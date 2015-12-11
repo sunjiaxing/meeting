@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white" >
+
+    <include
+        android:id="@+id/head_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/title" />
+
+    <RelativeLayout
+        android:id="@+id/galleryLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/head_layout"
+        android:background="@color/color_white"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false" >
+
+        <com.zhengshang.meeting.ui.component.MyGallery
+            android:id="@+id/gallery1"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="40dp"
+            android:background="#ededed"
+            android:paddingLeft="5dp"
+            android:fadingEdge="none"
+            android:scrollbars="none" />
+
+        <RelativeLayout
+            android:id="@+id/right_handle_layout"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="#ededed" >
+
+            <TextView
+                android:id="@+id/tv_handle_news_type_open"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@mipmap/news_type_open" />
+
+            <ImageView
+                android:id="@+id/iv_red_point"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="2dp"
+                android:contentDescription="@null"
+                android:src="@mipmap/red_point" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_news_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/galleryLayout"
+        android:background="@color/color_white" />
+
+    <LinearLayout
+        android:id="@+id/layout_handle_news_type"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/head_layout"
+        android:background="#90000000"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#ededed"
+            android:paddingLeft="10dp"
+            android:paddingRight="2dp" >
+
+            <TextView
+                android:id="@+id/tv_my_channel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/my_channel"
+                android:textColor="#666666"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@id/tv_my_channel"
+                android:text="@string/channel_tip"
+                android:textColor="#ff7800" />
+
+            <TextView
+                android:id="@+id/tv_handle_news_type_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@mipmap/news_type_close" />
+        </RelativeLayout>
+
+        <GridView
+            android:id="@+id/gv_my_channel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0.1dp"
+            android:background="@color/color_white"
+            android:horizontalSpacing="5dp"
+            android:listSelector="@android:color/transparent"
+            android:numColumns="4"
+            android:padding="10dp"
+            android:verticalSpacing="5dp" >
+        </GridView>
+
+        <TextView
+            android:id="@+id/tv_more_channel"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="0.1dp"
+            android:background="#ededed"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="@string/more_channel"
+            android:textColor="#666666"
+            android:textSize="15sp" />
+
+        <GridView
+            android:id="@+id/gv_more_channel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_white"
+            android:horizontalSpacing="5dp"
+            android:listSelector="@android:color/transparent"
+            android:numColumns="4"
+            android:padding="10dp"
+            android:verticalSpacing="5dp" >
+        </GridView>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/menuLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/head_layout"
+        layout="@layout/menu_back_main"
+        android:visibility="gone" />
+
+</RelativeLayout>

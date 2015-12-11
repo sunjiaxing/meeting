@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 白色 -->
+    <color name="color_white">#FFFFFFFF</color>
+    <!-- 蓝色 -->
+    <color name="color_blue">#FF0000FF</color>
+    <!-- 黑色 -->
+    <color name="color_black">#FF000000</color>
+    <!-- 绿色 -->
+    <color name="color_green">#FF00FF00</color>
+    <!-- 顶部图片新闻标题半透明颜色背景 -->
+    <color name="header_color">#5A000000</color>
+    <!-- 新闻内容颜色 -->
+    <color name="news_content_color">#666666</color>
+    <!-- 线 的颜色 -->
+    <color name="line_color">#d8d8d8</color>
+    <color name="right_menu_line">#5e5e5e</color>
+</resources>
