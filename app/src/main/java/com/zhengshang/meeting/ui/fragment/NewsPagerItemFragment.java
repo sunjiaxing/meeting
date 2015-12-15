@@ -188,7 +188,7 @@ public class NewsPagerItemFragment extends BaseFragment implements
     }
 
     /**
-     * 刷新数据
+     * 获取数据库缓存数据
      */
     private void getDataFromDB() {
         if (newsType != null) {

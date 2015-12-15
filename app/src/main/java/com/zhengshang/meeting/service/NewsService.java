@@ -48,7 +48,7 @@ public class NewsService extends BaseService {
      * @throws JSONException
      */
     public List<NewsChannelVO> getAllNewsTypes() throws JSONException {
-        List<NewsChannelVO> showData = null;
+        List<NewsChannelVO> showData;
         List<NewsChannel> dbData = newsDao.getNewsType(true, "");
         if (!Utils.isEmpty(dbData)) {
             showData = parseNewsChannel2ShowDataFromDB(dbData);

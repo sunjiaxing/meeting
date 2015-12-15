@@ -40,13 +40,13 @@ public interface IParam {
     // G
     // H
     // I
-    String IS_TOP = "isTop";
     String ID = "id";
     String ICON_URL = "iconUrl";
     String IMG_URL = "imgUrl";
     String IS_AD = "isAd";
     String ICON_AD_URL = "iconAdUrl";
     String IMGS = "imgs";
+    String IS_OPEN_BLANK = "isOpenBlank";
 
     // J
     // K

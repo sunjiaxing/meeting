@@ -79,7 +79,7 @@ public class NewsRO extends BaseRO {
                     res.put(IParam.TIME, json.getLong(IParam.TIME));
                     // 实例化集合并创建变量
                     List<NewsChannelDto> typeList = new ArrayList<>();
-                    NewsChannelDto newsType = null;
+                    NewsChannelDto newsType;
                     // 循环解析栏目信息
                     for (int i = 0; i < jsonArray.length(); i++) {
                         newsType = new NewsChannelDto();

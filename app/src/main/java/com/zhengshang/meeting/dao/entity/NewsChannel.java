@@ -32,8 +32,9 @@ public class NewsChannel {
 	private int isLock;
 	/** 栏目所在位置 */
 	private int position;
-
+	/** 表示是否选中 */
 	private int isMine;
+	/** 登录账户的Id */
 	private String masterId;
 
 	public String getTypeId() {

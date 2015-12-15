@@ -27,7 +27,7 @@ public class BaseRO {
 	private boolean debug = false;
 
 	protected HashMap<String, String> getHeaderParam(String key, String value) {
-		headerParam = new HashMap<String, String>();
+		headerParam = new HashMap<>();
 		headerParam.put(key, value);
 		return headerParam;
 	}
@@ -37,7 +37,7 @@ public class BaseRO {
 	}
 
 	public interface IBaseURL {
-		public String getURL();
+		String getURL();
 	}
 
 	/**

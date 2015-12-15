@@ -474,7 +474,7 @@ public class NewsActivity extends BaseActivity implements
 
     @Override
     protected void onTaskSuccess(int action, Object data) {
-        Object[] dataArray = null;
+        Object[] dataArray;
         int fragmentId;
         switch (action) {
             case TaskAction.ACTION_GET_NEWS_TYPE:// 获取新闻分类成功

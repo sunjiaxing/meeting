@@ -122,8 +122,6 @@ public class NewsDao extends BaseDao {
                             .getColumnIndex(NewsChannel.KEY_COLUMN_IS_LOCK)));
                     newsType.setIsMine(cursor.getInt(cursor
                             .getColumnIndex(NewsChannel.KEY_COLUMN_IS_MINE)));
-                    newsType.setIsLock(cursor.getInt(cursor
-                            .getColumnIndex(NewsChannel.KEY_COLUMN_IS_LOCK)));
                     newsType.setPosition(cursor.getInt(cursor
                             .getColumnIndex(NewsChannel.KEY_COLUMN_POSITION)));
                     typeList.add(newsType);
@@ -176,7 +174,7 @@ public class NewsDao extends BaseDao {
     public List<News> getOnlineNewsFromDB(String catId) {
         List<News> newsList = null;
         try {
-            String sql = "select * from " + News.KEY_TABLE_NAME + " where "
+            sql = "select * from " + News.KEY_TABLE_NAME + " where "
                     + News.KEY_COLUMN_CAT_ID + "=? order by "
                     + News.KEY_COLUMN_CREATE_TIME + " desc";
             cursor = db.rawQuery(sql, new String[]{catId});

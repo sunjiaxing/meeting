@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
+ * 执行任务的Service
  * Created by sun on 2015/12/9.
  */
 public class TaskService extends Service implements TaskResultListener {
@@ -23,6 +24,7 @@ public class TaskService extends Service implements TaskResultListener {
     @Override
     public void onCreate() {
         super.onCreate();
+        // 创建线程池 根据需要 可自行定义
         singlePool = Executors.newSingleThreadExecutor();
         morePool = Executors.newFixedThreadPool(5);
     }

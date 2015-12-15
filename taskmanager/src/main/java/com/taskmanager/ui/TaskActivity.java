@@ -14,7 +14,11 @@ import android.widget.Toast;
 import com.taskmanager.TaskKey;
 
 /**
+ * 所有Activity的父类
  * Created by sun on 2015/12/10.
+ *
+ * 子类 实现 onTaskSuccess方法 处理任务成功之后的操作
+ * 如需 手动处理任务失败情况，则需手动重写 onTaskFail方法
  */
 public abstract class TaskActivity extends FragmentActivity {
 

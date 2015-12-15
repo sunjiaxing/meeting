@@ -29,7 +29,8 @@
             android:background="#ededed"
             android:paddingLeft="5dp"
             android:fadingEdge="none"
-            android:scrollbars="none" />
+            android:scrollbars="none"
+            android:fillViewport="false" />
 
         <RelativeLayout
             android:id="@+id/right_handle_layout"
