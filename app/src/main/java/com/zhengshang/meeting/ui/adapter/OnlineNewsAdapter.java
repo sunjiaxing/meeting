@@ -130,7 +130,7 @@ public class OnlineNewsAdapter extends QuickFlingAdapter {
 			// 显示评论条数
 			viewHolder.tvCommentCount.setVisibility(View.VISIBLE);
 			// 设置评论条数
-			viewHolder.tvCommentCount.setText(news.getCommentCount() + "评论");
+			//viewHolder.tvCommentCount.setText(news.getCommentCount() + "评论");
 			// 判断子标题字数 保留30个字
 			// if (news != null && !Utils.isEmpty(news.getSummary())
 			// && news.getSummary().length() > 26) {

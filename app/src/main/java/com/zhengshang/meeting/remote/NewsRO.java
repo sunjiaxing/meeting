@@ -28,7 +28,7 @@ import com.zhengshang.meeting.remote.dto.NewsDto;
 /**
  * news ro
  *
- * @author sun 2015年12月10日14:53:47
+ * @author sun
  */
 public class NewsRO extends BaseRO {
 
@@ -59,7 +59,7 @@ public class NewsRO extends BaseRO {
     /**
      * 根据标记获取新闻栏目
      *
-     * @param time  新闻栏目的版本
+     * @param time
      * @param token
      * @throws JSONException
      */
@@ -105,10 +105,8 @@ public class NewsRO extends BaseRO {
      * @return
      * @throws JSONException
      */
-    public List<NewsDto> refreshNews(String catId, int limit, long minTime,
-                                     String token) throws JSONException {
+    public List<NewsDto> refreshNews(String catId, int limit, long minTime, String token) throws JSONException {
         List<NewsDto> newsList;
-//        List<NewsDto> topList;
         String url = getServerUrl()
                 + RemoteNewsUrl.GET_NEWS_LIST.getURL() + IParam.WENHAO
                 + IParam.CATID + IParam.EQUALS_STRING + catId + IParam.AND
@@ -119,29 +117,14 @@ public class NewsRO extends BaseRO {
             JSONObject json = new JSONObject(result);
             NewsDto news;
             if (json.getInt(IParam.STATUS) == 1) {
-//                topList = new ArrayList<>();
                 newsList = new ArrayList<>();
                 JSONArray array = json.getJSONArray(IParam.NEWS);
                 // 先解析新闻
                 for (int i = 0; i < array.length(); i++) {
                     news = new NewsDto();
                     news.parseJson(array.getJSONObject(i));
-                    news.setCatId(catId);
-//                    if (news.getTop() == 1) {
-//                        topList.add(news);
-//                    } else {
-                        newsList.add(news);
-//                    }
+                    newsList.add(news);
                 }
-                // 排序
-//                Collections.sort(topList, new NewsOrderByCreateTime());
-//                Collections.sort(newsList, new NewsOrderByCreateTime());
-//                if (topList.size() > 0) {
-//                    NewsDto model = topList.get(0);
-//                    model.setTop(1);
-//                    model.setTopNews(topList);
-//                    newsList.add(0, model);
-//                }
                 return newsList;
             } else {
                 throw new AppException(json.getInt(IParam.ERROR_CODE));
@@ -151,20 +134,6 @@ public class NewsRO extends BaseRO {
         }
     }
 
-    private class NewsOrderByCreateTime implements Comparator<NewsDto> {
-
-        @Override
-        public int compare(NewsDto lhs, NewsDto rhs) {
-            if (rhs.getCreateTime() > lhs.getCreateTime()) {
-                return 1;
-            } else if (rhs.getCreateTime() < lhs.getCreateTime()) {
-                return -1;
-            } else {
-                return 0;
-            }
-        }
-
-    }
 
     /**
      * 获取新闻详情

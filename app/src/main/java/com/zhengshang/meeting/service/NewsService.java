@@ -49,7 +49,7 @@ public class NewsService extends BaseService {
      */
     public List<NewsChannelVO> getAllNewsTypes() throws JSONException {
         List<NewsChannelVO> showData;
-        List<NewsChannel> dbData = newsDao.getNewsType(true, "");
+        List<NewsChannel> dbData = newsDao.getNewsType(true, "0");
         if (!Utils.isEmpty(dbData)) {
             showData = parseNewsChannel2ShowDataFromDB(dbData);
         } else {
@@ -263,9 +263,14 @@ public class NewsService extends BaseService {
             }
             // 有滚动新闻  把滚动新闻放在list顶部
             if (!Utils.isEmpty(topData)) {
+                // 排序
+                Collections.sort(topData, new NewsOrderByCreateTime());
+                Collections.sort(showData, new NewsOrderByCreateTime());
                 NewsVO newsVO = topData.get(0);
                 newsVO.setTopNews(topData);
                 showData.add(0, newsVO);
+            } else {
+                Collections.sort(showData, new NewsOrderByCreateTime());
             }
         }
         return showData;
@@ -353,9 +358,14 @@ public class NewsService extends BaseService {
             newsDao.saveNews(dbData);
             // 处理 top新闻
             if (!Utils.isEmpty(topData)) {
+                // 排序
+                Collections.sort(topData, new NewsOrderByCreateTime());
+                Collections.sort(showData, new NewsOrderByCreateTime());
                 vo = topData.get(0);
                 vo.setTopNews(topData);
                 showData.add(0, vo);
+            } else {
+                Collections.sort(showData, new NewsOrderByCreateTime());
             }
             newsDao.setTransactionSuccessful();
         } catch (Exception e) {
@@ -367,6 +377,19 @@ public class NewsService extends BaseService {
         return showData;
     }
 
+    private class NewsOrderByCreateTime implements Comparator<NewsVO> {
+
+        @Override
+        public int compare(NewsVO lhs, NewsVO rhs) {
+            if (rhs.getCreateTime() > lhs.getCreateTime()) {
+                return 1;
+            } else if (rhs.getCreateTime() < lhs.getCreateTime()) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+    }
 
 
 

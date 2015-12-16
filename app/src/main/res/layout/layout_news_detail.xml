@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/head_layout"
+        layout="@layout/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.zhengshang.meeting.ui.component.CustomerWebview
+            android:id="@+id/webview_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadingEdge="none"
+            android:visibility="gone"
+            android:scrollbars="none" />
+        <!-- 显示转轮 -->
+
+        <include
+            android:id="@+id/layout_loading"
+            layout="@layout/common_progressbar"
+            android:visibility="visible" />
+
+        <!-- 显示提示或异常信息 -->
+
+        <include
+            android:id="@+id/layout_error"
+            layout="@layout/common_result_message"
+            android:visibility="gone" />
+    </RelativeLayout>
+</LinearLayout>

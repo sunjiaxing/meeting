@@ -169,7 +169,7 @@ public class NewsPagerItemFragment extends BaseFragment implements
      * 显示错误信息
      *
      * @param msg
-     * @author sunjiaxing 2014-10-16下午12:00:03
+     * @author
      */
     private void showErrorMsg(String msg) {
         if (!isAdded()) {

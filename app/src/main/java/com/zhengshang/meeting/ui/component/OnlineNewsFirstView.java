@@ -144,8 +144,8 @@ public class OnlineNewsFirstView extends FrameLayout implements
 			count = topList.size();
 		}
 		View view = null;
-		// 顶部图片新闻按order排序
-		orderTopNews(topList);
+//		 顶部图片新闻按order排序
+//		orderTopNews(topList);
 		// 创建view数组
 		views = new View[topList.size()];
 		// 循环添加
@@ -264,9 +264,9 @@ public class OnlineNewsFirstView extends FrameLayout implements
 	 * 
 	 * @param topNews
 	 */
-	public void orderTopNews(List<NewsVO> topNews) {
-		Collections.sort(topNews, new NewsModelOrderByOrder());
-	}
+//	public void orderTopNews(List<NewsVO> topNews) {
+//		Collections.sort(topNews, new NewsModelOrderByOrder());
+//	}
 
 	/**
 	 * 顶部图片新闻排序类
@@ -274,20 +274,20 @@ public class OnlineNewsFirstView extends FrameLayout implements
 	 * @author sun
 	 * 
 	 */
-	public class NewsModelOrderByOrder implements Comparator<NewsVO> {
-
-		@Override
-		public int compare(NewsVO newsModel_1, NewsVO newsModel_2) {
-			if (newsModel_1 != null && newsModel_2 != null) {
-				if (newsModel_1.getOrder() > newsModel_2.getOrder()) {
-					return -1;
-				} else if (newsModel_1.getOrder() < newsModel_1.getOrder()) {
-					return 1;
-				}
-			}
-			return 0;
-		}
-	}
+//	public class NewsModelOrderByOrder implements Comparator<NewsVO> {
+//
+//		@Override
+//		public int compare(NewsVO newsModel_1, NewsVO newsModel_2) {
+//			if (newsModel_1 != null && newsModel_2 != null) {
+//				if (newsModel_1.getOrder() > newsModel_2.getOrder()) {
+//					return -1;
+//				} else if (newsModel_1.getOrder() < newsModel_1.getOrder()) {
+//					return 1;
+//				}
+//			}
+//			return 0;
+//		}
+//	}
 
 	/**
 	 * 点击顶部滚动图接口
