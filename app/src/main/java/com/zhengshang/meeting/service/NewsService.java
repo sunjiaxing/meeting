@@ -120,8 +120,8 @@ public class NewsService extends BaseService {
             configDao.setNewsTypeState(time);
         }
         List<NewsChannel> saveData = parseNewsChannel2SaveDataFromDto(webData);
-        // 删除本地数据后 添加到系统库中
-        newsDao.deleteAfterSaveNewsType(saveData);
+        // 更新
+        newsDao.updateNewsType(saveData);
 
         return webData;
     }
@@ -171,17 +171,8 @@ public class NewsService extends BaseService {
         } else {
             throw new AppException("获取新闻栏目失败！");
         }
-        orderTopNewsTypes(showData);
+        Collections.sort(showData, new NewsTypeOrder());
         return showData;
-    }
-
-    /**
-     * 新闻栏目排序
-     *
-     * @param result
-     */
-    private void orderTopNewsTypes(List<NewsChannelVO> result) {
-        Collections.sort(result, new NewsTypeOrder());
     }
 
     /**
@@ -244,58 +235,40 @@ public class NewsService extends BaseService {
      */
     public List<NewsVO> getNewsFromDB(String catId) {
         List<News> dbData = newsDao.getOnlineNewsFromDB(catId);
-        return parseNews2ShowFromDB(dbData);
-    }
-
-    /**
-     * (新闻) 数据转换
-     *
-     * @param dbData
-     * @return
-     */
-    private List<NewsVO> parseNews2ShowFromDB(List<News> dbData) {
-        List<NewsVO> showData = new ArrayList<>();
-        NewsVO vo;
+        // 处理缓存数据
+        List<NewsVO> showData = null;
+        List<NewsVO> topData;
         if (!Utils.isEmpty(dbData)) {
+            showData = new ArrayList<>();
+            topData = new ArrayList<>();
+            NewsVO vo;
             for (News news : dbData) {
-                if (!Utils.isEmpty(news.getTopNews())) {
-                    List<NewsVO> topList = new ArrayList<>();
-                    for (News top : news.getTopNews()) {
-                        topList.add(parseNews2VOFromDB(top));
-                    }
-                    vo = new NewsVO();
-                    vo.setTop(true);
-                    vo.setTopNews(topList);
-                    showData.add(vo);
+                vo = new NewsVO();
+                vo.setId(news.getNewsId());
+                vo.setCatId(news.getCatId());
+                vo.setTitle(news.getTitle());
+                vo.setSummary(news.getSummary());
+                vo.setSubject(news.getSubject() == 1);
+                vo.setIconPath(news.getIconPath());
+                vo.setCreateTime(news.getCreateTime());
+                vo.setIsOpenBlank(news.getIsOpenBlank() == 1);
+                vo.setRead(news.getIsRead() == 1);
+                vo.setTop(news.getTop() == 1);
+                vo.setIconAdUrl(news.getIconAdUrl());
+                if (vo.isTop()) {
+                    topData.add(vo);
                 } else {
-                    showData.add(parseNews2VOFromDB(news));
+                    showData.add(vo);
                 }
+            }
+            // 有滚动新闻  把滚动新闻放在list顶部
+            if (!Utils.isEmpty(topData)) {
+                NewsVO newsVO = topData.get(0);
+                newsVO.setTopNews(topData);
+                showData.add(0, newsVO);
             }
         }
         return showData;
-    }
-
-    /**
-     * (新闻) 将db转换成vo
-     *
-     * @param news
-     * @return
-     */
-    private NewsVO parseNews2VOFromDB(News news) {
-        NewsVO vo = new NewsVO();
-        vo.setId(news.getNewsId());
-        vo.setTitle(news.getTitle());
-        vo.setIconPath(news.getIconPath());
-        vo.setSummary(news.getSummary());
-        vo.setSubject(news.getSubject() == 1);
-        vo.setOrder(news.getOrder());
-        vo.setCatId(news.getCatId());
-        vo.setRead(news.getIsRead() == 1);
-        vo.setTop(news.getTop() == 1);
-        vo.setCreateTime(news.getCreateTime());
-        vo.setCommentCount(news.getCommentCount());
-        vo.setIconAdUrl(news.getIconAdUrl());
-        return vo;
     }
 
     /**
@@ -308,37 +281,81 @@ public class NewsService extends BaseService {
      */
     public List<NewsVO> getNewsListFromWeb(String catId, long minTime)
             throws JSONException {
+        List<NewsVO> showData = new ArrayList<>();
         // 获取数据
         List<NewsDto> webData = newsRO.refreshNews(catId,
                 BonConstants.LIMIT_GET_NEWS, minTime, null);
-        // 判断新闻阅读状态
-        for (NewsDto newsDto : webData) {
-            newsDto.setIsRead(newsDao.getReadState(newsDto.getId(), catId));
-        }
-        if (minTime == 0) {
-            // 初始化 或者 刷新 时，清除原数据
-            newsDao.deleteAllByCatId(catId);
-            // 设置栏目刷新时间
-            configDao.setCatClickTime(catId, System.currentTimeMillis());
-        }
         try {
-            newsDao.beginTransaction();
-            int startIndex = 0;
-            // 添加新闻
-            if (!Utils.isEmpty(webData)
-                    && !Utils.isEmpty(webData.get(0).getTopNews())) {
-                startIndex = 1;
-                // 有顶部新闻 先添加顶部新闻
-                for (NewsDto dto : webData.get(0).getTopNews()) {
-                    newsDao.saveNews(parseNews2DBFromDto(dto));
+            News news;
+            NewsVO vo;
+            int readState;
+            List<News> dbData = new ArrayList<>();
+            List<NewsVO> topData = new ArrayList<>();
+            // 同时转换为 vo 和 db
+            for (NewsDto dto : webData) {
+                news = new News();
+                vo = new NewsVO();
+                readState = newsDao.getReadState(dto.getId(), catId);
+                news.setIsAd(dto.getIsAd());
+                news.setNewsId(dto.getId());
+                news.setSummary(dto.getSummary());
+                news.setCatId(catId);
+                news.setTop(dto.getTop());
+                news.setCreateTime(dto.getCreateTime());
+                news.setIsRead(readState);
+
+                vo.setId(dto.getId());
+                vo.setSummary(dto.getSummary());
+                vo.setCatId(catId);
+                vo.setTop(dto.getTop() == 1);
+                vo.setCreateTime(dto.getCreateTime());
+                vo.setRead(readState == 1);
+
+                if (dto.getIsAd() == 1) {
+                    // 广告单独处理
+                    news.setTitle(dto.getAdTitle());
+                    news.setIconPath(dto.getAdImgUrl());
+                    news.setIconAdUrl(dto.getAdUrl());
+                    news.setIsOpenBlank(dto.getIsOpenBlank());
+
+                    vo.setTitle(dto.getAdTitle());
+                    vo.setIconPath(dto.getAdImgUrl());
+                    vo.setIconAdUrl(dto.getAdUrl());
+                    vo.setIsOpenBlank(dto.getIsOpenBlank() == 1);
+                } else {
+                    news.setTitle(dto.getTitle());
+                    vo.setTitle(dto.getTitle());
+                    if (dto.getTop() == 1) {
+                        news.setIconPath(dto.getImgUrl());
+                        vo.setIconPath(dto.getImgUrl());
+                    } else {
+                        news.setIconPath(dto.getIconUrl());
+                        vo.setIconPath(dto.getIconUrl());
+                    }
+                }
+                // 添加db集合
+                dbData.add(news);
+                // 添加vo集合
+                if (vo.isTop()) {
+                    topData.add(vo);
+                } else {
+                    showData.add(vo);
                 }
             }
-            if (!Utils.isEmpty(webData)) {
-                // 添加剩余新闻
-                for (int i = startIndex; i < webData.size(); i++) {
-                    NewsDto dto = webData.get(i);
-                    newsDao.saveNews(parseNews2DBFromDto(dto));
-                }
+            // 添加缓存
+            newsDao.beginTransaction();
+            if (minTime == 0) {
+                // 初始化 或者 刷新 时，清除原数据
+                newsDao.deleteAllByCatId(catId);
+                // 设置栏目刷新时间
+                configDao.setCatClickTime(catId, System.currentTimeMillis());
+            }
+            newsDao.saveNews(dbData);
+            // 处理 top新闻
+            if (!Utils.isEmpty(topData)) {
+                vo = topData.get(0);
+                vo.setTopNews(topData);
+                showData.add(0, vo);
             }
             newsDao.setTransactionSuccessful();
         } catch (Exception e) {
@@ -347,83 +364,14 @@ public class NewsService extends BaseService {
             newsDao.endTransaction();
         }
         // 数据转换
-        return parseNews2ShowFromDto(webData);
-    }
-
-    /**
-     * (新闻) 从dto转换到db
-     *
-     * @param dto
-     * @return
-     */
-    private News parseNews2DBFromDto(NewsDto dto) {
-        News news = new News();
-        news.setNewsId(dto.getId());
-        news.setCatId(dto.getCatId());
-        news.setTitle(dto.getTitle());
-        news.setIconPath(dto.getIconPath());
-        news.setSummary(dto.getSummary());
-        news.setTop(dto.getTop());
-        news.setIsRead(dto.getIsRead());
-        news.setSubject(dto.getSubject());
-        news.setCreateTime(dto.getCreateTime());
-        news.setUpdateTime(dto.getUpdateTime());
-        news.setOrder(dto.getOrder());
-        news.setCommentCount(dto.getCommentCount());
-        news.setIconAdUrl(dto.getIconAdUrl());
-        return news;
-    }
-
-    /**
-     * (新闻) 将dto转换成vo
-     *
-     * @param dto
-     * @return
-     */
-    private NewsVO parseNews2VOFromDto(NewsDto dto) {
-        NewsVO vo = new NewsVO();
-        vo.setId(dto.getId());
-        vo.setTitle(dto.getTitle());
-        vo.setIconPath(dto.getIconPath());
-        vo.setSummary(dto.getSummary());
-        vo.setSubject(dto.getSubject() == 1);
-        vo.setOrder(dto.getOrder());
-        vo.setCatId(dto.getCatId());
-        vo.setRead(dto.getIsRead() == 1);
-        vo.setTop(dto.getTop() == 1);
-        vo.setCreateTime(dto.getCreateTime());
-        vo.setCommentCount(dto.getCommentCount());
-        vo.setIconAdUrl(dto.getIconAdUrl());
-        return vo;
-    }
-
-    /**
-     * 数据转换
-     *
-     * @param webData
-     * @return
-     */
-    private List<NewsVO> parseNews2ShowFromDto(List<NewsDto> webData) {
-        List<NewsVO> showData = new ArrayList<>();
-        if (!Utils.isEmpty(webData)) {
-            NewsVO vo;
-            for (NewsDto dto : webData) {
-                if (!Utils.isEmpty(dto.getTopNews())) {
-                    List<NewsVO> topList = new ArrayList<>();
-                    for (NewsDto top : dto.getTopNews()) {
-                        topList.add(parseNews2VOFromDto(top));
-                    }
-                    vo = new NewsVO();
-                    vo.setTop(true);
-                    vo.setTopNews(topList);
-                    showData.add(vo);
-                } else {
-                    showData.add(parseNews2VOFromDto(dto));
-                }
-            }
-        }
         return showData;
     }
+
+
+
+
+
+
 
     /**
      * 网络请求获取新闻详情

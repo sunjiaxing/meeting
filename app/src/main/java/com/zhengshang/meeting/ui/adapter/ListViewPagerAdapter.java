@@ -49,9 +49,9 @@ public class ListViewPagerAdapter extends FragmentPagerAdapter {
 		return super.instantiateItem(container, position);
 	}
 
-	@Override
-	public int getItemPosition(Object object) {
-
-		return PagerAdapter.POSITION_NONE;
-	}
+//	@Override
+//	public int getItemPosition(Object object) {
+//
+//		return PagerAdapter.POSITION_NONE;
+//	}
 }

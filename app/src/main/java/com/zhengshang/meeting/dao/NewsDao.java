@@ -22,14 +22,13 @@ public class NewsDao extends BaseDao {
     }
 
     /**
-     * 新闻栏目 删除之后添加
+     * 更新 新闻栏目
      *
      * @param types 新闻栏目集合
      */
-    public void deleteAfterSaveNewsType(List<NewsChannel> types) {
+    public void updateNewsType(List<NewsChannel> types) {
         try {
             beginTransaction();
-            // db.execSQL(NewsChannel.DELETE_TABLE_DATA);
             for (NewsChannel tmp : types) {
                 ContentValues values = new ContentValues();
                 if (!Utils.isEmpty(tmp.getTypeId())) {
@@ -184,6 +183,7 @@ public class NewsDao extends BaseDao {
                 newsList = new ArrayList<>();
                 while (cursor.moveToNext()) {
                     lm = new News();
+                    lm.setIsAd(cursor.getInt(cursor.getColumnIndex(News.KEY_COLUMN_IS_AD)));
                     lm.setNewsId(cursor.getString(cursor
                             .getColumnIndex(News.KEY_COLUMN_ID)));
                     lm.setTitle(cursor.getString(cursor
@@ -192,8 +192,8 @@ public class NewsDao extends BaseDao {
                             .getColumnIndex(News.KEY_COLUMN_ICON_PATH)));
                     lm.setSummary(cursor.getString(cursor
                             .getColumnIndex(News.KEY_COLUMN_SUMMARY)));
-                    lm.setOrder(cursor.getInt(cursor
-                            .getColumnIndex(News.KEY_COLUMN_NEWS_ORDER)));
+                    lm.setIsOpenBlank(cursor.getInt(cursor
+                            .getColumnIndex(News.KEY_COLUMN_IS_OPEN_BLANK)));
                     lm.setTop(cursor.getInt(cursor.getColumnIndex(News.KEY_COLUMN_TOP)));
                     lm.setIsRead(cursor.getInt(cursor
                             .getColumnIndex(News.KEY_COLUMN_IS_READ)));
@@ -201,23 +201,21 @@ public class NewsDao extends BaseDao {
                             .getColumnIndex(News.KEY_COLUMN_CREATE_TIME)));
                     lm.setSubject(cursor.getInt(cursor
                             .getColumnIndex(News.KEY_COLUMN_SUBJECT)));
-                    lm.setCommentCount(cursor.getInt(cursor
-                            .getColumnIndex(News.KEY_COLUMN_COMMENT_COUNT)));
                     lm.setIconAdUrl(cursor.getString(cursor
-                            .getColumnIndex(News.KEY_COLUMN_ICON_AD_URL)));
+                            .getColumnIndex(News.KEY_COLUMN_AD_URL)));
                     lm.setCatId(catId);
-                    if (lm.getTop() == 1) {
-                        topList.add(lm);
-                    } else {
-                        newsList.add(lm);
-                    }
+//                    if (lm.getTop() == 1) {
+//                        topList.add(lm);
+//                    } else {
+                    newsList.add(lm);
+//                    }
                 }
-                if (topList.size() > 0) {
-                    News model = topList.get(0);
-                    model.setTop(1);
-                    model.setTopNews(topList);
-                    newsList.add(0, model);
-                }
+//                if (topList.size() > 0) {
+//                    News model = topList.get(0);
+//                    model.setTop(1);
+//                    model.setTopNews(topList);
+//                    newsList.add(0, model);
+//                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -301,16 +299,28 @@ public class NewsDao extends BaseDao {
         if (n.getSubject() != 0) {
             values.put(News.KEY_COLUMN_SUBJECT, n.getSubject());
         }
-        values.put(News.KEY_COLUMN_NEWS_ORDER, n.getOrder());
+        values.put(News.KEY_COLUMN_IS_OPEN_BLANK, n.getIsOpenBlank());
         values.put(News.KEY_COLUMN_CREATE_TIME, n.getCreateTime());
         if (!Utils.isEmpty(n.getIconAdUrl())) {
-            values.put(News.KEY_COLUMN_ICON_AD_URL, n.getIconAdUrl());
+            values.put(News.KEY_COLUMN_AD_URL, n.getIconAdUrl());
         }
         values.put(News.KEY_COLUMN_REMARK, n.getUpdateTime());
-        if (n.getCommentCount() != 0) {
-            values.put(News.KEY_COLUMN_COMMENT_COUNT, n.getCommentCount());
+        if (n.getIsAd() != 0) {
+            values.put(News.KEY_COLUMN_IS_AD, n.getIsAd());
         }
         db.insert(News.KEY_TABLE_NAME, null, values);
+    }
+
+    /**
+     * 保存新闻
+     * @param data
+     */
+    public void saveNews(List<News> data) {
+        if (!Utils.isEmpty(data)) {
+            for (News news : data) {
+                saveNews(news);
+            }
+        }
     }
 
     /**

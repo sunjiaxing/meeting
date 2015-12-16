@@ -108,7 +108,7 @@ public class NewsRO extends BaseRO {
     public List<NewsDto> refreshNews(String catId, int limit, long minTime,
                                      String token) throws JSONException {
         List<NewsDto> newsList;
-        List<NewsDto> topList;
+//        List<NewsDto> topList;
         String url = getServerUrl()
                 + RemoteNewsUrl.GET_NEWS_LIST.getURL() + IParam.WENHAO
                 + IParam.CATID + IParam.EQUALS_STRING + catId + IParam.AND
@@ -119,7 +119,7 @@ public class NewsRO extends BaseRO {
             JSONObject json = new JSONObject(result);
             NewsDto news;
             if (json.getInt(IParam.STATUS) == 1) {
-                topList = new ArrayList<>();
+//                topList = new ArrayList<>();
                 newsList = new ArrayList<>();
                 JSONArray array = json.getJSONArray(IParam.NEWS);
                 // 先解析新闻
@@ -127,21 +127,21 @@ public class NewsRO extends BaseRO {
                     news = new NewsDto();
                     news.parseJson(array.getJSONObject(i));
                     news.setCatId(catId);
-                    if (news.getTop() == 1) {
-                        topList.add(news);
-                    } else {
+//                    if (news.getTop() == 1) {
+//                        topList.add(news);
+//                    } else {
                         newsList.add(news);
-                    }
+//                    }
                 }
                 // 排序
-                Collections.sort(topList, new NewsOrderByCreateTime());
-                Collections.sort(newsList, new NewsOrderByCreateTime());
-                if (topList.size() > 0) {
-                    NewsDto model = topList.get(0);
-                    model.setTop(1);
-                    model.setTopNews(topList);
-                    newsList.add(0, model);
-                }
+//                Collections.sort(topList, new NewsOrderByCreateTime());
+//                Collections.sort(newsList, new NewsOrderByCreateTime());
+//                if (topList.size() > 0) {
+//                    NewsDto model = topList.get(0);
+//                    model.setTop(1);
+//                    model.setTopNews(topList);
+//                    newsList.add(0, model);
+//                }
                 return newsList;
             } else {
                 throw new AppException(json.getInt(IParam.ERROR_CODE));
