@@ -1,4 +1,4 @@
-package com.zhengshang.meeting.common;
+package com.zhengshang.meeting.http;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +18,7 @@ import android.content.Context;
 import android.os.Build;
 
 import com.zhengshang.meeting.R;
+import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.exeception.AppException;
 import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.ui.activity.BaseActivity;

@@ -10,7 +10,7 @@ import android.util.Log;
 
 import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.BonConstants;
-import com.zhengshang.meeting.common.HttpUtilsApache;
+import com.zhengshang.meeting.http.HttpUtilsApache;
 import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.exeception.AppException;
 

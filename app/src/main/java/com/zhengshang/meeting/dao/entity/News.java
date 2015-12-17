@@ -1,7 +1,5 @@
 package com.zhengshang.meeting.dao.entity;
 
-import java.util.List;
-
 /**
  * 新闻实体类
  *
@@ -55,7 +53,6 @@ public class News {
     private int top;
     private int isOpenBlank;
     private int isRead;// 新闻阅读状态
-    private List<News> topNews;// 头条列表
     private int subject;//是否是专题
     private long createTime;//新闻创建时间
     private String iconAdUrl;// 广告链接
@@ -116,14 +113,6 @@ public class News {
 
     public void setIsRead(int isRead) {
         this.isRead = isRead;
-    }
-
-    public List<News> getTopNews() {
-        return topNews;
-    }
-
-    public void setTopNews(List<News> topNews) {
-        this.topNews = topNews;
     }
 
     public int getSubject() {
