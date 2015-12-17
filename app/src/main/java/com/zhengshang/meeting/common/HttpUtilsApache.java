@@ -236,7 +236,7 @@ public class HttpUtilsApache {
 	private static Map<String, String> addOtherParamToHeader(
 			Map<String, String> header) throws UnsupportedEncodingException {
 		if (header == null) {
-			header = new HashMap<String, String>();
+			header = new HashMap<>();
 		}
 		header.put("model", Build.MODEL);
 		header.put("manufacturer", Build.MANUFACTURER);

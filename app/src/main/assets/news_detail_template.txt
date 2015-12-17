@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>新闻</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/*公共样式-Public Style*/
+
+@font-face {
+font-family: ‘fzltxh';
+src: url(‘fonts/fzltxh_gbk.ttf’);
+src: url(‘fonts/fzltxh_gbk.ttf’) format(‘embedded-opentype’),
+url(‘fonts/fzltxh_gbk.ttf’) format(‘woff’),
+url(‘fonts/fzltxh_gbk.ttf’) format(‘truetype’),
+url(‘fonts/fzltxh_gbk.ttf’) format(‘svg’);
+font-weight: normal;
+font-style: normal;
+}
+
+
+/*样式预设*/
+body,ul,p,h1,h2,h3,h4,h5,dl,dt,dd,form,input,textarea,select { margin: 0px; padding: 0px;font-family:fzltxh}
+li { list-style:none; }
+img { border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; }
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
+.clear { font-size: 0px; line-height: 0px; clear: both; height: 0px; visibility: hidden; }
+img { vertical-align: middle; width:100%}
+
+
+
+
+/*字体*/
+.font1 {}
+/*链接*/
+.link1 { color: #000; text-decoration: none; display: block; }
+.link1:hover { color: #FFF; text-decoration: none; background-color: #ee5050; }
+
+
+/*框架样式*/ 
+.article{ height:auto; margin:13px 11px;  }
+.article_title{ /*height:29px;*/ line-height:29px; font-size:21px; font-weight:bold;  color:#333333; margin-top:13px;  }
+.article_time { /*height:19px;*/ line-height:19px; font-size:11px; color:#808080; }
+.article_content{ margin:0px 11px; font-size:17px; line-height:30px;  }
+.article_content p{ margin-bottom:15px; }
+.article_content img{ width:100%; }
+.comment{margin:0px 11px; background-color: #ffffff; border: 1px solid #e5e5e5; border-top: 1px solid #e5e5e5; border-radius: 5px; -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2); box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2); }
+.comment_top{margin:0px 3px; height:3px; background-color: #f5c330; border-radius: 0px 0px 3px 3px; }
+.comment_title { color:#faa304; font-size:13px; font-family:"microsoft yahei"; height:33px; line-height:33px; margin:5px 13px 0px  13px; border-bottom:#e5e5e5 1px solid;}
+.comment dl{ list-style:none; display:block; margin:15px 13px 0px 13px;}
+.comment dt{ width:31px; display:block; float:left; }
+.comment dt img { border-radius:31px; width:31px; height:31px; display:block;}
+.comment dd{ margin-left:41px; border-bottom: #e7e7e7  1px solid; display:block;}
+.comment .last-child{border-bottom: #e7e7e7  0px solid;}
+
+.comment dd h3{ height:15px; display:block; line-height:15px;margin:0px; }
+.comment dd h3 a.name{ height:15px; float:left; width:50%; display:block; font-size:13px; color:#00a0e9 ; font-weight:lighter; line-height:15px; }
+.comment dd h3 .counts{ height:15px; float:right; width:50%; display:block; text-align:right; font-size:11px; color:#999; font-weight:lighter;  line-height:15px;}
+.comment dd h4 { height:28px; display:block; line-height:25px; font-weight:lighter; font-size:11px; color:#999;  margin:0px; }
+.comment dd p{ color:#333; font-size:15px; line-height:24px; margin-bottom:16px;}
+.comment .more{ height:43px; line-height:43px; font-size:13px; text-align:center;}
+.comment .more a{ color:#333; }
+.comment .more a:hover{ text-decoration: none; }
+
+
+
+.banner_01{margin:0px  11px 13px 11px; ; background-color: #ffffff; border: 1px solid #e5e5e5; border-top: 1px solid #e5e5e5; border-radius: 5px; -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2); box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2); }
+.banner_01 img { border-radius: 5px;width:100%; }
+.banner_01 dl{ list-style:none; display:block; height:37px; line-height:37px; margin:0px 13px;}
+.banner_01 dt{ color:#333; height:37px; width:90%; float:left; line-height:37px; font-size:15px;}
+.banner_01 dt a{ color:#333;}
+.banner_01 dd{ height:37px; float:right ; width:10%; line-height:37px; text-align:right;}
+.banner_01 dd a{ border-radius:2px; border:#6bcbf3 1px solid; padding:2px; color:#00a0e9; font-size:10px;}
+
+
+.aa{ width:100%;}
+.aa dl{ list-style:none; }
+.aa dt{ float:left; display:block; background:#f00; width:32px;}
+.aa dd{ border-bottom:#f00 solid 1px; margin-left:32px; }
+.aa dd::nth-of-type(1){ border:#f00 0px solid;}
+/*头部*/    
+
+/*banner广告*/
+.banner { }
+/*文章快速入口*/
+
+
+
+/*按钮*/
+.button_01 { }
+.button_01:hover { }
+
+/*边框*/
+.bk01 { }
+
+/*线条*/
+.line_01 { height:15px; border-bottom:#e3e3e3 dashed 1px; margin-bottom:15px; margin-left:11px; margin-right:11px; }
+.line_02 {  margin:0px 13px; border-bottom: #e7e7e7  1px solid;}
+
+</style>
+</head>
+<body>
+
+<!--文章开始-->
+<div class="article">
+  <div class="article_title">@title</div>
+  <div class="article_time">@comeAndTime</div>
+</div>
+<div class="article_content">
+  @content
+</div>
+
+<!--文章结束-->
+@ad
+</body>
+</html>

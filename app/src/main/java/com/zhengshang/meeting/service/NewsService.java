@@ -390,12 +390,6 @@ public class NewsService extends BaseService {
             }
         }
     }
-
-
-
-
-
-
     /**
      * 网络请求获取新闻详情
      *
@@ -406,46 +400,34 @@ public class NewsService extends BaseService {
      */
     public NewsDetailVO getNewsDetailFromWeb(String id, String catId)
             throws JSONException {
+        NewsDetailVO vo = null;
         // 设置新闻已读状态
         newsDao.setReadState(id, catId, 1);
         // 访问服务器
-        NewsDetailDto webData = newsRO.getNewsDetail(id, catId,
+        NewsDetailDto dto = newsRO.getNewsDetail(id, catId,
                 null);
-        if (webData != null) {
-            return parseDetail2ShowFromDto(webData);
-        }
-        return null;
-    }
+        if (dto != null) {
+            // 数据转换
+            vo = new NewsDetailVO();
+            vo.setId(id);
+            vo.setTitle(dto.getTitle());
+            vo.setContent(dto.getContent());
+            vo.setContentUrl(dto.getContentUrl());
+            vo.setcFrom(dto.getcFrom());
+            vo.setcTime(Utils.formateTime(dto.getcTime(), false));
 
-    /**
-     * (新闻详情)从dto转换到vo
-     *
-     * @param dto
-     * @return
-     */
-    private NewsDetailVO parseDetail2ShowFromDto(NewsDetailDto dto) {
-        NewsDetailVO vo = new NewsDetailVO();
-        vo.setId(dto.getId());
-        vo.setTitle(dto.getTitle());
-        vo.setSummary(dto.getSummary());
-        vo.setcFrom(dto.getcFrom());
-        vo.setcTime(Utils.formateTime(dto.getcTime(), false));
-        vo.setContent(dto.getContent());
-        vo.setCanComment(dto.getCanComment() == 0);
-        vo.setShortUrl(dto.getShortUrl());
-        vo.setWapUrl(dto.getWapUrl());
-        vo.setForwardId(dto.getForwardId());
-        vo.setRootId(dto.getRootId());
-        vo.setCommentNum(dto.getCommentNum());
-        vo.setImgs(dto.getImgs());
-        vo.setAdId(dto.getAdId());
-        vo.setAdTitle(dto.getAdTitle());
-        vo.setAdIconUrl(dto.getAdIconUrl());
-        vo.setAdUrl(dto.getAdUrl());
-        vo.setIconUrl(dto.getIconUrl());
+            vo.setSummary(dto.getSummary());
+            vo.setShortUrl(dto.getShortUrl());
+            vo.setLongUrl(dto.getLongUrl());
+            vo.setIconUrl(dto.getIconUrl());
+
+            vo.setAdId(dto.getAdId());
+            vo.setAdTitle(dto.getAdTitle());
+            vo.setAdIconUrl(dto.getAdIconUrl());
+            vo.setAdUrl(dto.getAdUrl());
+        }
         return vo;
     }
-
     /**
      * 获取不同类别的点击时间
      *
@@ -500,6 +482,9 @@ public class NewsService extends BaseService {
         // 修改状态
         newsDao.saveToMyChannel(saveData, "0");
     }
+
+
+
 
     /**
      * 版本更新

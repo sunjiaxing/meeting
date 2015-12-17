@@ -18,10 +18,10 @@ public interface IParam {
     String CAN_SHARE = "canShare";
     String CREATE_TIME = "createTime";
     String COUNT_COMMENT = "countComment";
-    String CATID = "catId";
+    String CAT_ID = "catId";
     String CONTENT = "content";
+    String CONTENT_URL = "contentUrl";
     String C_TIME = "cTime";
-    String COMMENT_NUM = "commentNum";
 
     // D
     String DETAIL = "detail";
@@ -34,7 +34,6 @@ public interface IParam {
 
     // F
     String FROM = "from";
-    String FORWARD_ID = "forwardId";
     String FOCUS = "focus";
 
     // G
@@ -71,14 +70,12 @@ public interface IParam {
 
     // Q
     // R
-    String ROOT_ID = "rootId";
 
     // S
     String SHARE_URL = "shareUrl";
     String STATUS = "status";
     String SUMMARY = "summary";
     String SUBJECT = "subject";
-    String SUBTITLE = "subTitle";
     String SHORT_URL = "shortUrl";
 
     // T

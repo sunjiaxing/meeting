@@ -20,6 +20,10 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import java.io.InputStream;
+
+import cz.msebera.android.httpclient.util.EncodingUtils;
+
 /**
  * Created by sun on 2015/12/16.
  */
@@ -45,20 +49,44 @@ public class NewsDetailActivity extends BaseActivity {
     private AnimationDrawable anim;
     private NewsService newsService;
     private NewsDetailVO detailVO;
+    private String html;
 
     @AfterViews
     void init() {
-        catId = getIntent().getStringExtra(IParam.CATID);
+        catId = getIntent().getStringExtra(IParam.CAT_ID);
         newsId = getIntent().getStringExtra(IParam.NEWS_ID);
         title = getIntent().getStringExtra(IParam.TITLE);
         anim = (AnimationDrawable) findViewById(R.id.iv_loading_in)
                 .getBackground();
         ivBack.setVisibility(View.VISIBLE);
         tvTitle.setText(title);
+        initWebView();
         newsService = new NewsService(this);
         getNewsDetail();
     }
 
+    /**
+     * 初始化webview和加载新闻模板
+     */
+    private void initWebView(){
+        // todo 给webview 注入图片点击 js
+
+        try {
+            InputStream is = getAssets().open(
+                    "news_detail_template.txt");
+            int length = is.available();
+            byte[] buffer = new byte[length];
+            is.read(buffer);
+            is.close();
+            html = EncodingUtils.getString(buffer, "UTF-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取新闻详情
+     */
     private void getNewsDetail() {
         startLoadingSelf();
         TaskManager.pushTask(new Task(TaskAction.ACTION_GET_NEWS_DETAIL, getLocalClassName()) {
@@ -112,6 +140,71 @@ public class NewsDetailActivity extends BaseActivity {
 
     @Override
     protected void onTaskSuccess(int action, Object data) {
+        switch (action) {
+            case TaskAction.ACTION_GET_NEWS_DETAIL:// 获取新闻详情
+                stopLoadingSelf();
+                detailVO = (NewsDetailVO) data;
+                refreshUI();
+                break;
+        }
+    }
 
+    /**
+     * 刷新界面
+     */
+    private void refreshUI() {
+        if (!Utils.isEmpty(html) && Utils.isEmpty(detailVO.getContentUrl())) {
+            html = html
+                    .replace("@title", detailVO.getTitle())
+                    .replace(
+                            "@comeAndTime",
+                            "来源:" + detailVO.getcFrom() + "  "
+                                    + detailVO.getcTime())
+                    .replace("@content", detailVO.getContent());
+            if (!Utils.isEmpty(detailVO.getAdIconUrl())
+                    && !Utils.isEmpty(detailVO.getAdTitle())) {
+                try {
+                    InputStream is = getAssets().open(
+                            "news_detail_bottom_ad.txt");
+                    int length = is.available();
+                    byte[] buffer = new byte[length];
+                    is.read(buffer);
+                    is.close();
+                    String bottomAd = EncodingUtils.getString(buffer, "UTF-8");
+                    html = html.replace("@ad", bottomAd);
+                    if (!Utils.isEmpty(detailVO.getAdIconUrl())) {
+                        html = html.replace("@adIconUrl",
+                                detailVO.getAdIconUrl());
+                        html = html.replace("@adUrl", detailVO.getAdUrl());
+                    } else {
+                        html = html.replace("@adIconUrl", "");
+                        html = html.replace("@adUrl", "");
+                    }
+                    if (!Utils.isEmpty(detailVO.getAdTitle())) {
+                        html = html.replace("@adTitle",
+                                detailVO.getAdTitle());
+                    } else {
+                        html = html.replace("@adTitle", "");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                html = html.replace("@ad", "");
+            }
+            webview.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null);
+        } else {
+            webview.loadUrl(detailVO.getContentUrl());
+        }
+    }
+
+    @Override
+    protected void onTaskFail(int action, String errorMessage) {
+        switch (action) {
+            case TaskAction.ACTION_GET_NEWS_DETAIL:
+                stopLoadingSelf();
+                showErrorMsg(errorMessage);
+                break;
+        }
     }
 }

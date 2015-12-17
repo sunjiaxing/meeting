@@ -253,7 +253,7 @@ public class NewsDao extends BaseDao {
                     + News.KEY_TABLE_NAME + " where " + News.KEY_COLUMN_ID
                     + "= ?" + "and " + News.KEY_COLUMN_CAT_ID + " = ?";
             cursor = db.rawQuery(sql, new String[]{newsId, catId});
-            if (cursor != null) {
+            if (cursor != null && cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
                     isRead = cursor.getInt(cursor
                             .getColumnIndex(News.KEY_COLUMN_IS_READ));

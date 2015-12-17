@@ -4,28 +4,20 @@ import java.util.List;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.taskmanager.Task;
 import com.taskmanager.TaskManager;
-import com.taskmanager.TaskResultListener;
 import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.BonConstants;
 import com.zhengshang.meeting.common.TaskAction;
 import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.service.NewsService;
+import com.zhengshang.meeting.ui.activity.NewsDetailActivity_;
 import com.zhengshang.meeting.ui.activity.ShowUrlActivity;
 import com.zhengshang.meeting.ui.adapter.OnlineNewsAdapter;
 import com.zhengshang.meeting.ui.component.DragListView;
@@ -36,7 +28,6 @@ import com.zhengshang.meeting.ui.vo.NewsVO;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ItemClick;
-import org.androidannotations.annotations.ViewById;
 
 /**
  * 新闻每个栏目的fragment
@@ -48,7 +39,7 @@ public class NewsPagerItemFragment extends BaseFragment implements
         OnlineNewsFirstView.OnClickFirstView,
         DragListView.OnRefreshLoadMoreListener {
     DragListView listview;
-    View layoutLoading,layoutError;
+    View layoutLoading, layoutError;
     TextView tvErrorMsg;
     Button btnErrorRefresh;
 
@@ -419,9 +410,11 @@ public class NewsPagerItemFragment extends BaseFragment implements
      * @param model
      */
     private void toNewsDetail(NewsVO model) {
-//		Intent intent = new Intent(getActivity(), NewsDetailActivity.class);
-//		intent.putExtra("newsModel", model);
-//		startActivityForResult(intent, BonConstants.REQUEST_TO_DETAIL);
+        Intent intent = new Intent(getActivity(), NewsDetailActivity_.class);
+        intent.putExtra(IParam.NEWS_ID, model.getId());
+        intent.putExtra(IParam.CAT_ID, model.getCatId());
+        intent.putExtra(IParam.TITLE, model.getTitle());
+        startActivityForResult(intent, 0);
     }
 
     @Override
@@ -456,7 +449,7 @@ public class NewsPagerItemFragment extends BaseFragment implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
-            case BonConstants.REQUEST_TO_DETAIL:
+            case 1:
                 getDataFromDB();
                 break;
         }

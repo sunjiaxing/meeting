@@ -1,0 +1,8 @@
+<!--广告开始-->
+<div  class="banner_01"  onclick="ad.onClick('@adUrl','@adTitle')"> <img src="@adIconUrl">
+<!--  <dl>
+    <dt>苏宁易购 美妆全场满198减10</dt>
+    <dd><a href="#">推广</a></dd>
+  </dl>
+</div>-->
+<!--广告结束-->

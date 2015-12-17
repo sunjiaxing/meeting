@@ -109,7 +109,7 @@ public class NewsRO extends BaseRO {
         List<NewsDto> newsList;
         String url = getServerUrl()
                 + RemoteNewsUrl.GET_NEWS_LIST.getURL() + IParam.WENHAO
-                + IParam.CATID + IParam.EQUALS_STRING + catId + IParam.AND
+                + IParam.CAT_ID + IParam.EQUALS_STRING + catId + IParam.AND
                 + IParam.LIMIT + IParam.EQUALS_STRING + limit + IParam.AND
                 + IParam.MIN_TIME + IParam.EQUALS_STRING + minTime;
         String result = httpGetRequest(url, getHeaderParam(IParam.TOKEN, token));
@@ -148,23 +148,21 @@ public class NewsRO extends BaseRO {
             throws JSONException {
         String url = getServerUrl()
                 + RemoteNewsUrl.NEWS_DETAIL.getURL() + IParam.WENHAO
-                + IParam.CATID + IParam.EQUALS_STRING + catId + IParam.AND
+                + IParam.CAT_ID + IParam.EQUALS_STRING + catId + IParam.AND
                 + IParam.NEWS_ID + IParam.EQUALS_STRING + id;
         String result = httpGetRequest(url, getHeaderParam(IParam.TOKEN, token));
         if (!Utils.isEmpty(result)) {
-            NewsDetailDto newsDetail;
             JSONObject json = new JSONObject(result);
             if (json.getInt(IParam.STATUS) == 1) {
                 String temp = json.getString(IParam.DETAIL);
-                newsDetail = new NewsDetailDto();
+                NewsDetailDto newsDetail = new NewsDetailDto();
                 newsDetail.paserJson(new JSONObject(temp));
-                newsDetail.setId(id);
+                return newsDetail;
             } else if (json.getInt(IParam.ERROR_CODE) == 100070) {
                 throw new AppException("110");
             } else {
                 throw new AppException(json.getInt(IParam.ERROR_CODE));
             }
-            return newsDetail;
         } else {
             throw new AppException(mContext.getString(R.string.netconnecterror));
         }
