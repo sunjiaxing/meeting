@@ -22,11 +22,13 @@ public interface IParam {
     String CONTENT = "content";
     String CONTENT_URL = "contentUrl";
     String C_TIME = "cTime";
+    String CATEGORIES = "categories";
 
     // D
     String DETAIL = "detail";
     String DESCRIPTION = "description";
     String DESC = "desc";
+    String DETAIL_NEW = "detailNew";
 
     // E
     String ERROR_CODE = "errorCode";
@@ -54,6 +56,7 @@ public interface IParam {
     String LIST = "list";
     String LIMIT = "limit";
     String LOGO_URL = "logoUrl";
+    String LIST_FOR_ORIENTATION = "listForOrientation";
 
     // M
     String MIN_TIME = "minTime";

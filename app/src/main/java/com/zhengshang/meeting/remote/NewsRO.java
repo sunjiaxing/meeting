@@ -40,9 +40,9 @@ public class NewsRO extends BaseRO {
     }
 
     public enum RemoteNewsUrl implements IBaseURL {
-        GET_NEWS_TYPE("categories"), GET_NEWS_LIST("listForOrientation"), NEWS_DETAIL(
-                "detailNew");
-        private static final String NAMESPACE = "news";
+        GET_NEWS_TYPE(IParam.CATEGORIES), GET_NEWS_LIST(IParam.LIST_FOR_ORIENTATION), NEWS_DETAIL(
+                IParam.DETAIL_NEW);
+        private static final String NAMESPACE = IParam.NEWS;
         private String url;
 
         RemoteNewsUrl(String mapping) {
