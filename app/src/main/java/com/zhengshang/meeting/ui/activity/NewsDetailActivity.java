@@ -1,6 +1,7 @@
 package com.zhengshang.meeting.ui.activity;
 
 import android.graphics.drawable.AnimationDrawable;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,6 +18,7 @@ import com.zhengshang.meeting.ui.component.CustomerWebview;
 import com.zhengshang.meeting.ui.vo.NewsDetailVO;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
@@ -68,7 +70,7 @@ public class NewsDetailActivity extends BaseActivity {
     /**
      * 初始化webview和加载新闻模板
      */
-    private void initWebView(){
+    private void initWebView() {
         // todo 给webview 注入图片点击 js
 
         try {
@@ -206,5 +208,19 @@ public class NewsDetailActivity extends BaseActivity {
                 showErrorMsg(errorMessage);
                 break;
         }
+    }
+
+    @Click(R.id.iv_back)
+    void back() {
+        finish();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            back();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -37,6 +37,6 @@ public class BonConstants {
     /** 跳转到新闻详情 */
     public static final int REQUEST_TO_DETAIL = 0x1008;
 
-    public static final String SERVER_URL = "http://android.doulimall.com/";
+    public static final String SERVER_URL = "http://192.168.1.103:8080/";
     public static String SLASH = "/";
 }

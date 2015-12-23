@@ -251,6 +251,8 @@ public class NewsPagerItemFragment extends BaseFragment implements
     }
 
     public void onTaskFail(int action, String message) {
+        listview.onRefreshComplete();
+        listview.onLoadMoreComplete(DragListView.LoadMoreState.LV_NETWORK_DISABLE);
         switch (action) {
             case TaskAction.ACTION_GET_NEWS_FROM_DB:
                 stopLoadingSelf();
