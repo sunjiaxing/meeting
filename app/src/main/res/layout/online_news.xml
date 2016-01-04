@@ -2,13 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_white" >
+    android:background="@color/color_white">
 
     <include
         android:id="@+id/head_layout"
+        layout="@layout/title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/title" />
+        android:layout_height="wrap_content" />
 
     <RelativeLayout
         android:id="@+id/galleryLayout"
@@ -18,7 +18,7 @@
         android:background="@color/color_white"
         android:clickable="false"
         android:focusable="false"
-        android:focusableInTouchMode="false" >
+        android:focusableInTouchMode="false">
 
         <com.zhengshang.meeting.ui.component.MyGallery
             android:id="@+id/gallery1"
@@ -27,10 +27,10 @@
             android:layout_alignParentLeft="true"
             android:layout_marginRight="40dp"
             android:background="#ededed"
-            android:paddingLeft="5dp"
             android:fadingEdge="none"
-            android:scrollbars="none"
-            android:fillViewport="false" />
+            android:fillViewport="false"
+            android:paddingLeft="5dp"
+            android:scrollbars="none" />
 
         <RelativeLayout
             android:id="@+id/right_handle_layout"
@@ -38,7 +38,7 @@
             android:layout_height="45dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="#ededed" >
+            android:background="#ededed">
 
             <TextView
                 android:id="@+id/tv_handle_news_type_open"
@@ -73,14 +73,14 @@
         android:layout_below="@+id/head_layout"
         android:background="#90000000"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="#ededed"
             android:paddingLeft="10dp"
-            android:paddingRight="2dp" >
+            android:paddingRight="2dp">
 
             <TextView
                 android:id="@+id/tv_my_channel"
@@ -113,20 +113,17 @@
             android:id="@+id/gv_my_channel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="0.1dp"
             android:background="@color/color_white"
-            android:horizontalSpacing="5dp"
+            android:horizontalSpacing="20dp"
             android:listSelector="@android:color/transparent"
-            android:numColumns="4"
-            android:padding="10dp"
-            android:verticalSpacing="5dp" >
-        </GridView>
+            android:numColumns="3"
+            android:padding="20dp"
+            android:verticalSpacing="20dp" />
 
         <TextView
             android:id="@+id/tv_more_channel"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="0.1dp"
             android:background="#ededed"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
@@ -143,16 +140,15 @@
             android:listSelector="@android:color/transparent"
             android:numColumns="4"
             android:padding="10dp"
-            android:verticalSpacing="5dp" >
-        </GridView>
+            android:verticalSpacing="5dp" />
     </LinearLayout>
 
     <include
         android:id="@+id/menuLayout"
+        layout="@layout/menu_back_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/head_layout"
-        layout="@layout/menu_back_main"
         android:visibility="gone" />
 
 </RelativeLayout>

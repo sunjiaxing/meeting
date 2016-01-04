@@ -13,12 +13,12 @@ public class ConfigDao {
 
     private SharedPreferences getShare() {
         return mContext.getSharedPreferences("configInfo",
-                Context.MODE_MULTI_PROCESS);
+                Context.MODE_PRIVATE);
     }
 
     private SharedPreferences.Editor getEdit() {
         return mContext.getSharedPreferences("configInfo",
-                Context.MODE_MULTI_PROCESS).edit();
+                Context.MODE_PRIVATE).edit();
     }
 
     public static ConfigDao getInstance(Context context) {
@@ -73,6 +73,7 @@ public class ConfigDao {
     public boolean setShowInitTime(long time) {
         return getEdit().putLong("showInitTime", time).commit();
     }
+
     /**
      * 获取上次删除logo图片的时间
      *
@@ -92,6 +93,7 @@ public class ConfigDao {
     public boolean setDeleteInitTime(long time) {
         return getEdit().putLong("deleteInitTime", time).commit();
     }
+
     /**
      * 获取新闻栏目是否更新的状态信息
      *
@@ -110,6 +112,7 @@ public class ConfigDao {
     public void setNewsTypeState(long newsTypeState) {
         getEdit().putLong("newsTypeState", newsTypeState).commit();
     }
+
     /**
      * 设置不同类别的点击时间
      *
@@ -129,6 +132,7 @@ public class ConfigDao {
     public long getCatClickTime(String catID, long defaultTime) {
         return getShare().getLong(catID, defaultTime);
     }
+
     /**
      * 设置新闻栏目更新状态
      *
@@ -147,4 +151,14 @@ public class ConfigDao {
     public boolean getNewsChannelUpdate() {
         return getShare().getBoolean("newsChannelUpdate", false);
     }
+
+    public boolean setString(String key, String value) {
+        return getEdit().putString(key, value).commit();
+    }
+
+    public boolean setInt(String key, int value) {
+        return getEdit().putInt(key, value).commit();
+    }
+
+
 }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#ededed"
+        android:paddingLeft="10dp"
+        android:paddingRight="2dp">
+
+        <TextView
+            android:id="@+id/tv_my_channel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/my_channel"
+            android:textColor="#666666"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/tv_my_channel"
+            android:text="@string/channel_tip"
+            android:textColor="#ff7800" />
+
+    </RelativeLayout>
+
+    <com.zhengshang.meeting.ui.component.DragGridView
+        android:id="@+id/gv_my_channel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white"
+        android:horizontalSpacing="20dp"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="3"
+        android:paddingBottom="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:scrollbars="none"
+        android:verticalSpacing="15dp" />
+
+    <TextView
+        android:id="@+id/tv_more_channel"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="0.1dp"
+        android:background="#ededed"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="@string/more_channel"
+        android:textColor="#666666"
+        android:textSize="15sp" />
+
+    <GridView
+        android:id="@+id/gv_more_channel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white"
+        android:horizontalSpacing="20dp"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="3"
+        android:paddingBottom="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:scrollbars="none"
+        android:verticalSpacing="15dp" />
+</LinearLayout>

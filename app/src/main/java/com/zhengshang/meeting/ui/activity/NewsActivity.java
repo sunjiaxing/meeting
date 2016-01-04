@@ -312,17 +312,18 @@ public class NewsActivity extends BaseActivity implements
      */
     @Click(R.id.tv_handle_news_type_open)
     void clickTypeOpen() {
-        // 构建显示数据
-        // 创建适配器 并设置
-        myChannelAdapter = new MyChannelAdapter(this);
-        myChannelAdapter.setData(newsTypes);
-        moreChannelAdapter = new MoreChannelAdapter(this);
-        moreChannelAdapter.setData(getMoreChannelList());
-        gvMyChannel.setAdapter(myChannelAdapter);
-        gvMoreChannel.setAdapter(moreChannelAdapter);
-        // 显示编辑区域
-        handleNewsTypeView.setVisibility(View.VISIBLE);
-        newsService.setNewsChannelUpdate(false);
+        startActivity(new Intent(this, NewsChannelActivity_.class));
+//        // 构建显示数据
+//        // 创建适配器 并设置
+//        myChannelAdapter = new MyChannelAdapter(this);
+//        myChannelAdapter.setData(newsTypes);
+//        moreChannelAdapter = new MoreChannelAdapter(this);
+//        moreChannelAdapter.setData(getMoreChannelList());
+//        gvMyChannel.setAdapter(myChannelAdapter);
+//        gvMoreChannel.setAdapter(moreChannelAdapter);
+//        // 显示编辑区域
+//        handleNewsTypeView.setVisibility(View.VISIBLE);
+//        newsService.setNewsChannelUpdate(false);
     }
 
     /**
