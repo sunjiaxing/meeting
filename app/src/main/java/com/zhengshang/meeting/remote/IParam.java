@@ -11,7 +11,6 @@ public interface IParam {
     String AD_URL = "adUrl";
     String AND = "&";
     String AD_ID = "adId";
-    String ARTICLE = "article";
 
     // B
     // C
@@ -21,7 +20,6 @@ public interface IParam {
     String CAT_ID = "catId";
     String CONTENT = "content";
     String CONTENT_URL = "contentUrl";
-    String C_TIME = "cTime";
     String CATEGORIES = "categories";
 
     // D
@@ -35,7 +33,6 @@ public interface IParam {
     String EQUALS_STRING = "=";
 
     // F
-    String FROM = "from";
     String FOCUS = "focus";
 
     // G
@@ -65,6 +62,7 @@ public interface IParam {
     String NEED_PARAM = "needParam";
     String NAME = "name";
     String NEWS = "news";
+    String NEWS_FROM = "newsFrom";
     String NEWS_ID = "newsId";
 
     // O

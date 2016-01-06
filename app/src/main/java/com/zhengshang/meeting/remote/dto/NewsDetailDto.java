@@ -1,5 +1,6 @@
 package com.zhengshang.meeting.remote.dto;
 
+import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.remote.IParam;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -100,11 +101,11 @@ public class NewsDetailDto {
 		if (json.has(IParam.CONTENT_URL)) {
 			this.contentUrl = json.getString(IParam.CONTENT_URL);
 		}
-		if (json.has(IParam.FROM)) {
-			this.cFrom = json.getString(IParam.FROM);
+		if (json.has(IParam.NEWS_FROM)) {
+			this.cFrom = json.getString(IParam.NEWS_FROM);
 		}
-		if (json.has(IParam.C_TIME)) {
-			this.cTime = json.getLong(IParam.C_TIME);
+		if (json.has(IParam.CREATE_TIME)) {
+			this.cTime = Utils.formateTimeFromPhpToJava(json.getLong(IParam.CREATE_TIME));
 		}
 
 		// 用于对外分享的内容

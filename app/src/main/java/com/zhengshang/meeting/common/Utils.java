@@ -241,4 +241,7 @@ public class Utils {
         }
     }
 
+    public static long formateTimeFromPhpToJava(long time) {
+        return Long.parseLong(time + "000");
+    }
 }
