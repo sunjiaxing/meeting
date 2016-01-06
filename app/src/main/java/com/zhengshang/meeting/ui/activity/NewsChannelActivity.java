@@ -1,6 +1,7 @@
 package com.zhengshang.meeting.ui.activity;
 
-import android.support.v4.app.FragmentTransaction;
+import android.content.Intent;
+import android.graphics.Color;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -13,12 +14,12 @@ import com.taskmanager.TaskManager;
 import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.TaskAction;
 import com.zhengshang.meeting.common.Utils;
+import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.service.NewsService;
 import com.zhengshang.meeting.ui.adapter.DragChannelAdapter;
 import com.zhengshang.meeting.ui.adapter.MoreChannelAdapter;
-import com.zhengshang.meeting.ui.adapter.MyChannelAdapter;
 import com.zhengshang.meeting.ui.component.DragGridView;
-import com.zhengshang.meeting.ui.fragment.NewsPagerItemFragment;
+import com.zhengshang.meeting.ui.component.TlcyDialog;
 import com.zhengshang.meeting.ui.vo.NewsChannelVO;
 
 import org.androidannotations.annotations.AfterViews;
@@ -27,6 +28,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,14 +66,28 @@ public class NewsChannelActivity extends BaseActivity {
         ivBack.setVisibility(View.VISIBLE);
         tvTitle.setText("栏目管理");
         btnRight.setVisibility(View.VISIBLE);
-        btnRight.setBackground(null);
+        btnRight.setBackgroundColor(Color.TRANSPARENT);
         btnRight.setText("完成");
         getNewsType();
     }
 
     @Click(R.id.iv_back)
     void back() {
-        finish();
+        if (isChange) {
+            showAlert("消息提示", "确定要保存已操作的栏目吗？", "保存", "取消", new TlcyDialog.TlcyDialogListener() {
+                @Override
+                public void onClick() {
+                    complete();
+                }
+            }, new TlcyDialog.TlcyDialogListener() {
+                @Override
+                public void onClick() {
+                    finish();
+                }
+            });
+        } else {
+            finish();
+        }
     }
 
     @Override
@@ -106,14 +122,50 @@ public class NewsChannelActivity extends BaseActivity {
                 refreshUI();
                 break;
             case TaskAction.ACTION_SAVE_NEWS_TYPE:
-                setResult(RESULT_OK);
+                showToast("保存成功");
+                isChange = false;
+                Intent intent = new Intent();
+                intent.putExtra(IParam.LIST, (Serializable) newsTypes);
+                setResult(RESULT_OK, intent);
                 finish();
                 break;
         }
     }
 
+    @Override
+    protected void onTaskFail(int action, String errorMessage) {
+        switch (action) {
+            case TaskAction.ACTION_SAVE_NEWS_TYPE:
+                // TODO 结束进度
+
+                showToast("保存失败");
+                break;
+            default:
+                super.onTaskFail(action, errorMessage);
+                break;
+        }
+    }
+
     private void refreshUI() {
-        myChannelAdapter = new DragChannelAdapter(this);
+        myChannelAdapter = new DragChannelAdapter(this) {
+            @Override
+            public void swapView(int draggedPos, int destPos) {
+                //从前向后拖动，其他item依次前移
+                if (draggedPos < destPos) {
+                    myChannelList.add(destPos + 1, getItem(draggedPos));
+                    myChannelList.remove(draggedPos);
+                }
+                //从后向前拖动，其他item依次后移
+                else if (draggedPos > destPos) {
+                    myChannelList.add(destPos, getItem(draggedPos));
+                    myChannelList.remove(draggedPos + 1);
+                }
+                hidePosition = destPos;
+                notifyDataSetChanged();
+                isChange = true;
+                newsTypes = myChannelList;
+            }
+        };
         myChannelAdapter.setData(newsTypes);
         moreChannelAdapter = new MoreChannelAdapter(this);
         moreChannelAdapter.setData(getMoreChannelList());
@@ -180,6 +232,8 @@ public class NewsChannelActivity extends BaseActivity {
     @Click(R.id.btn_right)
     void complete() {
         if (isChange) {
+            // TODO 加载进度圈
+
             // 整理栏目索引
             tidyNewsTypeIndex(newsTypes);
             // 整理数据库中的栏目数据
@@ -192,7 +246,6 @@ public class NewsChannelActivity extends BaseActivity {
                     newsService.saveNewsType(newsTypes);
                 }
             }, this);
-            isChange = false;
         }
     }
 

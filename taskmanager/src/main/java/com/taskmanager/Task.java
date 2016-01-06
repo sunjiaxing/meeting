@@ -23,12 +23,20 @@ public abstract class Task implements Runnable {
         this.className = className;
     }
 
+    public Task(int action) {
+        this.mAction = action;
+    }
+
     public void setReturnData(Object returnData) {
         this.returnData = returnData;
     }
 
     public void setNeedCallBack(boolean needCallBack) {
         this.needCallBack = needCallBack;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     @Override

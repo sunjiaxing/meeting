@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -21,11 +20,10 @@ import com.taskmanager.TaskManager;
 import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.TaskAction;
 import com.zhengshang.meeting.common.Utils;
+import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.service.NewsService;
 import com.zhengshang.meeting.ui.adapter.ListViewPagerAdapter;
-import com.zhengshang.meeting.ui.adapter.MoreChannelAdapter;
-import com.zhengshang.meeting.ui.adapter.MyChannelAdapter;
-import com.zhengshang.meeting.ui.component.MyGallery;
+import com.zhengshang.meeting.ui.component.ChannelGallery;
 import com.zhengshang.meeting.ui.fragment.NewsPagerItemFragment;
 import com.zhengshang.meeting.ui.fragment.NewsPagerItemFragment_;
 import com.zhengshang.meeting.ui.vo.NewsChannelVO;
@@ -33,7 +31,6 @@ import com.zhengshang.meeting.ui.vo.NewsChannelVO;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
@@ -54,43 +51,22 @@ public class NewsActivity extends BaseActivity implements
     TextView tvTitle;
     @ViewById(R.id.vp_news_list)
     ViewPager mPager;
-    @ViewById(R.id.gallery1)
-    MyGallery myGallery;
     @ViewById(R.id.right_handle_layout)
     RelativeLayout rightHandleLayout;
     @ViewById(R.id.iv_red_point)
     ImageView ivRedPoint;
     @ViewById(R.id.tv_handle_news_type_open)
     TextView tvHandleNewsTypeOpen;
-    @ViewById(R.id.tv_handle_news_type_close)
-    TextView tvHandleNewsTypeClose;
-    @ViewById(R.id.layout_handle_news_type)
-    View handleNewsTypeView;
-    @ViewById(R.id.gv_my_channel)
-    GridView gvMyChannel;
-    @ViewById(R.id.gv_more_channel)
-    GridView gvMoreChannel;
     @ViewById(R.id.menuLayout)
     View menuBgLayout;
     @ViewById(R.id.btn_back_main)
     LinearLayout btnShouYe;
+    @ViewById(R.id.channel_gallery)
+    ChannelGallery channelGallery;
 
     private ListViewPagerAdapter listViewPagerAdapter;
     private List<NewsChannelVO> newsTypes = new ArrayList<>();
-    /**
-     * 系统全部新闻栏目信息
-     */
-    private List<NewsChannelVO> allNewsTypes = new ArrayList<>();
-    /**
-     * 我的栏目适配器
-     */
-    private MyChannelAdapter myChannelAdapter;
-    /**
-     * 更多栏目适配器
-     */
-    private MoreChannelAdapter moreChannelAdapter;
     private NewsService newsService;
-    private boolean isChange = false;
     private List<NewsPagerItemFragment> fragmentList;
     private Bundle saveInstance;
 
@@ -104,18 +80,13 @@ public class NewsActivity extends BaseActivity implements
     @AfterViews
     void init() {
         // 设置点击事件
-        myGallery.setOnItemClickListener(new MyGallery.TlcyGalleryListener() {
+        channelGallery.setOnItemClickListener(new ChannelGallery.ItemClickListener() {
 
             @Override
-            public void onState(int state) {
-            }
-
-            @Override
-            public boolean onItemClick(int position) {
+            public void onItemClick(int position) {
                 if (mPager != null) {
                     mPager.setCurrentItem(position);
                 }
-                return !Utils.isEmpty(newsTypes);
             }
         });
         rightHandleLayout.setVisibility(View.GONE);
@@ -130,7 +101,7 @@ public class NewsActivity extends BaseActivity implements
         ivRight.setBackgroundResource(R.drawable.btn_more);
 
         mPager.addOnPageChangeListener(this);
-        if (Utils.isEmpty(allNewsTypes) || Utils.isEmpty(newsTypes)) {
+        if (Utils.isEmpty(newsTypes)) {
             getNewsType();
             newsService.updateNewsType();
         } else {
@@ -142,22 +113,23 @@ public class NewsActivity extends BaseActivity implements
      * 联网获取新闻类型
      */
     private void getNewsType() {
-        TaskManager.pushTaskWithQueue(new Task(TaskAction.ACTION_GET_NEWS_TYPE, getLocalClassName()) {
+        TaskManager.pushTaskWithQueue(new Task(TaskAction.ACTION_GET_NEWS_TYPE) {
             @Override
             protected void doBackground() throws Exception {
-                setReturnData(new Object[]{newsService.getAllNewsTypes(), newsService.getUserNewsTypes()});
+                newsService.getAllNewsTypes();
+                setReturnData(newsService.getUserNewsTypes());
             }
         }, this);
     }
 
-    /***
+    /**
      * 刷新界面
      *
      * @param savedInstanceState
      */
     private void refreshUI(Bundle savedInstanceState) {
         // 加载栏目
-        updateGallery(newsTypes, 0);
+        updateGallery(newsTypes);
         // 判断栏目更新
         notifyNewsChannelUpdate(newsService.getNewsChannelUpdate());
         // 加载新闻
@@ -212,7 +184,6 @@ public class NewsActivity extends BaseActivity implements
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         controlMenuBg(false);
-        closeChannel();
         return super.onTouchEvent(event);
     }
 
@@ -233,18 +204,15 @@ public class NewsActivity extends BaseActivity implements
      * 更新新闻分类
      *
      * @param data
-     * @param index
      */
-    public void updateGallery(List<NewsChannelVO> data, int index) {
+    public void updateGallery(List<NewsChannelVO> data) {
         if (data != null && data.size() > 0) {
             // 有栏目数据时显示操作按钮
+            channelGallery.setData(data);
             rightHandleLayout.setVisibility(View.VISIBLE);
-            myGallery.setAdapter(R.layout.item, R.mipmap.menu_selected, data);
-            myGallery.setSelected(index);
             if (mPager != null) {
-                mPager.setCurrentItem(index);
+                mPager.setCurrentItem(0);
             }
-            myGallery.scrollToSelected();
         }
     }
 
@@ -260,9 +228,8 @@ public class NewsActivity extends BaseActivity implements
 
     @Override
     public void onPageSelected(int position) {
-        if (myGallery != null) {
-            myGallery.setSelected(position);
-            myGallery.scrollToSelected();
+        if (channelGallery != null) {
+            channelGallery.setSelected(position);
         }
         if (!Utils.isEmpty(fragmentList)) {
             NewsPagerItemFragment itemFragment = fragmentList.get(position);
@@ -312,135 +279,20 @@ public class NewsActivity extends BaseActivity implements
      */
     @Click(R.id.tv_handle_news_type_open)
     void clickTypeOpen() {
-        startActivity(new Intent(this, NewsChannelActivity_.class));
-//        // 构建显示数据
-//        // 创建适配器 并设置
-//        myChannelAdapter = new MyChannelAdapter(this);
-//        myChannelAdapter.setData(newsTypes);
-//        moreChannelAdapter = new MoreChannelAdapter(this);
-//        moreChannelAdapter.setData(getMoreChannelList());
-//        gvMyChannel.setAdapter(myChannelAdapter);
-//        gvMoreChannel.setAdapter(moreChannelAdapter);
-//        // 显示编辑区域
-//        handleNewsTypeView.setVisibility(View.VISIBLE);
-//        newsService.setNewsChannelUpdate(false);
+        startActivityForResult(new Intent(this, NewsChannelActivity_.class), 0);
     }
 
-    /**
-     * 获取更多栏目列表
-     *
-     * @return
-     */
-    public List<NewsChannelVO> getMoreChannelList() {
-        ArrayList<NewsChannelVO> moreChannelList = null;
-        if (!Utils.isEmpty(allNewsTypes) && newsTypes != null) {
-            moreChannelList = new ArrayList<>();
-            moreChannelList.addAll(allNewsTypes);
-            for (NewsChannelVO my : newsTypes) {
-                for (NewsChannelVO more : moreChannelList) {
-                    if (more.getTypeId().equals(my.getTypeId())) {
-                        moreChannelList.remove(more);
-                        break;
-                    }
-                }
-            }
-        }
-        return moreChannelList;
-    }
 
-    /***
-     * 关闭栏目编辑菜单
-     */
-    @Click({R.id.tv_handle_news_type_close, R.id.layout_handle_news_type})
-    void closeChannel() {
-        // 判断栏目编辑区状态
-        if (handleNewsTypeView.getVisibility() != View.GONE) {
-            // 隐藏红色圆点提示
-            notifyNewsChannelUpdate(newsService.getNewsChannelUpdate());
-            // 隐藏编辑区域
-            handleNewsTypeView.setVisibility(View.GONE);
-            if (isChange) {
-                // 整理栏目索引
-                tidyNewsTypeIndex(newsTypes);
-                // 清除原fragment在内存中的缓存
-                FragmentTransaction ft = getSupportFragmentManager()
-                        .beginTransaction();
-                for (NewsPagerItemFragment item : fragmentList) {
-                    ft.remove(item);
-                }
-                ft.commit();
-                // 刷新界面
-                refreshUI(null);
-                // 整理数据库中的栏目数据
-                TaskManager.pushTask(new Task(TaskAction.ACTION_SAVE_NEWS_TYPE, this.getLocalClassName()) {
-                    @Override
-                    protected void doBackground() {
-                        // 不需要返回处理
-                        setNeedCallBack(false);
-                        // 执行操作
-                        newsService.saveNewsType(newsTypes);
-                    }
-                }, this);
-                isChange = false;
-            }
+    void afterSaveNewsChannel() {
+        // 清除原fragment在内存中的缓存
+        FragmentTransaction ft = getSupportFragmentManager()
+                .beginTransaction();
+        for (NewsPagerItemFragment item : fragmentList) {
+            ft.remove(item);
         }
-    }
-
-    /**
-     * 整理我的栏目索引
-     *
-     * @param types
-     */
-    private void tidyNewsTypeIndex(List<NewsChannelVO> types) {
-        if (!Utils.isEmpty(types)) {
-            for (int i = 0; i < types.size(); i++) {
-                types.get(i).setPosition(i);
-            }
-        }
-    }
-
-    /**
-     * 移除已选栏目
-     *
-     * @param item
-     */
-    @ItemClick(R.id.gv_my_channel)
-    void removeChannel(NewsChannelVO item) {
-        // 点击我的栏目
-        // 判断是否锁定
-        if (item.getIsLock() == 1) {
-            // 锁定
-            return;
-        }
-        // 将选中项从我的栏目中移除并更新数据
-        newsTypes.remove(item);
-        myChannelAdapter.setData(newsTypes);
-        moreChannelAdapter.setData(getMoreChannelList());
-        myChannelAdapter.notifyDataSetChanged();
-        moreChannelAdapter.notifyDataSetChanged();
-        isChange = true;
-    }
-
-    /**
-     * 添加新栏目
-     *
-     * @param item
-     */
-    @ItemClick(R.id.gv_more_channel)
-    void addNewChannel(NewsChannelVO item) {
-        // 点击更多栏目
-        // 判断是否锁定
-        if (item.getIsLock() == 1) {
-            // 锁定
-            return;
-        }
-        // 将选中项添加到我的栏目中
-        newsTypes.add(item);
-        myChannelAdapter.setData(newsTypes);
-        moreChannelAdapter.setData(getMoreChannelList());
-        myChannelAdapter.notifyDataSetChanged();
-        moreChannelAdapter.notifyDataSetChanged();
-        isChange = true;
+        ft.commit();
+        // 刷新界面
+        refreshUI(null);
     }
 
     @Override
@@ -459,6 +311,7 @@ public class NewsActivity extends BaseActivity implements
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             back();
+            return true;
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -466,6 +319,11 @@ public class NewsActivity extends BaseActivity implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            // 操作栏目
+            newsTypes = (List<NewsChannelVO>) data.getSerializableExtra(IParam.LIST);
+            afterSaveNewsChannel();
+        }
     }
 
     @Click(R.id.iv_back)
@@ -479,9 +337,7 @@ public class NewsActivity extends BaseActivity implements
         int fragmentId;
         switch (action) {
             case TaskAction.ACTION_GET_NEWS_TYPE:// 获取新闻分类成功
-                dataArray = (Object[]) data;
-                allNewsTypes = (List<NewsChannelVO>) dataArray[0];
-                newsTypes = (List<NewsChannelVO>) dataArray[1];
+                newsTypes = (List<NewsChannelVO>) data;
                 refreshUI(saveInstance);
                 break;
             case TaskAction.ACTION_GET_NEWS_FROM_DB:// 获取缓存数据
@@ -501,15 +357,8 @@ public class NewsActivity extends BaseActivity implements
 
     @Override
     protected void onTaskFail(int action, String errorMessage) {
-        switch (action) {
-            case TaskAction.ACTION_GET_NEWS_FROM_DB:
-                for (NewsPagerItemFragment fra : fragmentList) {
-                    fra.onTaskFail(action, errorMessage);
-                }
-                break;
-            default:
-                super.onTaskFail(action, errorMessage);
-                break;
+        for (NewsPagerItemFragment fra : fragmentList) {
+            fra.onTaskFail(action, errorMessage);
         }
     }
 }

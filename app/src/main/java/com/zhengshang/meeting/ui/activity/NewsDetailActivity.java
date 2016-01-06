@@ -91,7 +91,7 @@ public class NewsDetailActivity extends BaseActivity {
      */
     private void getNewsDetail() {
         startLoadingSelf();
-        TaskManager.pushTask(new Task(TaskAction.ACTION_GET_NEWS_DETAIL, getLocalClassName()) {
+        TaskManager.pushTask(new Task(TaskAction.ACTION_GET_NEWS_DETAIL) {
             @Override
             protected void doBackground() throws Exception {
                 setReturnData(newsService.getNewsDetailFromWeb(newsId, catId));
@@ -124,8 +124,7 @@ public class NewsDetailActivity extends BaseActivity {
     /**
      * 显示错误信息
      *
-     * @param msg
-     * @author
+     * @param msg 错误信息
      */
     private void showErrorMsg(String msg) {
         if (Utils.isEmpty(msg)) {

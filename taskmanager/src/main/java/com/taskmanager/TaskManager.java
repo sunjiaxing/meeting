@@ -1,5 +1,6 @@
 package com.taskmanager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -18,6 +19,7 @@ public class TaskManager {
 
     /**
      * 并发执行任务
+     *
      * @param task
      * @param context
      */
@@ -32,6 +34,7 @@ public class TaskManager {
 
     /**
      * 放入到任务队列中排队执行
+     *
      * @param task
      * @param context
      */
@@ -43,6 +46,20 @@ public class TaskManager {
             context.startService(intent);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void pushTask(Task task, Activity activity) {
+        if (task != null) {
+            task.setClassName(activity.getLocalClassName());
+            pushTask(task, activity.getBaseContext());
+        }
+    }
+
+    public static void pushTaskWithQueue(Task task, Activity activity) {
+        if (task != null) {
+            task.setClassName(activity.getLocalClassName());
+            pushTaskWithQueue(task, activity.getBaseContext());
         }
     }
 

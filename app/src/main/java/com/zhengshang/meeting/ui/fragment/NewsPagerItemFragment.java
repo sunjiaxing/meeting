@@ -183,7 +183,7 @@ public class NewsPagerItemFragment extends BaseFragment implements
      */
     private void getDataFromDB() {
         if (newsType != null) {
-            TaskManager.pushTask(new Task(TaskAction.ACTION_GET_NEWS_FROM_DB, getActivity().getLocalClassName()) {
+            TaskManager.pushTask(new Task(TaskAction.ACTION_GET_NEWS_FROM_DB) {
                 @Override
                 protected void doBackground() throws Exception {
                     // 获取本地数据
@@ -273,7 +273,7 @@ public class NewsPagerItemFragment extends BaseFragment implements
      * 刷新数据
      */
     private void refresh() {
-        TaskManager.pushTask(new Task(TaskAction.ACTION_REFRESH_NEWS, getActivity().getLocalClassName()) {
+        TaskManager.pushTask(new Task(TaskAction.ACTION_REFRESH_NEWS) {
             @Override
             protected void doBackground() throws Exception {
                 minTime = 0;
@@ -308,7 +308,7 @@ public class NewsPagerItemFragment extends BaseFragment implements
     @Override
     public void onLoadMore() {
         // 获取当前集合中的数据的时间的最小值---从集合最后一条数据
-        TaskManager.pushTask(new Task(TaskAction.ACTION_LOAD_MORE_NEWS, getActivity().getLocalClassName()) {
+        TaskManager.pushTask(new Task(TaskAction.ACTION_LOAD_MORE_NEWS) {
             @Override
             protected void doBackground() throws Exception {
                 minTime = news.get(news.size() - 1).getCreateTime();

@@ -16,20 +16,18 @@ import java.util.List;
 
 /**
  * 我的栏目适配器
- *
- * @author sun
  */
-public class DragChannelAdapter extends QuickFlingAdapter implements DragGridView.DragGridViewAdapter {
+public abstract class DragChannelAdapter extends QuickFlingAdapter implements DragGridView.DragGridViewAdapter {
 
-    List<NewsChannelVO> myChannelList = null;
-    private int hidePosition = AdapterView.INVALID_POSITION;
+    protected List<NewsChannelVO> myChannelList = null;
+    protected int hidePosition = AdapterView.INVALID_POSITION;
 
     public DragChannelAdapter(Context context) {
         super(context);
     }
 
     public void setData(List<NewsChannelVO> list) {
-        this.myChannelList = new ArrayList<NewsChannelVO>(list);
+        this.myChannelList = new ArrayList<>(list);
     }
 
     @Override
@@ -98,24 +96,25 @@ public class DragChannelAdapter extends QuickFlingAdapter implements DragGridVie
         notifyDataSetChanged();
     }
 
-    @Override
-    public void swapView(int draggedPos, int destPos) {
-        //从前向后拖动，其他item依次前移
-        if (draggedPos < destPos) {
-            myChannelList.add(destPos + 1, getItem(draggedPos));
-            myChannelList.remove(draggedPos);
-        }
-        //从后向前拖动，其他item依次后移
-        else if (draggedPos > destPos) {
-            myChannelList.add(destPos, getItem(draggedPos));
-            myChannelList.remove(draggedPos + 1);
-        }
-        hidePosition = destPos;
-        notifyDataSetChanged();
-    }
+//    @Override
+//    public void swapView(int draggedPos, int destPos) {
+//        //从前向后拖动，其他item依次前移
+//        if (draggedPos < destPos) {
+//            myChannelList.add(destPos + 1, getItem(draggedPos));
+//            myChannelList.remove(draggedPos);
+//        }
+//        //从后向前拖动，其他item依次后移
+//        else if (draggedPos > destPos) {
+//            myChannelList.add(destPos, getItem(draggedPos));
+//            myChannelList.remove(draggedPos + 1);
+//        }
+//        hidePosition = destPos;
+//        notifyDataSetChanged();
+//    }
 
     public class ViewHolder {
         TextView tvChannelName;
         ImageView ivHandleLogo;
     }
+
 }
