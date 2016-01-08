@@ -66,7 +66,7 @@ public abstract class DragChannelAdapter extends QuickFlingAdapter implements Dr
         // 获取数据
         NewsChannelVO newsType = myChannelList.get(position);
         viewHolder.tvChannelName.setText(newsType.getName());
-        if (newsType.getIsLock() == 1) {
+        if (newsType.isLock()) {
             // 锁定状态不显示图标
             viewHolder.ivHandleLogo.setVisibility(View.GONE);
         } else {

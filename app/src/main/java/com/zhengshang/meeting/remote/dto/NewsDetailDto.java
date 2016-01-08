@@ -105,7 +105,7 @@ public class NewsDetailDto {
 			this.cFrom = json.getString(IParam.NEWS_FROM);
 		}
 		if (json.has(IParam.CREATE_TIME)) {
-			this.cTime = Utils.formateTimeFromPhpToJava(json.getLong(IParam.CREATE_TIME));
+			this.cTime = json.getLong(IParam.CREATE_TIME);
 		}
 
 		// 用于对外分享的内容

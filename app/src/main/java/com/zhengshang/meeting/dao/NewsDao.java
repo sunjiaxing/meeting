@@ -41,10 +41,6 @@ public class NewsDao extends BaseDao {
                     values.put(NewsChannel.KEY_COLUMN_MASTER_ID,
                             tmp.getMasterId());
                 }
-                if (tmp.getPosition() > 0) {
-                    values.put(NewsChannel.KEY_COLUMN_POSITION,
-                            tmp.getPosition());
-                }
                 if (tmp.getIsMine() > 0) {
                     values.put(NewsChannel.KEY_COLUMN_IS_MINE, tmp.getIsMine());
                 }
@@ -55,6 +51,10 @@ public class NewsDao extends BaseDao {
                                     + NewsChannel.KEY_COLUMN_MASTER_ID + "=?",
                             new String[]{tmp.getTypeId(), tmp.getMasterId()});
                 } else {
+                    if (tmp.getPosition() > 0) {
+                        values.put(NewsChannel.KEY_COLUMN_POSITION,
+                                tmp.getPosition());
+                    }
                     db.insert(NewsChannel.KEY_TABLE_NAME, null, values);
                 }
             }
@@ -149,12 +149,13 @@ public class NewsDao extends BaseDao {
             db.execSQL(sql, new String[]{masterId});
 
             sql = "update " + NewsChannel.KEY_TABLE_NAME + " set "
-                    + NewsChannel.KEY_COLUMN_IS_MINE + " = 1 where "
+                    + NewsChannel.KEY_COLUMN_IS_MINE + " = 1 ,"
+                    + NewsChannel.KEY_COLUMN_POSITION + " = ?  where "
                     + NewsChannel.KEY_COLUMN_MASTER_ID + " = ? and "
                     + NewsChannel.KEY_COLUMN_TYPE_ID + " = ? ";
             for (NewsChannel newsChannel : newsTypes) {
                 db.execSQL(sql,
-                        new String[]{masterId, newsChannel.getTypeId()});
+                        new Object[]{newsChannel.getPosition(), masterId, newsChannel.getTypeId()});
             }
             setTransactionSuccessful();
         } catch (Exception e) {
@@ -313,6 +314,7 @@ public class NewsDao extends BaseDao {
 
     /**
      * 保存新闻
+     *
      * @param data
      */
     public void saveNews(List<News> data) {

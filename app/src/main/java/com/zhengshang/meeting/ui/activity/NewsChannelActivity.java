@@ -199,7 +199,7 @@ public class NewsChannelActivity extends BaseActivity {
     void deleteChannel(NewsChannelVO item) {
         // 点击我的栏目
         // 判断是否锁定
-        if (item.getIsLock() == 1) {
+        if (item.isLock()) {
             // 锁定
             return;
         }
@@ -216,7 +216,7 @@ public class NewsChannelActivity extends BaseActivity {
     void addNewChannel(NewsChannelVO item) {
         // 点击更多栏目
         // 判断是否锁定
-        if (item.getIsLock() == 1) {
+        if (item.isLock()) {
             // 锁定
             return;
         }

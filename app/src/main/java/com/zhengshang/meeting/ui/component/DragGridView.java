@@ -14,6 +14,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 
+import com.zhengshang.meeting.ui.vo.NewsChannelVO;
+
 /**
  * 拖拽移动位置的 GridView
  */
@@ -29,9 +31,6 @@ public class DragGridView extends GridView {
     private boolean isViewOnDrag = false;
     private DragGridViewAdapter dragAdater;
 
-    /**
-     * previous dragged over position
-     */
     private int preDraggedOverPositon = AdapterView.INVALID_POSITION;
     private int downRawX;
     private int downRawY;
@@ -40,7 +39,10 @@ public class DragGridView extends GridView {
         @Override
         //长按item开始拖动
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
+            NewsChannelVO vo = (NewsChannelVO) parent.getAdapter().getItem(position);
+            if (vo.isLock()) {
+                return true;
+            }
             //记录长按item位置
             preDraggedOverPositon = position;
 
@@ -122,7 +124,7 @@ public class DragGridView extends GridView {
             downRawY = (int) ev.getRawY();
         }
         //dragImageView处于被拖动时，更新dragImageView位置
-        else if ((ev.getAction() == MotionEvent.ACTION_MOVE) && isViewOnDrag) {
+        else if (ev.getAction() == MotionEvent.ACTION_MOVE && isViewOnDrag) {
             Log.i(LOG_TAG, "" + ev.getRawX() + " " + ev.getRawY());
             //设置触摸点为dragImageView中心
             dragImageViewParams.x = (int) (ev.getRawX() - dragImageView.getWidth() / 2);
@@ -131,14 +133,14 @@ public class DragGridView extends GridView {
             windowManager.updateViewLayout(dragImageView, dragImageViewParams);
             //获取当前触摸点的item position
             int currDraggedPosition = pointToPosition((int) ev.getX(), (int) ev.getY());
-            //如果当前停留位置item不等于上次停留位置的item，交换本次和上次停留的item
-            if ((currDraggedPosition != AdapterView.INVALID_POSITION) && (currDraggedPosition != preDraggedOverPositon)) {
+            //如果当前停留位置item不等于上次停留位置的item 并且不是第一个位置，交换本次和上次停留的item
+            if (currDraggedPosition != AdapterView.INVALID_POSITION && currDraggedPosition != preDraggedOverPositon && currDraggedPosition != 0) {
                 dragAdater.swapView(preDraggedOverPositon, currDraggedPosition);
                 preDraggedOverPositon = currDraggedPosition;
             }
         }
         //释放dragImageView
-        else if ((ev.getAction() == MotionEvent.ACTION_UP) && isViewOnDrag) {
+        else if (ev.getAction() == MotionEvent.ACTION_UP && isViewOnDrag) {
             dragAdater.showHideView();
             if ((int) dragImageView.getTag() == DRAG_IMG_SHOW) {
                 windowManager.removeView(dragImageView);

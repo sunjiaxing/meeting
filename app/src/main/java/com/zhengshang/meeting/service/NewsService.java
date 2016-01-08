@@ -90,7 +90,7 @@ public class NewsService extends BaseService {
         if (!Utils.isEmpty(data)) {
             for (NewsChannel tmp : data) {
                 showData.add(new NewsChannelVO(tmp.getTypeId(), tmp.getName(),
-                        tmp.getIsLock(), tmp.getPosition()));
+                        tmp.getIsLock() == 1, tmp.getPosition()));
             }
         }
         return showData;
@@ -166,7 +166,7 @@ public class NewsService extends BaseService {
         if (!Utils.isEmpty(data)) {
             for (NewsChannelDto dto : data) {
                 showData.add(new NewsChannelVO(dto.getTypeId(), dto.getName(),
-                        dto.getIsLock(), dto.getPosition()));
+                        dto.getIsLock() == 1, dto.getPosition()));
             }
         } else {
             throw new AppException("获取新闻栏目失败！");
@@ -217,7 +217,7 @@ public class NewsService extends BaseService {
                 NewsChannel type = new NewsChannel();
                 type.setTypeId(vo.getTypeId());
                 type.setName(vo.getName());
-                type.setIsLock(vo.getIsLock());
+                type.setIsLock(vo.isLock() ? 1 : 0);
                 type.setIsMine(1);
                 type.setPosition(vo.getPosition());
                 type.setMasterId("0");
@@ -390,6 +390,7 @@ public class NewsService extends BaseService {
             }
         }
     }
+
     /**
      * 网络请求获取新闻详情
      *
@@ -428,6 +429,7 @@ public class NewsService extends BaseService {
         }
         return vo;
     }
+
     /**
      * 获取不同类别的点击时间
      *
@@ -482,8 +484,6 @@ public class NewsService extends BaseService {
         // 修改状态
         newsDao.saveToMyChannel(saveData, "0");
     }
-
-
 
 
     /**
