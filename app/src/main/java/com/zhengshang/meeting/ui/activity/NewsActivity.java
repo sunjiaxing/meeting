@@ -24,6 +24,7 @@ import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.service.NewsService;
 import com.zhengshang.meeting.ui.adapter.ListViewPagerAdapter;
 import com.zhengshang.meeting.ui.component.ChannelGallery;
+import com.zhengshang.meeting.ui.fragment.BaseFragment;
 import com.zhengshang.meeting.ui.fragment.NewsPagerItemFragment;
 import com.zhengshang.meeting.ui.fragment.NewsPagerItemFragment_;
 import com.zhengshang.meeting.ui.vo.NewsChannelVO;
@@ -67,7 +68,7 @@ public class NewsActivity extends BaseActivity implements
     private ListViewPagerAdapter listViewPagerAdapter;
     private List<NewsChannelVO> newsTypes = new ArrayList<>();
     private NewsService newsService;
-    private List<NewsPagerItemFragment> fragmentList;
+    private List<BaseFragment> fragmentList;
     private Bundle saveInstance;
 
     @Override
@@ -142,7 +143,7 @@ public class NewsActivity extends BaseActivity implements
         if (mPager.getCurrentItem() != 0) {
             mPager.setCurrentItem(0);
         } else {
-            fragmentList.get(0).refreshCurrentView(newsTypes.get(0), 0);
+            ((NewsPagerItemFragment) fragmentList.get(0)).refreshCurrentView(newsTypes.get(0), 0);
         }
     }
 
@@ -153,8 +154,8 @@ public class NewsActivity extends BaseActivity implements
      * @param savedInstanceState
      * @return
      */
-    private List<NewsPagerItemFragment> createFragment2Show(int count,
-                                                            Bundle savedInstanceState) {
+    private List<BaseFragment> createFragment2Show(int count,
+                                                   Bundle savedInstanceState) {
         fragmentList = new ArrayList<>();
         if (savedInstanceState == null) {
             for (int i = 0; i < count; i++) {
@@ -232,7 +233,7 @@ public class NewsActivity extends BaseActivity implements
             channelGallery.setSelected(position);
         }
         if (!Utils.isEmpty(fragmentList)) {
-            NewsPagerItemFragment itemFragment = fragmentList.get(position);
+            NewsPagerItemFragment itemFragment = (NewsPagerItemFragment) fragmentList.get(position);
             itemFragment.refreshCurrentView(newsTypes.get(position), position);
         }
     }
@@ -280,6 +281,7 @@ public class NewsActivity extends BaseActivity implements
     @Click(R.id.tv_handle_news_type_open)
     void clickTypeOpen() {
         startActivityForResult(new Intent(this, NewsChannelActivity_.class), 0);
+//        startActivityForResult(new Intent(this, TestActivity_.class), 0);
     }
 
 
@@ -287,7 +289,7 @@ public class NewsActivity extends BaseActivity implements
         // 清除原fragment在内存中的缓存
         FragmentTransaction ft = getSupportFragmentManager()
                 .beginTransaction();
-        for (NewsPagerItemFragment item : fragmentList) {
+        for (BaseFragment item : fragmentList) {
             ft.remove(item);
         }
         ft.commit();
@@ -345,7 +347,9 @@ public class NewsActivity extends BaseActivity implements
             case TaskAction.ACTION_LOAD_MORE_NEWS:// 加载更多
                 dataArray = (Object[]) data;
                 fragmentId = Integer.parseInt(String.valueOf(dataArray[0]));
-                for (NewsPagerItemFragment fra : fragmentList) {
+                NewsPagerItemFragment fra;
+                for (BaseFragment base : fragmentList) {
+                    fra = (NewsPagerItemFragment) base;
                     Log.d("=-==============", "id:[" + fra.getId() + "],hashCode:[" + fra.hashCode() + "]");
                     if (fra.hashCode() == fragmentId) {
                         fra.onTaskSuccess(action, dataArray[1]);
@@ -357,7 +361,9 @@ public class NewsActivity extends BaseActivity implements
 
     @Override
     protected void onTaskFail(int action, String errorMessage) {
-        for (NewsPagerItemFragment fra : fragmentList) {
+        NewsPagerItemFragment fra;
+        for (BaseFragment base : fragmentList) {
+            fra = (NewsPagerItemFragment) base;
             fra.onTaskFail(action, errorMessage);
         }
     }

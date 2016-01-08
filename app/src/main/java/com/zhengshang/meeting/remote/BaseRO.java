@@ -17,9 +17,6 @@ import com.zhengshang.meeting.exeception.AppException;
 
 /**
  * 引擎类基类
- * 
- * @author sun
- * 
  */
 public class BaseRO {
 	protected Context mContext;
@@ -58,6 +55,9 @@ public class BaseRO {
 		if (debug) {
 			Log.e("===============", "url:" + serverUrl + " **res:" + res);
 		}
+		if (Utils.isEmpty(res)) {
+			throw new AppException(mContext.getString(R.string.netconnecterror));
+		}
 		return res;
 	}
 
@@ -78,6 +78,9 @@ public class BaseRO {
 		String res = HttpUtilsApache.post(mContext, url, params, headerParams);
 		if (debug) {
 			Log.e("===============", "url:" + url + " **res:" + res);
+		}
+		if (Utils.isEmpty(res)) {
+			throw new AppException(mContext.getString(R.string.netconnecterror));
 		}
 		return res;
 	}

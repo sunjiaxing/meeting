@@ -1,6 +1,9 @@
 package com.zhengshang.meeting.ui.activity;
 
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -13,8 +16,12 @@ import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.TaskAction;
 import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.remote.IParam;
+import com.zhengshang.meeting.service.CommentService;
 import com.zhengshang.meeting.service.NewsService;
-import com.zhengshang.meeting.ui.component.CustomerWebview;
+import com.zhengshang.meeting.ui.adapter.ListViewPagerAdapter;
+import com.zhengshang.meeting.ui.fragment.BaseFragment;
+import com.zhengshang.meeting.ui.fragment.CommentListFrament;
+import com.zhengshang.meeting.ui.fragment.NewsDetailFragment;
 import com.zhengshang.meeting.ui.vo.NewsDetailVO;
 
 import org.androidannotations.annotations.AfterViews;
@@ -23,18 +30,23 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import cz.msebera.android.httpclient.util.EncodingUtils;
 
 /**
- * Created by sun on 2015/12/16.
+ * 新闻详情 Activity
+ * Created by sun on 2016/1/8.
  */
-@EActivity(R.layout.layout_news_detail)
-public class NewsDetailActivity extends BaseActivity {
+@EActivity(R.layout.layout_news_detail_main)
+public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
     @ViewById(R.id.iv_back)
     ImageView ivBack;
     @ViewById(R.id.tv_title)
     TextView tvTitle;
+    @ViewById(R.id.vp_news_detail)
+    ViewPager vpMain;
     @ViewById(R.id.layout_loading)
     View layoutLoading;
     @ViewById(R.id.layout_error)
@@ -43,36 +55,56 @@ public class NewsDetailActivity extends BaseActivity {
     TextView tvErrorMsg;
     @ViewById(R.id.btn_refresh)
     Button btnErrorRefresh;
-    @ViewById(R.id.webview_detail)
-    CustomerWebview webview;
+
     private String catId;
     private String newsId;
-    private String title;
     private AnimationDrawable anim;
     private NewsService newsService;
     private NewsDetailVO detailVO;
     private String html;
+    private NewsDetailFragment newsDetailFragment;
+    private CommentListFrament commentListFrament;
+    private List<BaseFragment> fragmentList;
+    private Bundle saveInstance;
+    private CommentService commentService;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+        this.saveInstance = savedInstanceState;
+    }
 
     @AfterViews
     void init() {
         catId = getIntent().getStringExtra(IParam.CAT_ID);
         newsId = getIntent().getStringExtra(IParam.NEWS_ID);
-        title = getIntent().getStringExtra(IParam.TITLE);
+        String title = getIntent().getStringExtra(IParam.TITLE);
         anim = (AnimationDrawable) findViewById(R.id.iv_loading_in)
                 .getBackground();
         ivBack.setVisibility(View.VISIBLE);
         tvTitle.setText(title);
-        initWebView();
+        vpMain.addOnPageChangeListener(this);
+        initNewsTemplate();
+        initFragment();
         newsService = new NewsService(this);
-        getNewsDetail();
+        commentService = new CommentService(this);
+        getNewsDetailAndComment();
     }
 
     /**
-     * 初始化webview和加载新闻模板
+     * 获取fragmentmanager中的缓存
+     *
+     * @param position
+     * @return
      */
-    private void initWebView() {
-        // todo 给webview 注入图片点击 js
+    private String getFragmentTag(int position) {
+        return "android:switcher:" + R.id.vp_news_detail + ":" + position;
+    }
 
+    /**
+     * 初始化加载新闻模板
+     */
+    private void initNewsTemplate() {
         try {
             InputStream is = getAssets().open(
                     "news_detail_template.txt");
@@ -87,13 +119,36 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     /**
-     * 获取新闻详情
+     * 初始化 fragment
      */
-    private void getNewsDetail() {
+    private void initFragment() {
+        fragmentList = new ArrayList<>();
+        if (saveInstance == null) {
+            newsDetailFragment = new NewsDetailFragment();
+            commentListFrament = new CommentListFrament();
+        } else {
+            newsDetailFragment = (NewsDetailFragment) getSupportFragmentManager()
+                    .findFragmentByTag(getFragmentTag(0));
+            commentListFrament = (CommentListFrament) getSupportFragmentManager()
+                    .findFragmentByTag(getFragmentTag(1));
+        }
+        fragmentList.add(newsDetailFragment);
+        fragmentList.add(commentListFrament);
+        ListViewPagerAdapter adapter = new ListViewPagerAdapter(getSupportFragmentManager());
+        adapter.setData(fragmentList);
+        vpMain.setAdapter(adapter);
+        vpMain.setCurrentItem(0);
+    }
+
+    /**
+     * 获取新闻详情和评论列表
+     */
+    private void getNewsDetailAndComment() {
         startLoadingSelf();
         TaskManager.pushTask(new Task(TaskAction.ACTION_GET_NEWS_DETAIL) {
             @Override
             protected void doBackground() throws Exception {
+                commentService.getCommentList(newsId, catId);
                 setReturnData(newsService.getNewsDetailFromWeb(newsId, catId));
             }
         }, this);
@@ -154,6 +209,7 @@ public class NewsDetailActivity extends BaseActivity {
      * 刷新界面
      */
     private void refreshUI() {
+        // 展示新闻详情
         if (!Utils.isEmpty(html) && Utils.isEmpty(detailVO.getContentUrl())) {
             html = html
                     .replace("@title", detailVO.getTitle())
@@ -193,11 +249,18 @@ public class NewsDetailActivity extends BaseActivity {
             } else {
                 html = html.replace("@ad", "");
             }
-            webview.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null);
+            // 传递给 fragment
+            newsDetailFragment.setHtml(html);
         } else {
-            webview.loadUrl(detailVO.getContentUrl());
+            // 传递给 fragment
+            newsDetailFragment.setUrl(detailVO.getContentUrl());
         }
+
+        // TODO 添加评论列表数据
+
+
     }
+
 
     @Override
     protected void onTaskFail(int action, String errorMessage) {
@@ -221,5 +284,20 @@ public class NewsDetailActivity extends BaseActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

@@ -70,30 +70,26 @@ public class NewsRO extends BaseRO {
                 + RemoteNewsUrl.GET_NEWS_TYPE.getURL() + IParam.WENHAO
                 + IParam.TIME + IParam.EQUALS_STRING + time;
         String result = httpGetRequest(url, getHeaderParam(IParam.TOKEN, token));
-        if (!Utils.isEmpty(result)) {
-            JSONObject json = new JSONObject(result);
-            if (json.getInt(IParam.STATUS) == 1) {
-                JSONArray jsonArray = json.getJSONArray(IParam.TYPES);
-                if (jsonArray != null && jsonArray.length() > 0) {
-                    // 设置新闻栏目更新状态
-                    res.put(IParam.TIME, json.getLong(IParam.TIME));
-                    // 实例化集合并创建变量
-                    List<NewsChannelDto> typeList = new ArrayList<>();
-                    NewsChannelDto newsType;
-                    // 循环解析栏目信息
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        newsType = new NewsChannelDto();
-                        newsType.parseJson(jsonArray.getJSONObject(i));
-                        typeList.add(newsType);
-                    }
-                    res.put(IParam.LIST, typeList);
+        JSONObject json = new JSONObject(result);
+        if (json.getInt(IParam.STATUS) == 1) {
+            JSONArray jsonArray = json.getJSONArray(IParam.TYPES);
+            if (jsonArray != null && jsonArray.length() > 0) {
+                // 设置新闻栏目更新状态
+                res.put(IParam.TIME, json.getLong(IParam.TIME));
+                // 实例化集合并创建变量
+                List<NewsChannelDto> typeList = new ArrayList<>();
+                NewsChannelDto newsType;
+                // 循环解析栏目信息
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    newsType = new NewsChannelDto();
+                    newsType.parseJson(jsonArray.getJSONObject(i));
+                    typeList.add(newsType);
                 }
-                return res;
-            } else {
-                throw new AppException(json.getInt(IParam.ERROR_CODE));
+                res.put(IParam.LIST, typeList);
             }
+            return res;
         } else {
-            throw new AppException(mContext.getString(R.string.netconnecterror));
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
         }
     }
 
@@ -113,24 +109,20 @@ public class NewsRO extends BaseRO {
                 + IParam.LIMIT + IParam.EQUALS_STRING + limit + IParam.AND
                 + IParam.MIN_TIME + IParam.EQUALS_STRING + minTime;
         String result = httpGetRequest(url, getHeaderParam(IParam.TOKEN, token));
-        if (!Utils.isEmpty(result)) {
-            JSONObject json = new JSONObject(result);
-            NewsDto news;
-            if (json.getInt(IParam.STATUS) == 1) {
-                newsList = new ArrayList<>();
-                JSONArray array = json.getJSONArray(IParam.NEWS);
-                // 先解析新闻
-                for (int i = 0; i < array.length(); i++) {
-                    news = new NewsDto();
-                    news.parseJson(array.getJSONObject(i));
-                    newsList.add(news);
-                }
-                return newsList;
-            } else {
-                throw new AppException(json.getInt(IParam.ERROR_CODE));
+        JSONObject json = new JSONObject(result);
+        NewsDto news;
+        if (json.getInt(IParam.STATUS) == 1) {
+            newsList = new ArrayList<>();
+            JSONArray array = json.getJSONArray(IParam.NEWS);
+            // 先解析新闻
+            for (int i = 0; i < array.length(); i++) {
+                news = new NewsDto();
+                news.parseJson(array.getJSONObject(i));
+                newsList.add(news);
             }
+            return newsList;
         } else {
-            throw new AppException(mContext.getString(R.string.netconnecterror));
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
         }
     }
 
@@ -151,66 +143,57 @@ public class NewsRO extends BaseRO {
                 + IParam.CAT_ID + IParam.EQUALS_STRING + catId + IParam.AND
                 + IParam.NEWS_ID + IParam.EQUALS_STRING + id;
         String result = httpGetRequest(url, getHeaderParam(IParam.TOKEN, token));
-        if (!Utils.isEmpty(result)) {
-            JSONObject json = new JSONObject(result);
-            if (json.getInt(IParam.STATUS) == 1) {
-                String temp = json.getString(IParam.DETAIL);
-                NewsDetailDto newsDetail = new NewsDetailDto();
-                newsDetail.paserJson(new JSONObject(temp));
-                return newsDetail;
-            } else if (json.getInt(IParam.ERROR_CODE) == 100070) {
-                throw new AppException("110");
-            } else {
-                throw new AppException(json.getInt(IParam.ERROR_CODE));
-            }
+        JSONObject json = new JSONObject(result);
+        if (json.getInt(IParam.STATUS) == 1) {
+            String temp = json.getString(IParam.DETAIL);
+            NewsDetailDto newsDetail = new NewsDetailDto();
+            newsDetail.paserJson(new JSONObject(temp));
+            return newsDetail;
+        } else if (json.getInt(IParam.ERROR_CODE) == 100070) {
+            throw new AppException("110");
         } else {
-            throw new AppException(mContext.getString(R.string.netconnecterror));
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
         }
     }
 
     /**
      * 版本更新
      *
-     * @return http://update.doulimall.com
      * @throws JSONException
      */
     public Map<String, Object> updateVersion() throws JSONException {
-        String result = httpGetRequest("http://update.doulimall.com", null);
-        if (!Utils.isEmpty(result)) {
-            JSONObject json = new JSONObject(result);
-            if (json.has(IParam.VERSION_CODE)) {
-                String versionNub = json.getString(IParam.VERSION_CODE);
-                if (!Utils.isEmpty(versionNub)
-                        && versionNub.compareTo(Utils.getVersionCode(mContext)) > 0) {
-                    // 获取更新标题
-                    String title = "更新提示";
-                    if (json.has(IParam.TITLE)) {
-                        title = json.getString(IParam.TITLE);
-                    }
-                    // 获取更新信息的描述
-                    String desc = "有新版本，是否更新？";
-                    if (json.has(IParam.DESCRIPTION)) {
-                        desc = json.getString(IParam.DESCRIPTION);
-                    }
-                    // 获取应用的下载地址
-                    String url = json.getString(IParam.URL);
-                    boolean focus = false;
-                    if (json.has(IParam.FOCUS)) {
-                        focus = json.getBoolean(IParam.FOCUS);
-                    }
-                    Map<String, Object> data = new HashMap<String, Object>();
-                    data.put(IParam.TITLE, title);
-                    data.put(IParam.DESC, desc);
-                    data.put(IParam.URL, url);
-                    data.put(IParam.FOCUS, focus);
-
-                    return data;
+        String result = httpGetRequest("http://update.com", null);
+        JSONObject json = new JSONObject(result);
+        if (json.has(IParam.VERSION_CODE)) {
+            String versionNub = json.getString(IParam.VERSION_CODE);
+            if (!Utils.isEmpty(versionNub)
+                    && versionNub.compareTo(Utils.getVersionCode(mContext)) > 0) {
+                // 获取更新标题
+                String title = "更新提示";
+                if (json.has(IParam.TITLE)) {
+                    title = json.getString(IParam.TITLE);
                 }
+                // 获取更新信息的描述
+                String desc = "有新版本，是否更新？";
+                if (json.has(IParam.DESCRIPTION)) {
+                    desc = json.getString(IParam.DESCRIPTION);
+                }
+                // 获取应用的下载地址
+                String url = json.getString(IParam.URL);
+                boolean focus = false;
+                if (json.has(IParam.FOCUS)) {
+                    focus = json.getBoolean(IParam.FOCUS);
+                }
+                Map<String, Object> data = new HashMap<String, Object>();
+                data.put(IParam.TITLE, title);
+                data.put(IParam.DESC, desc);
+                data.put(IParam.URL, url);
+                data.put(IParam.FOCUS, focus);
+
+                return data;
             }
-            return null;
-        } else {
-            throw new AppException(mContext.getString(R.string.netconnecterror));
         }
+        return null;
     }
 
     /**
@@ -222,42 +205,38 @@ public class NewsRO extends BaseRO {
         String result = httpGetRequest(
                 getServerUrl()
                         + "logo/getLogo", null);
-        if (!Utils.isEmpty(result)) {
-            JSONObject json = new JSONObject(result);
-            if (json != null && json.getInt(IParam.STATUS) == 1) {
-                // 获取更新时间
-                if (json.has(IParam.UPDATE_TIME)) {
-                    long time = json.getLong(IParam.UPDATE_TIME);
-                    // 判断本地默认时间
-                    if (configDao.getShowInitTime() == 0) {
-                        configDao.setShowInitTime(time);
+        JSONObject json = new JSONObject(result);
+        if (json.getInt(IParam.STATUS) == 1) {
+            // 获取更新时间
+            if (json.has(IParam.UPDATE_TIME)) {
+                long time = json.getLong(IParam.UPDATE_TIME);
+                // 判断本地默认时间
+                if (configDao.getShowInitTime() == 0) {
+                    configDao.setShowInitTime(time);
+                }
+                // // 判断是否更新
+                if (json.has(IParam.LOGO_URL)) {
+                    // 获取url地址 并下载
+                    Utils.saveImageFromUrl(json.getString(IParam.LOGO_URL),
+                            time);
+                    // 替换显示时间
+                    configDao.setShowInitTime(time);
+                    // 整理图片
+                    // 判断时间间隔
+                    if (configDao.getDeleteInitTime() == 0) {
+                        // 第一次操作 记录时间 不删除
+                        configDao.setDeleteInitTime(System
+                                .currentTimeMillis());
+                        return;
                     }
-                    // // 判断是否更新
-                    if (json.has(IParam.LOGO_URL)) {
-                        // 获取url地址 并下载
-                        Utils.saveImageFromUrl(json.getString(IParam.LOGO_URL),
-                                time);
-                        // 替换显示时间
-                        configDao.setShowInitTime(time);
-                        // 整理图片
-                        // 判断时间间隔
-                        if (configDao.getDeleteInitTime() == 0) {
-                            // 第一次操作 记录时间 不删除
-                            configDao.setDeleteInitTime(System
-                                    .currentTimeMillis());
-                            return;
-                        }
-                        if (System.currentTimeMillis()
-                                - configDao.getDeleteInitTime() > BonConstants.TIME_TO_DELETE_LOGO) {
-                            deleteLogo();
-                        }
+                    if (System.currentTimeMillis()
+                            - configDao.getDeleteInitTime() > BonConstants.TIME_TO_DELETE_LOGO) {
+                        deleteLogo();
                     }
                 }
-            } else {
-                throw new AppException(json.getInt(IParam.ERROR_CODE));
             }
         } else {
-            throw new AppException(mContext.getString(R.string.netconnecterror));
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
         }
     }
 
