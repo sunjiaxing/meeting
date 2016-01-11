@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -241,4 +242,26 @@ public class Utils {
         }
     }
 
+    /**
+     * 格式化评论时间
+     * @param millsDate 时间的毫秒值
+     * @return
+     */
+    public static String formateCommentTime(long millsDate) {
+        int today = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        Date formateDate = new Date(millsDate);
+        SimpleDateFormat sdf;
+        String headStr;
+        if (today == formateDate.getDate()) {
+            headStr = "今天";
+        } else if (today - 1 == formateDate.getDate()) {
+            headStr = "昨天";
+        } else if (today - 2 == formateDate.getDate()) {
+            headStr = "前天";
+        } else {
+            headStr = "MM-dd ";
+        }
+        sdf = new SimpleDateFormat(headStr + "HH:mm");
+        return sdf.format(formateDate);
+    }
 }

@@ -37,6 +37,8 @@ public interface IParam {
     String FOCUS = "focus";
 
     // G
+    String GROUP_ID = "groupId";
+
     // H
     // I
     String ID = "id";
@@ -69,9 +71,13 @@ public interface IParam {
     // O
     // P
     String POSITION = "position";
+    String PARENT_ID = "parentId";
 
     // Q
     // R
+    String REPLY_TO_USER_ID = "replyToUserId";
+    String REPLY_TO_USER_NAME = "replyToUserName";
+    String REPLIES = "replies";
 
     // S
     String SHARE_URL = "shareUrl";
@@ -91,6 +97,8 @@ public interface IParam {
     // U
     String URL = "url";
     String UPDATE_TIME = "updateTime";
+    String USER_ID = "userId";
+    String USER_NAME = "userName";
 
     // V
     String VERSION_CODE = "versionCode";

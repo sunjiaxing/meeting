@@ -4,6 +4,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import com.zhengshang.meeting.ui.adapter.ListViewPagerAdapter;
 import com.zhengshang.meeting.ui.fragment.BaseFragment;
 import com.zhengshang.meeting.ui.fragment.CommentListFrament;
 import com.zhengshang.meeting.ui.fragment.NewsDetailFragment;
+import com.zhengshang.meeting.ui.vo.CommentVO;
 import com.zhengshang.meeting.ui.vo.NewsDetailVO;
 
 import org.androidannotations.annotations.AfterViews;
@@ -61,6 +63,7 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     private AnimationDrawable anim;
     private NewsService newsService;
     private NewsDetailVO detailVO;
+    private List<CommentVO> commentList;
     private String html;
     private NewsDetailFragment newsDetailFragment;
     private CommentListFrament commentListFrament;
@@ -148,8 +151,7 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
         TaskManager.pushTask(new Task(TaskAction.ACTION_GET_NEWS_DETAIL) {
             @Override
             protected void doBackground() throws Exception {
-                commentService.getCommentList(newsId, catId);
-                setReturnData(newsService.getNewsDetailFromWeb(newsId, catId));
+                setReturnData(new Object[]{newsService.getNewsDetailFromWeb(newsId, catId), commentService.getCommentList(newsId, catId)});
             }
         }, this);
     }
@@ -196,10 +198,13 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
 
     @Override
     protected void onTaskSuccess(int action, Object data) {
+        Log.e("===============", "onTaskSuccess: " + action);
         switch (action) {
             case TaskAction.ACTION_GET_NEWS_DETAIL:// 获取新闻详情
                 stopLoadingSelf();
-                detailVO = (NewsDetailVO) data;
+                Object[] dataArr = (Object[]) data;
+                detailVO = (NewsDetailVO) dataArr[0];
+                commentList = (List<CommentVO>) dataArr[1];
                 refreshUI();
                 break;
         }
@@ -256,8 +261,8 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
             newsDetailFragment.setUrl(detailVO.getContentUrl());
         }
 
-        // TODO 添加评论列表数据
-
+        // 添加评论列表数据
+        commentListFrament.setData(commentList);
 
     }
 

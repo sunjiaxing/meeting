@@ -14,5 +14,12 @@
     <color name="news_content_color">#666666</color>
     <!-- 线 的颜色 -->
     <color name="line_color">#d8d8d8</color>
+    <!-- 新闻评论列表按下背景色 -->
+    <color name="news_comment_list_pressed">#f1f1f1</color>
+    <!-- 评论回复列表中正常背景颜色 -->
+    <color name="news_comment_reply_nomal">#f5f6f8</color>
+    <!-- 评论回复列表中按下背景颜色 -->
+    <color name="news_comment_reply_pressed">#d5d5d5</color>
+
     <color name="right_menu_line">#5e5e5e</color>
 </resources>

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -31,7 +30,6 @@ public abstract class TaskActivity extends FragmentActivity {
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(getPackageName(), getLocalClassName() + " onReceive ");
                 int taskAction = intent.getIntExtra(TaskKey.KEY_TASK_ACTION, -1);
                 if (intent.getBooleanExtra(TaskKey.KEY_TASK_SUCCESS, false)) {
                     // 任务执行成功

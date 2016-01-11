@@ -50,6 +50,10 @@ public class BonConstants {
      */
     public static final int LIMIT_DEFAULT_NEWS_TYPE = 5;
     /**
+     * 评论最多显示字数
+     */
+    public static final int LIMIT_COMMENT_LENGTH = 50;
+    /**
      * 剩余logo图片的数量 剩余10张
      */
     public static final int LIMIT_LOGO_LAST = 10;

@@ -2,7 +2,6 @@ package com.zhengshang.meeting.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ public class NewsDetailFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("==============", "onCreate: ");
     }
 
     @Nullable
@@ -33,7 +31,6 @@ public class NewsDetailFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.e("==============", "onViewCreated: " + view);
         webview = (CustomerWebview) view.findViewById(R.id.webview_detail);
 
     }
@@ -45,7 +42,7 @@ public class NewsDetailFragment extends BaseFragment {
      */
     public void setHtml(String html) {
         // todo 给webview 注入图片点击 js
-        Log.e("==============", "setHtml: " + html);
+
         if (webview != null) {
             webview.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null);
         }
