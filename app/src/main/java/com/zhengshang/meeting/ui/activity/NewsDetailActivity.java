@@ -4,7 +4,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -57,6 +56,10 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     TextView tvErrorMsg;
     @ViewById(R.id.btn_refresh)
     Button btnErrorRefresh;
+    @ViewById(R.id.tv_comment_tip)
+    TextView tvCommentTip;
+    @ViewById(R.id.tv_switch)
+    TextView tvSwitch;
 
     private String catId;
     private String newsId;
@@ -198,7 +201,6 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
 
     @Override
     protected void onTaskSuccess(int action, Object data) {
-        Log.e("===============", "onTaskSuccess: " + action);
         switch (action) {
             case TaskAction.ACTION_GET_NEWS_DETAIL:// 获取新闻详情
                 stopLoadingSelf();
@@ -289,6 +291,16 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Click(R.id.tv_comment_tip)
+    void clickToComment() {
+
+    }
+
+    @Click(R.id.tv_switch)
+    void switchDetailAndComment() {
+
     }
 
     @Override

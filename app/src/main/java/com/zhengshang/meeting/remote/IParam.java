@@ -31,6 +31,7 @@ public interface IParam {
 
     // E
     String ERROR_CODE = "errorCode";
+    String EMAIL = "email";
     String EQUALS_STRING = "=";
 
     // F
@@ -54,6 +55,8 @@ public interface IParam {
     // L
     String LOCK = "lock";
     String LIST = "list";
+    String LOGIN = "login";
+    String LAST_LOGIN_TIME = "lastLoginTime";
     String LIMIT = "limit";
     String LOGO_URL = "logoUrl";
     String LIST_FOR_ORIENTATION = "listForOrientation";
@@ -67,17 +70,20 @@ public interface IParam {
     String NEWS = "news";
     String NEWS_FROM = "newsFrom";
     String NEWS_ID = "newsId";
+    String NICK_NAME = "nickName";
 
     // O
     // P
     String POSITION = "position";
     String PARENT_ID = "parentId";
+    String PASSWORD = "password";
 
     // Q
     // R
     String REPLY_TO_USER_ID = "replyToUserId";
     String REPLY_TO_USER_NAME = "replyToUserName";
     String REPLIES = "replies";
+    String REGISTER_TIME = "registerTime";
 
     // S
     String SHARE_URL = "shareUrl";
@@ -98,6 +104,7 @@ public interface IParam {
     String URL = "url";
     String UPDATE_TIME = "updateTime";
     String USER_ID = "userId";
+    String USER = "user";
     String USER_NAME = "userName";
 
     // V

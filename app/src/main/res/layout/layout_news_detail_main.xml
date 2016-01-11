@@ -43,16 +43,33 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_weight="1"
         android:background="@color/news_content_color"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+
+        <TextView
+            android:id="@+id/tv_comment_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/input_bg_shape"
+            android:gravity="center_vertical"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="50dp"
+            android:paddingTop="5dp"
+            android:text="我也说一句..." />
 
         <TextView
             android:id="@+id/tv_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="原文" />
+            android:textSize="15sp"
+            android:background="@drawable/news_category_shape"
+            android:textColor="@color/color_white"
+            android:layout_marginLeft="15dp"
+            android:text="评论" />
     </LinearLayout>
 </RelativeLayout>
