@@ -10,6 +10,7 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import com.zhengshang.meeting.R;
+import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.ui.adapter.CommentExpandableAdapter;
 import com.zhengshang.meeting.ui.vo.CommentVO;
 
@@ -49,20 +50,25 @@ public class CommentListFrament extends BaseFragment implements CommentExpandabl
     }
 
     public void setData(List<CommentVO> data) {
-        this.list = data;
-        if (adapter == null) {
-            adapter = new CommentExpandableAdapter(getActivity());
-            adapter.setData(list);
-            listView.setAdapter(adapter);
+        if (!Utils.isEmpty(data)) {
+            this.list = data;
+            if (adapter == null) {
+                adapter = new CommentExpandableAdapter(getActivity());
+                adapter.setData(list);
+                listView.setAdapter(adapter);
+            } else {
+                adapter.setData(list);
+                adapter.notifyDataSetChanged();
+            }
+            adapter.setOnCommentListener(this);
+            for (int i = 0; i < list.size(); i++) {
+                listView.expandGroup(i);
+            }
+            listView.setGroupIndicator(null);
         } else {
-            adapter.setData(list);
-            adapter.notifyDataSetChanged();
+            // 显示无数据提示
+
         }
-        adapter.setOnCommentListener(this);
-        for (int i = 0; i < list.size(); i++) {
-            listView.expandGroup(i);
-        }
-        listView.setGroupIndicator(null);
     }
 
     @Override

@@ -22,4 +22,6 @@
     <color name="news_comment_reply_pressed">#d5d5d5</color>
 
     <color name="right_menu_line">#5e5e5e</color>
+
+    <color name="loading_dialog_bg">#20000000</color>
 </resources>

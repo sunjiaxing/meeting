@@ -1,18 +1,22 @@
 package com.zhengshang.meeting.ui.activity;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.taskmanager.ui.TaskActivity;
 import com.zhengshang.meeting.R;
+import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.ui.component.TlcyDialog;
 
 /**
+ * activity 基类 主要封装 toast 、 dialog 、 loading等内容
  * Created by sun on 2015/12/9.
  */
 public abstract class BaseActivity extends TaskActivity {
@@ -20,11 +24,51 @@ public abstract class BaseActivity extends TaskActivity {
     private Dialog tempDialog;// 处理连续快速点击出现多个对话框的情况
     private Dialog toDialog = null;
     private boolean isShowing = true;// 当前activity是否显示中
+    private Dialog loadingDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
 
+    }
+
+    public void startLoading(String message, boolean cancelable, DialogInterface.OnCancelListener listener) {
+        if (loadingDialog == null || !loadingDialog.isShowing()) {
+            loadingDialog = new Dialog(this, R.style.loadingDialogStyle);
+            loadingDialog.setContentView(R.layout.layout_loading_dialog);
+            TextView tvText = (TextView) loadingDialog.findViewById(R.id.tv_message);
+            if (!Utils.isEmpty(message)) {
+                tvText.setText(message);
+            } else {
+                tvText.setText(getString(R.string.loading));
+            }
+            loadingDialog.setCancelable(cancelable);
+            loadingDialog.setOnCancelListener(listener);
+            loadingDialog.show();
+        }
+    }
+
+    public void startLoading(String message, boolean cancelable) {
+        startLoading(message, cancelable, null);
+    }
+
+    public void startLoading(String message) {
+        startLoading(message, false);
+    }
+
+    public void startLoading(boolean cancelable){
+        startLoading(null,cancelable);
+    }
+
+    public void startLoading() {
+        startLoading(null);
+    }
+
+    public void stopLoading() {
+        if (loadingDialog != null) {
+            loadingDialog.cancel();
+            loadingDialog = null;
+        }
     }
 
     /**
@@ -55,6 +99,7 @@ public abstract class BaseActivity extends TaskActivity {
 
         }
     }
+
     public Dialog showDialog(Dialog dialog) {
         if (tempDialog != null && tempDialog.isShowing()) {
             tempDialog.dismiss();

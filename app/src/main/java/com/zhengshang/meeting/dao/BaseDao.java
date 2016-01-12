@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.zhengshang.meeting.common.DBHelper;
 import com.zhengshang.meeting.dao.entity.News;
 import com.zhengshang.meeting.dao.entity.NewsChannel;
+import com.zhengshang.meeting.dao.entity.User;
 
 
 public class BaseDao {
@@ -41,6 +42,7 @@ public class BaseDao {
 			beginTransaction();
 			db.execSQL(NewsChannel.DELETE_TABLE_DATA);
 			db.execSQL(News.DELETE_TABLE_DATA);
+			db.execSQL(User.DELETE_TABLE_DATA);
 			setTransactionSuccessful();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -49,6 +51,9 @@ public class BaseDao {
 		}
 	}
 
+	/**
+	 * 释放 cursor
+	 */
 	protected void releaseConnection(){
 		if (cursor != null) {
 			cursor.close();

@@ -1,5 +1,6 @@
 package com.zhengshang.meeting.ui.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -18,6 +19,7 @@ import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.service.CommentService;
 import com.zhengshang.meeting.service.NewsService;
+import com.zhengshang.meeting.service.UserService;
 import com.zhengshang.meeting.ui.adapter.ListViewPagerAdapter;
 import com.zhengshang.meeting.ui.fragment.BaseFragment;
 import com.zhengshang.meeting.ui.fragment.CommentListFrament;
@@ -73,6 +75,8 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     private List<BaseFragment> fragmentList;
     private Bundle saveInstance;
     private CommentService commentService;
+    private boolean isNews;
+    private UserService userService;
 
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
@@ -94,6 +98,7 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
         initFragment();
         newsService = new NewsService(this);
         commentService = new CommentService(this);
+        userService = new UserService(this);
         getNewsDetailAndComment();
     }
 
@@ -149,7 +154,8 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     /**
      * 获取新闻详情和评论列表
      */
-    private void getNewsDetailAndComment() {
+    @Click(R.id.btn_refresh)
+    void getNewsDetailAndComment() {
         startLoadingSelf();
         TaskManager.pushTask(new Task(TaskAction.ACTION_GET_NEWS_DETAIL) {
             @Override
@@ -206,7 +212,9 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
                 stopLoadingSelf();
                 Object[] dataArr = (Object[]) data;
                 detailVO = (NewsDetailVO) dataArr[0];
-                commentList = (List<CommentVO>) dataArr[1];
+                if (dataArr[1] != null) {
+                    commentList = (List<CommentVO>) dataArr[1];
+                }
                 refreshUI();
                 break;
         }
@@ -295,12 +303,31 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
 
     @Click(R.id.tv_comment_tip)
     void clickToComment() {
+        if (userService.checkLoginState()) {
+            // 跳转评论输入框
 
+        } else {
+            // 跳转登录
+            LoginActivity_.intent(this).startForResult(0);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+
+        }
     }
 
     @Click(R.id.tv_switch)
     void switchDetailAndComment() {
-
+        if (isNews) {
+            // 显示 评论
+            vpMain.setCurrentItem(0);
+        } else {
+            vpMain.setCurrentItem(1);
+        }
     }
 
     @Override
@@ -310,7 +337,13 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
 
     @Override
     public void onPageSelected(int position) {
-
+        if (position == 0) {
+            tvSwitch.setText("评论");
+            isNews = false;
+        } else if (position == 1) {
+            tvSwitch.setText("原文");
+            isNews = true;
+        }
     }
 
     @Override

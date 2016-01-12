@@ -32,10 +32,13 @@
         <activity
             android:name=".ui.activity.NewsChannelActivity_"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".ui.activity.LoginActivity_"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.TestActivity_"
             android:screenOrientation="portrait" />
+
         <service android:name="com.taskmanager.TaskService" />
     </application>
 

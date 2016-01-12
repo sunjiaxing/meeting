@@ -39,6 +39,10 @@ public class BonConstants {
      * 点击不同新闻栏目时 刷新的时间间隔
      */
     public static final long TIME_TO_REFESH_DATA = 600000;// 10分钟
+    /**
+     * 保存用户登录状态时间
+     */
+    public static final long TIME_TO_SAVE_LOGIN_STATE = 604800000;// 7天
 
 
     /**
@@ -64,8 +68,8 @@ public class BonConstants {
      */
     public static final int REQUEST_TO_DETAIL = 0x1008;
 
-    //    public static final String SERVER_URL = "http://192.168.1.103:8080/";
+        public static final String SERVER_URL = "http://192.168.1.103:8080/";
     //    public static final String SERVER_URL = "http://192.168.1.28:8080/api/";
-    public static final String SERVER_URL = "http://192.168.1.27:8888/api/";
+//    public static final String SERVER_URL = "http://192.168.1.27:8888/api/";
     public static String SLASH = "/";
 }

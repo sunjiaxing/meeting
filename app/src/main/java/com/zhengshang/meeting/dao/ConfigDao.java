@@ -3,6 +3,8 @@ package com.zhengshang.meeting.dao;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.zhengshang.meeting.remote.IParam;
+
 /**
  * Created by sun on 2015/12/10.
  */
@@ -152,13 +154,21 @@ public class ConfigDao {
         return getShare().getBoolean("newsChannelUpdate", false);
     }
 
-    public boolean setString(String key, String value) {
-        return getEdit().putString(key, value).commit();
+    /**
+     * 保存用户id
+     *
+     * @param userId 用户id
+     * @return
+     */
+    public boolean saveUserId(String userId) {
+        return getEdit().putString(IParam.USER_ID, userId).commit();
     }
 
-    public boolean setInt(String key, int value) {
-        return getEdit().putInt(key, value).commit();
+    /**
+     * 获取用户id
+     * @return
+     */
+    public String getUserId() {
+        return getShare().getString(IParam.USER_ID, null);
     }
-
-
 }

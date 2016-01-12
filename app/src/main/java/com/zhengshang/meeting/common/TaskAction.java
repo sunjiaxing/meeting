@@ -13,4 +13,6 @@ public interface TaskAction extends TaskKey {
     int ACTION_LOAD_MORE_NEWS = 4;
     int ACTION_GET_NEWS_DETAIL = 5;
     int ACTION_GET_NEWS_TEMPLATE = 6;
+    int ACTION_LOGIN = 7;
+
 }

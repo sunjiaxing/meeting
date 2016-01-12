@@ -7,7 +7,7 @@ import org.androidannotations.annotations.EActivity;
 /**
  * Created by sun on 2016/1/8.
  */
-@EActivity(R.layout.layout_test)
+@EActivity(R.layout.layout_loading_dialog)
 public class TestActivity extends BaseActivity {
     @Override
     protected void onTaskSuccess(int action, Object data) {

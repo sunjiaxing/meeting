@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 用户 服务器交互 RO
  * Created by sun on 2016/1/11.
  */
 public class UserRO extends BaseRO {
@@ -36,6 +37,13 @@ public class UserRO extends BaseRO {
         }
     }
 
+    /**
+     * 登录
+     * @param userName 用户名
+     * @param password 密码
+     * @return
+     * @throws JSONException
+     */
     public UserDto login(String userName, String password) throws JSONException {
         String url = getServerUrl() + RemoteUserURL.LOGIN.getURL();
         Map<String, Object> params = new HashMap<>();

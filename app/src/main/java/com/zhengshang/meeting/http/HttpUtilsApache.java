@@ -2,6 +2,7 @@ package com.zhengshang.meeting.http;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,9 @@ import com.zhengshang.meeting.exeception.AppException;
 
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpStatus;
+import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.client.config.RequestConfig;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.CloseableHttpResponse;
 import cz.msebera.android.httpclient.client.methods.HttpGet;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
@@ -26,6 +29,7 @@ import cz.msebera.android.httpclient.entity.ContentType;
 import cz.msebera.android.httpclient.entity.mime.MultipartEntityBuilder;
 import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
 import cz.msebera.android.httpclient.impl.client.HttpClients;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 
 /**
@@ -35,8 +39,8 @@ import cz.msebera.android.httpclient.util.EntityUtils;
  */
 public class HttpUtilsApache {
 
-    private static final int connectionTimeout = 5000*10;
-    private static final int readTimeout = 15000*10;
+    private static final int connectionTimeout = 5000 * 10;
+    private static final int readTimeout = 15000 * 10;
     private static final Boolean DEBUG = false;
     private static final String TAG = "HttpUtilsApache";
 
@@ -115,26 +119,29 @@ public class HttpUtilsApache {
                     httpPost.setHeader(key, header.get(key));
                 }
             }
-            HttpEntity requestEntity;
+//            HttpEntity requestEntity;
             // 处理params
-            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+//            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            List<NameValuePair> nvps = new ArrayList<>();
             if (params != null) {
                 Iterator<?> iterator = params.keySet().iterator();
                 while (iterator.hasNext()) {
                     String key = iterator.next().toString();
-                    builder.addTextBody(key, params.get(key) != null ? params
-                            .get(key).toString() : "");
+//                    builder.addTextBody(key, params.get(key) != null ? params
+//                            .get(key).toString() : "");
+                    nvps.add(new BasicNameValuePair(key, params.get(key) != null ? params
+                            .get(key).toString() : ""));
                 }
             }
-            if (files != null) {
-                for (File file : files) {
-                    builder.addBinaryBody(
-                            isHead ? "avatarFile" : "pictureFile", file,
-                            ContentType.DEFAULT_BINARY, file.getName());
-                }
-            }
-            requestEntity = builder.build();
-            httpPost.setEntity(requestEntity);
+//            if (files != null) {
+//                for (File file : files) {
+//                    builder.addBinaryBody(
+//                            isHead ? "avatarFile" : "pictureFile", file,
+//                            ContentType.DEFAULT_BINARY, file.getName());
+//                }
+//            }
+//            requestEntity = builder.build();
+            httpPost.setEntity(new UrlEncodedFormEntity(nvps, "utf8"));
             return execute(context, httpPost);
         } catch (Exception e) {
             // 仅供测试使用
