@@ -9,14 +9,13 @@ import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.exeception.AppException;
 
-import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.Consts;
 import cz.msebera.android.httpclient.HttpStatus;
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.client.config.RequestConfig;
@@ -25,8 +24,6 @@ import cz.msebera.android.httpclient.client.methods.CloseableHttpResponse;
 import cz.msebera.android.httpclient.client.methods.HttpGet;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.client.methods.HttpUriRequest;
-import cz.msebera.android.httpclient.entity.ContentType;
-import cz.msebera.android.httpclient.entity.mime.MultipartEntityBuilder;
 import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
 import cz.msebera.android.httpclient.impl.client.HttpClients;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
@@ -34,8 +31,6 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 
 /**
  * Apache httpCLient辅助类
- *
- * @author sun
  */
 public class HttpUtilsApache {
 
@@ -48,7 +43,6 @@ public class HttpUtilsApache {
      * 创建连接
      *
      * @return
-     * @author sun
      */
     private static CloseableHttpClient createClient() {
         try {
@@ -68,14 +62,12 @@ public class HttpUtilsApache {
     /**
      * get 方法 使用 Apache httpCLient
      *
-     * @param context
-     * @param url
-     * @param header
+     * @param url    url
+     * @param header 请求头信息
      * @return
      * @throws IOException
-     * @author sun
      */
-    public static String get(Context context, String url,
+    public static String get(String url,
                              Map<String, String> header) {
         try {
             HttpGet httpGet = new HttpGet(url);
@@ -86,29 +78,27 @@ public class HttpUtilsApache {
                     httpGet.setHeader(key, header.get(key));
                 }
             }
-            return execute(context, httpGet);
+            return execute(httpGet);
         } catch (Exception e) {
             // 仅供测试使用
             if (DEBUG) {
-                Log.d(TAG, "get请求异常，url:" + url);
+                Log.e(TAG, "get请求异常，url:" + url);
             }
-            throw new AppException(context.getString(R.string.netconnecterror));
+            throw new AppException("网络连接异常, 请稍后再试！");
         }
     }
 
     /**
      * post 上传图片请求
      *
-     * @param context
-     * @param url
-     * @param params
-     * @param header
+     * @param url    url
+     * @param params 参数
+     * @param header 请求头信息
+     * @param files  要上传的文件
      * @return
-     * @author sun
      */
-    public static String post(Context context, String url,
-                              Map<String, Object> params, Map<String, String> header,
-                              List<File> files, boolean isHead) {
+    public static String postFile(String url, Map<String, Object> params, Map<String, String> header,
+                                  List<File> files) {
         try {
             HttpPost httpPost = new HttpPost(url);
             // 处理header
@@ -119,9 +109,7 @@ public class HttpUtilsApache {
                     httpPost.setHeader(key, header.get(key));
                 }
             }
-//            HttpEntity requestEntity;
-            // 处理params
-//            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+
             List<NameValuePair> nvps = new ArrayList<>();
             if (params != null) {
                 Iterator<?> iterator = params.keySet().iterator();
@@ -142,41 +130,64 @@ public class HttpUtilsApache {
 //            }
 //            requestEntity = builder.build();
             httpPost.setEntity(new UrlEncodedFormEntity(nvps, "utf8"));
-            return execute(context, httpPost);
+            return execute(httpPost);
         } catch (Exception e) {
             // 仅供测试使用
             if (DEBUG) {
                 Log.d(TAG, "post请求异常，url:" + url);
             }
-            throw new AppException(context.getString(R.string.netconnecterror));
+            throw new AppException("网络连接异常, 请稍后再试！");
         }
     }
 
     /**
      * 单独的post请求
      *
-     * @param context
-     * @param url
-     * @param params
-     * @param header
+     * @param url    url
+     * @param params 参数
+     * @param header 请求头信息
      * @return
-     * @author sun
      */
-    public static String post(Context context, String url,
+    public static String post(String url,
                               Map<String, Object> params, Map<String, String> header) {
-        return post(context, url, params, header, null, false);
+        try {
+            HttpPost httpPost = new HttpPost(url);
+            // 处理header
+            if (header != null) {
+                Iterator<?> iterator = header.keySet().iterator();
+                while (iterator.hasNext()) {
+                    String key = iterator.next().toString();
+                    httpPost.setHeader(key, header.get(key));
+                }
+            }
+            List<NameValuePair> requestParams = new ArrayList<>();
+            if (params != null) {
+                Iterator<?> iterator = params.keySet().iterator();
+                while (iterator.hasNext()) {
+                    String key = iterator.next().toString();
+                    requestParams.add(new BasicNameValuePair(key, params.get(key) != null ? params
+                            .get(key).toString() : ""));
+                }
+            }
+            httpPost.setEntity(new UrlEncodedFormEntity(requestParams, Consts.UTF_8));
+            return execute(httpPost);
+        } catch (Exception e) {
+            // 仅供测试使用
+            if (DEBUG) {
+                Log.e(TAG, "post请求异常，url:" + url);
+            }
+            throw new AppException("网络连接异常, 请稍后再试！");
+        }
     }
 
     /**
      * 执行 请求
      *
-     * @param context
-     * @param request
+     * @param request 请求
      * @return
      * @throws Exception
-     * @author sun
      */
-    private static String execute(Context context, HttpUriRequest request)
+    private static String execute(HttpUriRequest request)
             throws Exception {
         String result = null;
         CloseableHttpClient client = createClient();
@@ -187,8 +198,7 @@ public class HttpUtilsApache {
                     && response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 result = EntityUtils.toString(response.getEntity());
                 if (Utils.isEmpty(result)) {
-                    throw new AppException(
-                            context.getString(R.string.netconnecterror));
+                    throw new AppException("网络连接异常, 请稍后再试！");
                 }
             }
         } catch (Exception e) {
@@ -202,24 +212,21 @@ public class HttpUtilsApache {
     /**
      * 释放连接
      *
-     * @param httpClient
-     * @param request
-     * @param response
+     * @param httpClient httpclient
+     * @param request 请求
+     * @param response 响应
      */
     private static void releaseConnection(CloseableHttpClient httpClient,
                                           HttpUriRequest request, CloseableHttpResponse response) {
         try {
             if (response != null) {
                 response.close();
-                response = null;
             }
             if (request != null) {
                 request.abort();
-                request = null;
             }
             if (httpClient != null) {
                 httpClient.close();
-                httpClient = null;
             }
         } catch (Exception e) {
             e.printStackTrace();
