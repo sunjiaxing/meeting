@@ -28,7 +28,7 @@ public class CommentInputActivity extends BaseActivity {
     private boolean canSend;
 
     @AfterViews
-    void init(){
+    void init() {
         editContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -53,17 +53,20 @@ public class CommentInputActivity extends BaseActivity {
 
             }
         });
+        String hint = getIntent().getStringExtra(IParam.HINT);
+        editContent.setHint(hint);
     }
 
     @Click(R.id.tv_send)
-    void clickSend(){
+    void clickSend() {
         if (canSend) {
             Intent intent = new Intent();
-            intent.putExtra(IParam.CONTENT,editContent.getText().toString());
-            setResult(RESULT_OK,intent);
+            intent.putExtra(IParam.CONTENT, editContent.getText().toString());
+            setResult(RESULT_OK, intent);
             finish();
         }
     }
+
     @Override
     protected void onTaskSuccess(int action, Object data) {
 

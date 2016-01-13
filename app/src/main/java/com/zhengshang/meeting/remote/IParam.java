@@ -43,6 +43,8 @@ public interface IParam {
     String GROUP_ID = "groupId";
 
     // H
+    String HINT = "hint";
+
     // I
     String ID = "id";
     String ICON_URL = "iconUrl";

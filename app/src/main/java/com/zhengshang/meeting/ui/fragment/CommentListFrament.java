@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 
 import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.Utils;
+import com.zhengshang.meeting.ui.activity.NewsDetailActivity;
 import com.zhengshang.meeting.ui.adapter.CommentExpandableAdapter;
 import com.zhengshang.meeting.ui.vo.CommentVO;
 
@@ -54,13 +54,13 @@ public class CommentListFrament extends BaseFragment implements CommentExpandabl
             this.list = data;
             if (adapter == null) {
                 adapter = new CommentExpandableAdapter(getActivity());
+                adapter.setOnCommentListener(this);
                 adapter.setData(list);
                 listView.setAdapter(adapter);
             } else {
                 adapter.setData(list);
                 adapter.notifyDataSetChanged();
             }
-            adapter.setOnCommentListener(this);
             for (int i = 0; i < list.size(); i++) {
                 listView.expandGroup(i);
             }
@@ -68,6 +68,14 @@ public class CommentListFrament extends BaseFragment implements CommentExpandabl
         } else {
             // 显示无数据提示
 
+        }
+    }
+
+    public void refreshUI(List<CommentVO> data) {
+        this.list = data;
+        if (adapter != null) {
+            adapter.setData(list);
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -84,6 +92,7 @@ public class CommentListFrament extends BaseFragment implements CommentExpandabl
     @Override
     public void onClickReply(int groupPos, int childPos) {
         Log.e("============", "onClickReply: " + groupPos + "   " + childPos);
+        ((NewsDetailActivity)getActivity()).clickToReply(groupPos,childPos);
     }
 
     @Override

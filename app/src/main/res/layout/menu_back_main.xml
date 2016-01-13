@@ -8,7 +8,7 @@
         android:layout_height="50dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="2dp"
-        android:background="@mipmap/exhibition_detail_right_menu"
+        android:background="@drawable/exhibition_detail_right_menu"
         android:gravity="center"
         android:orientation="vertical" >
 
@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="@string/back_main"
+                android:text="退出登录"
                 android:textColor="@color/color_white"
                 android:textSize="15sp" />
         </LinearLayout>

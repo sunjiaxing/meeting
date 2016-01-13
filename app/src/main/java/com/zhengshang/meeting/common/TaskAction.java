@@ -16,5 +16,6 @@ public interface TaskAction extends TaskKey {
     int ACTION_LOGIN = 7;
     int ACTION_UPDATE_NEWS_CHANNEL = 8;
     int ACTION_SEND_COMMENT = 9;
+    int ACTION_SEND_REPLY = 10;
 
 }

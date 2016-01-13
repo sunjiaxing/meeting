@@ -27,6 +27,8 @@ import com.zhengshang.meeting.ui.fragment.CommentListFrament;
 import com.zhengshang.meeting.ui.fragment.NewsDetailFragment;
 import com.zhengshang.meeting.ui.vo.CommentVO;
 import com.zhengshang.meeting.ui.vo.NewsDetailVO;
+import com.zhengshang.meeting.ui.vo.ReplyVO;
+import com.zhengshang.meeting.ui.vo.UserVO;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -78,6 +80,11 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     private CommentService commentService;
     private boolean isNews;
     private UserService userService;
+    private int parentId;
+    private CommentVO replyTo;
+    private int groupPos;
+    private int childPos;
+    private UserVO userVO;
 
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
@@ -302,16 +309,6 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
         return super.onKeyDown(keyCode, event);
     }
 
-    @Click(R.id.tv_comment_tip)
-    void clickToComment() {
-        if (userService.checkLoginState()) {
-            // 跳转评论输入框
-            CommentInputActivity_.intent(this).startForResult(1);
-        } else {
-            // 跳转登录
-            LoginActivity_.intent(this).startForResult(0);
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -322,25 +319,60 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
             String content = data.getStringExtra(IParam.CONTENT);
             Log.e("=================", "onActivityResult: " + content);
             sendComment(content);
+        } else if (requestCode == 2 && resultCode == RESULT_OK) {
+            String content = data.getStringExtra(IParam.CONTENT);
+            sendReply(content);
+        } else if (requestCode == 3 && resultCode == RESULT_OK) {
+            clickToReply(groupPos, childPos);
+        }
+    }
+
+    @Click(R.id.tv_comment_tip)
+    void clickToComment() {
+        if (userService.checkLoginState()) {
+            getUserInfo();
+            // 跳转评论输入框
+            CommentInputActivity_.intent(this).startForResult(1);
+        } else {
+            // 跳转登录
+            LoginActivity_.intent(this).startForResult(0);
         }
     }
 
     /**
      * 发表评论
+     *
      * @param content 评论内容
      */
     private void sendComment(final String content) {
         // 添加数据到UI
+        CommentVO vo = new CommentVO();
+        vo.setContent(content);
+        vo.setUserId(userVO.getUserId());
+        vo.setUserName(userVO.getNickName());
+        vo.setCreateTime(Utils.formateCommentTime(System.currentTimeMillis()));
+        commentList.add(0, vo);
+        commentListFrament.refreshUI(commentList);
 
         // 发送数据到服务器
         TaskManager.pushTask(new Task(TaskAction.ACTION_SEND_COMMENT) {
             @Override
             protected void doBackground() throws Exception {
-                setNeedCallBack(false);
+//                setNeedCallBack(false);  测试时注释此行代码 以便输出错误信息
                 commentService.sendComment(newsId, catId, content);
             }
         }, this);
     }
+
+    /**
+     * 获取登录用户信息
+     */
+    private void getUserInfo() {
+        if (userVO == null) {
+            userVO = userService.getLoginUserInfo();
+        }
+    }
+
 
     @Click(R.id.tv_switch)
     void switchDetailAndComment() {
@@ -371,5 +403,62 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    /**
+     * 点击回复
+     *
+     * @param groupPos 评论组 pos
+     * @param childPos 组内 pos
+     */
+    public void clickToReply(int groupPos, int childPos) {
+        if (childPos == -1) {
+            replyTo = commentList.get(groupPos);
+        } else {
+            replyTo = commentList.get(groupPos).getReplies().get(childPos);
+        }
+        this.parentId = replyTo.getId();
+        // 记录 position
+        this.groupPos = groupPos;
+        this.childPos = childPos;
+        if (userService.checkLoginState()) {
+            getUserInfo();
+            if (replyTo.getUserId().equals(userVO.getUserId())) {
+                showToast("不能回复自己哦");
+                return;
+            }
+            // 跳转 输入框
+            CommentInputActivity_.intent(this).extra(IParam.HINT, "回复：" + replyTo.getUserName()).startForResult(2);
+        } else {
+            // 跳转登录
+            LoginActivity_.intent(this).startForResult(3);
+        }
+    }
+
+    /**
+     * 执行回复
+     *
+     * @param content 回复内容
+     */
+    private void sendReply(final String content) {
+        // 构建 临时 回复对象
+        ReplyVO reply = new ReplyVO();
+        reply.setUserId(userVO.getUserId());
+        reply.setUserName(userVO.getNickName());
+        reply.setReplyToUserId(replyTo.getUserId());
+        reply.setReplyToUserName(replyTo.getUserName());
+        reply.setContent(content);
+        reply.setCreateTime(Utils.formateCommentTime(System.currentTimeMillis()));
+        commentList.get(groupPos).getReplies().add(reply);
+        commentListFrament.refreshUI(commentList);
+
+        // 服务器通信
+        TaskManager.pushTask(new Task(TaskAction.ACTION_SEND_REPLY) {
+            @Override
+            protected void doBackground() throws Exception {
+//                setNeedCallBack(false); 测试时注释此行代码 以便输出错误信息
+                commentService.sendReply(newsId,catId,parentId,content);
+            }
+        },this);
     }
 }

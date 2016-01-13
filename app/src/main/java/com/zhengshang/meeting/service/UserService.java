@@ -8,6 +8,7 @@ import com.zhengshang.meeting.dao.UserDao;
 import com.zhengshang.meeting.dao.entity.User;
 import com.zhengshang.meeting.remote.UserRO;
 import com.zhengshang.meeting.remote.dto.UserDto;
+import com.zhengshang.meeting.ui.vo.UserVO;
 
 import org.json.JSONException;
 
@@ -50,6 +51,7 @@ public class UserService extends BaseService {
 
     /**
      * 检测用户登录状态
+     *
      * @return true 登录状态正常  false 未登录或登录状态失效
      */
     public boolean checkLoginState() {
@@ -68,5 +70,39 @@ public class UserService extends BaseService {
             return false;
         }
         return true;
+    }
+
+    public void logout() {
+        // 清除用户id
+        configDao.saveUserId(null);
+        // TODO 根据以后具体需求 确定是否要清除用户信息
+
+    }
+
+    /**
+     * 获取登录用户信息
+     * @return
+     */
+    public UserVO getLoginUserInfo() {
+        String userId = configDao.getUserId();
+        User user = userDao.getUserById(userId);
+        if (user == null) {
+            return null;
+        } else {
+            UserVO vo = new UserVO();
+            vo.setUserId(userId);
+            vo.setUserName(user.getUserName());
+            vo.setNickName(user.getNickName());
+            vo.setEmail(user.getEmail());
+            return vo;
+        }
+    }
+
+    /**
+     * 获取登录用户 id
+     * @return
+     */
+    public String getLoginUserId(){
+        return configDao.getUserId();
     }
 }

@@ -22,6 +22,7 @@ import com.zhengshang.meeting.common.TaskAction;
 import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.service.NewsService;
+import com.zhengshang.meeting.service.UserService;
 import com.zhengshang.meeting.ui.adapter.ListViewPagerAdapter;
 import com.zhengshang.meeting.ui.component.ChannelGallery;
 import com.zhengshang.meeting.ui.fragment.BaseFragment;
@@ -126,14 +127,14 @@ public class NewsActivity extends BaseActivity implements
     /**
      * 更新栏目
      */
-    private void updateNewsChannel(){
+    private void updateNewsChannel() {
         TaskManager.pushTaskWithQueue(new Task(TaskAction.ACTION_UPDATE_NEWS_CHANNEL) {
             @Override
             protected void doBackground() throws Exception {
                 setNeedCallBack(false);
                 newsService.updateNewsType();
             }
-        },this);
+        }, this);
     }
 
     /**
@@ -286,6 +287,10 @@ public class NewsActivity extends BaseActivity implements
     @Click(R.id.btn_back_main)
     void clickBack2Main() {
         // TODO returnToMain();
+        controlMenuBg(false);
+        // 暂定退出登录功能
+        new UserService(this).logout();
+        showToast("退出成功");
     }
 
     /**

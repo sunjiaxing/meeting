@@ -135,7 +135,7 @@ public class LoginActivity extends BaseActivity {
         switch (action) {
             case TaskAction.ACTION_LOGIN:// 登录
                 stopLoading();
-                showToastLongTime("登录成功");
+                showToast("登录成功");
                 setResult(RESULT_OK);
                 finish();
                 break;
