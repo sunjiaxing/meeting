@@ -20,6 +20,8 @@
     <color name="news_comment_reply_nomal">#f5f6f8</color>
     <!-- 评论回复列表中按下背景颜色 -->
     <color name="news_comment_reply_pressed">#d5d5d5</color>
+    <!-- 评论工具类背景色 -->
+    <color name="comment_tool_background">#88000000</color>
 
     <color name="right_menu_line">#5e5e5e</color>
 

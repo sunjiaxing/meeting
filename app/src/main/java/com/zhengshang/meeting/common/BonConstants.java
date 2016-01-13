@@ -68,7 +68,7 @@ public class BonConstants {
      */
     public static final int REQUEST_TO_DETAIL = 0x1008;
 
-        public static final String SERVER_URL = "http://192.168.1.103:8080/";
+    public static final String SERVER_URL = "http://192.168.1.103:8080/";
     //    public static final String SERVER_URL = "http://192.168.1.28:8080/api/";
 //    public static final String SERVER_URL = "http://192.168.1.27:8888/api/";
     public static String SLASH = "/";

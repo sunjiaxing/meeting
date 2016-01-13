@@ -3,6 +3,7 @@ package com.zhengshang.meeting.service;
 import android.content.Context;
 
 import com.zhengshang.meeting.common.Utils;
+import com.zhengshang.meeting.exeception.AppException;
 import com.zhengshang.meeting.remote.CommentRO;
 import com.zhengshang.meeting.remote.dto.CommentDto;
 import com.zhengshang.meeting.remote.dto.ReplyDto;
@@ -71,4 +72,64 @@ public class CommentService extends BaseService {
         return showData;
     }
 
+    /**
+     * 发表评论
+     *
+     * @param newsId  新闻id
+     * @param catId   新闻栏目id
+     * @param content 评论内容
+     * @throws JSONException
+     */
+    public void sendComment(String newsId, String catId, String content) throws JSONException {
+        // 数据校验
+        if (Utils.isEmpty(newsId)) {
+            throw new AppException("param --> newsId can not be null");
+        }
+        if (Utils.isEmpty(catId)) {
+            throw new AppException("param --> catId can not be null");
+        }
+        if (Utils.isEmpty(content)) {
+            throw new AppException("param --> content can not be null");
+        }
+        // TODO 剔除 评论内容中的特殊字符（如 delete drop update insert 等）
+
+        // 获取登录用户id
+        String userId = configDao.getUserId();
+        if (Utils.isEmpty(userId)) {
+            throw new AppException("user not login");
+        }
+        commentRO.addComment(newsId, catId, userId, content);
+    }
+
+    /**
+     * 发表回复
+     * @param newsId 新闻id
+     * @param catId 新闻栏目id
+     * @param parentId 评论id
+     * @param content 回复内容
+     * @throws JSONException
+     */
+    public void sendReply(String newsId, String catId, int parentId, String content) throws JSONException {
+        // 数据校验
+        if (Utils.isEmpty(newsId)) {
+            throw new AppException("param --> newsId can not be null ");
+        }
+        if (Utils.isEmpty(catId)) {
+            throw new AppException("param --> catId can not be null ");
+        }
+        if (Utils.isEmpty(content)) {
+            throw new AppException("param --> content can not be null ");
+        }
+        if (parentId == 0) {
+            throw new AppException("param --> parentId can not be 0 ");
+        }
+        // TODO 剔除 评论内容中的特殊字符（如 delete drop update insert 等）
+
+        // 获取登录用户id
+        String userId = configDao.getUserId();
+        if (Utils.isEmpty(userId)) {
+            throw new AppException("user not login");
+        }
+        commentRO.addReply(newsId, catId, userId, parentId, content);
+    }
 }

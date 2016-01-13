@@ -1,5 +1,7 @@
 package com.zhengshang.meeting.ui.activity;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,12 +43,70 @@ public class LoginActivity extends BaseActivity {
     TextView tvRegister;
 
     private UserService userService;
+    private boolean userNameInputOK = false;
+    private boolean passwordInputOK = false;
 
     @AfterViews
     void init() {
         ivBack.setVisibility(View.VISIBLE);
         tvTitle.setText("用户登录");
         userService = new UserService(this);
+        addTextWatcher();
+    }
+
+    /**
+     * 添加用户名和密码输入框监听
+     */
+    private void addTextWatcher() {
+        btnLogin.setEnabled(false);
+        editUserName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s != null && s.length() > 3) {
+                    userNameInputOK = true;
+                    if (passwordInputOK) {
+                        btnLogin.setEnabled(true);
+                    }
+                } else {
+                    userNameInputOK = false;
+                    btnLogin.setEnabled(false);
+                }
+            }
+        });
+        editPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s != null && s.length() > 5) {
+                    passwordInputOK = true;
+                    if (userNameInputOK) {
+                        btnLogin.setEnabled(true);
+                    }
+                } else {
+                    passwordInputOK = false;
+                    btnLogin.setEnabled(false);
+                }
+            }
+        });
     }
 
     @Click(R.id.btn_login)
@@ -76,6 +136,8 @@ public class LoginActivity extends BaseActivity {
             case TaskAction.ACTION_LOGIN:// 登录
                 stopLoading();
                 showToastLongTime("登录成功");
+                setResult(RESULT_OK);
+                finish();
                 break;
         }
     }

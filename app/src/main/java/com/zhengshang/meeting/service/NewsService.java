@@ -12,7 +12,10 @@ import org.json.JSONException;
 
 import android.content.Context;
 
+import com.taskmanager.Task;
+import com.taskmanager.TaskManager;
 import com.zhengshang.meeting.common.BonConstants;
+import com.zhengshang.meeting.common.TaskAction;
 import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.dao.NewsDao;
 import com.zhengshang.meeting.dao.entity.News;
@@ -64,17 +67,13 @@ public class NewsService extends BaseService {
      * 更新新闻类型
      */
     public void updateNewsType() {
-        new Thread() {
-            public void run() {
-                try {
-                    if (!Utils.isEmpty(getNewsTypeFromWeb(false))) {
-                        configDao.setNewsChannelUpdate(false);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        try {
+            if (!Utils.isEmpty(getNewsTypeFromWeb(false))) {
+                configDao.setNewsChannelUpdate(false);
             }
-        }.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

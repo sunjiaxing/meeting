@@ -104,7 +104,7 @@ public class NewsActivity extends BaseActivity implements
         mPager.addOnPageChangeListener(this);
         if (Utils.isEmpty(newsTypes)) {
             getNewsType();
-            newsService.updateNewsType();
+            updateNewsChannel();
         } else {
             refreshUI(saveInstance);
         }
@@ -121,6 +121,19 @@ public class NewsActivity extends BaseActivity implements
                 setReturnData(newsService.getUserNewsTypes());
             }
         }, this);
+    }
+
+    /**
+     * 更新栏目
+     */
+    private void updateNewsChannel(){
+        TaskManager.pushTaskWithQueue(new Task(TaskAction.ACTION_UPDATE_NEWS_CHANNEL) {
+            @Override
+            protected void doBackground() throws Exception {
+                setNeedCallBack(false);
+                newsService.updateNewsType();
+            }
+        },this);
     }
 
     /**

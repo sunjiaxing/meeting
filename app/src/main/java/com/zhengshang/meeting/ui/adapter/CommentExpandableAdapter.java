@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.BonConstants;
-import com.zhengshang.meeting.common.Utils;
+import com.zhengshang.meeting.dao.ConfigDao;
 import com.zhengshang.meeting.ui.vo.CommentVO;
 import com.zhengshang.meeting.ui.vo.ReplyVO;
 
@@ -22,18 +22,18 @@ import android.widget.TextView;
 
 /**
  * 评论列表适配器
+ * TODO getView中 待优化
  */
 public class CommentExpandableAdapter extends BaseExpandableListAdapter {
     private LayoutInflater inflater;
     private List<CommentVO> commentList;
     private CommentListener listener;
     private String userId;
-    private Context context;
 
     public CommentExpandableAdapter(Context context) {
         super();
-        this.context = context;
         inflater = LayoutInflater.from(context);
+        userId = ConfigDao.getInstance(context).getUserId();
     }
 
     public void setData(List<CommentVO> parentList) {
@@ -136,7 +136,6 @@ public class CommentExpandableAdapter extends BaseExpandableListAdapter {
 
             @Override
             public void onClick(View v) {
-
                 if (listener != null) {
                     int[] data = (int[]) v.getTag();
                     CommentVO vo = commentList.get(data[0]);
@@ -147,7 +146,6 @@ public class CommentExpandableAdapter extends BaseExpandableListAdapter {
             }
         });
         tvContent.setOnLongClickListener(new OnLongClickListener() {
-
             @Override
             public boolean onLongClick(View v) {
                 if (listener != null) {

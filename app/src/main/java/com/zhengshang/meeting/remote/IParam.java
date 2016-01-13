@@ -11,6 +11,8 @@ public interface IParam {
     String AD_URL = "adUrl";
     String AND = "&";
     String AD_ID = "adId";
+    String ADD_COMMENT = "addComment";
+    String ADD_REPLY = "addReply";
 
     // B
     // C

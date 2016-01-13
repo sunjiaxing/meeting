@@ -5,6 +5,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -305,7 +306,7 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     void clickToComment() {
         if (userService.checkLoginState()) {
             // 跳转评论输入框
-
+            CommentInputActivity_.intent(this).startForResult(1);
         } else {
             // 跳转登录
             LoginActivity_.intent(this).startForResult(0);
@@ -316,8 +317,29 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0 && resultCode == RESULT_OK) {
-
+            clickToComment();
+        } else if (requestCode == 1 && resultCode == RESULT_OK) {
+            String content = data.getStringExtra(IParam.CONTENT);
+            Log.e("=================", "onActivityResult: " + content);
+            sendComment(content);
         }
+    }
+
+    /**
+     * 发表评论
+     * @param content 评论内容
+     */
+    private void sendComment(final String content) {
+        // 添加数据到UI
+
+        // 发送数据到服务器
+        TaskManager.pushTask(new Task(TaskAction.ACTION_SEND_COMMENT) {
+            @Override
+            protected void doBackground() throws Exception {
+                setNeedCallBack(false);
+                commentService.sendComment(newsId, catId, content);
+            }
+        }, this);
     }
 
     @Click(R.id.tv_switch)
