@@ -17,6 +17,7 @@ import com.taskmanager.TaskManager;
 import com.zhengshang.meeting.common.BonConstants;
 import com.zhengshang.meeting.common.TaskAction;
 import com.zhengshang.meeting.common.Utils;
+import com.zhengshang.meeting.dao.ConfigDao;
 import com.zhengshang.meeting.dao.NewsDao;
 import com.zhengshang.meeting.dao.entity.News;
 import com.zhengshang.meeting.dao.entity.NewsChannel;
@@ -52,7 +53,7 @@ public class NewsService extends BaseService {
      */
     public List<NewsChannelVO> getAllNewsTypes() throws JSONException {
         List<NewsChannelVO> showData;
-        List<NewsChannel> dbData = newsDao.getNewsType(true, "0");
+        List<NewsChannel> dbData = newsDao.getNewsType(true, configDao.getUserId());
         if (!Utils.isEmpty(dbData)) {
             showData = parseNewsChannel2ShowDataFromDB(dbData);
         } else {
@@ -194,7 +195,7 @@ public class NewsService extends BaseService {
     public List<NewsChannelVO> getUserNewsTypes() throws JSONException {
         List<NewsChannelVO> showData = null;
         List<NewsChannel> dbData = newsDao
-                .getNewsType(false, "0");
+                .getNewsType(false, configDao.getUserId());
         if (!Utils.isEmpty(dbData)) {
             showData = parseNewsChannel2ShowDataFromDB(dbData);
         }

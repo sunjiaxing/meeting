@@ -169,6 +169,6 @@ public class ConfigDao {
      * @return
      */
     public String getUserId() {
-        return getShare().getString(IParam.USER_ID, null);
+        return getShare().getString(IParam.USER_ID, "0");
     }
 }

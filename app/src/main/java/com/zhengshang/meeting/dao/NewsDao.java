@@ -12,8 +12,6 @@ import java.util.List;
 
 /**
  * news dao
- *
- * @author sun 2014年5月28日14:39:50
  */
 public class NewsDao extends BaseDao {
 

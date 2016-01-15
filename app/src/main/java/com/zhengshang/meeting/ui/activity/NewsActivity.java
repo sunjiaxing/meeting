@@ -118,8 +118,14 @@ public class NewsActivity extends BaseActivity implements
         TaskManager.pushTaskWithQueue(new Task(TaskAction.ACTION_GET_NEWS_TYPE) {
             @Override
             protected void doBackground() throws Exception {
-                newsService.getAllNewsTypes();
-                setReturnData(newsService.getUserNewsTypes());
+                // 获取用户栏目
+                List<NewsChannelVO> userNewsTypes = newsService.getUserNewsTypes();
+                if (Utils.isEmpty(userNewsTypes)) {
+                    // 获取全部栏目
+                    newsService.getAllNewsTypes();
+                    userNewsTypes = newsService.getUserNewsTypes();
+                }
+                setReturnData(userNewsTypes);
             }
         }, this);
     }
