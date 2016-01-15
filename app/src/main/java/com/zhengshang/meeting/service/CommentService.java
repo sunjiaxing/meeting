@@ -2,6 +2,7 @@ package com.zhengshang.meeting.service;
 
 import android.content.Context;
 
+import com.zhengshang.meeting.common.BonConstants;
 import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.exeception.AppException;
 import com.zhengshang.meeting.remote.CommentRO;
@@ -50,6 +51,7 @@ public class CommentService extends BaseService {
                 vo.setId(dto.getId());
                 vo.setUserId(dto.getUserId());
                 vo.setUserName(dto.getUserName());
+                vo.setUserAvatar(Utils.getUserAvatar(dto.getUserId(), BonConstants.UserAvatarType.TYPE_45X45));
                 vo.setContent(dto.getContent());
                 vo.setCreateTime(Utils.formateCommentTime(dto.getCreateTime()));
                 if (!Utils.isEmpty(dto.getReplies())) {

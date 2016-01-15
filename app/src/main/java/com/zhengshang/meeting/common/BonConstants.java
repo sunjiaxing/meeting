@@ -68,8 +68,27 @@ public class BonConstants {
      */
     public static final int REQUEST_TO_DETAIL = 0x1008;
 
-    public static final String SERVER_URL = "http://192.168.1.103:8080/";
+    //    public static final String SERVER_URL = "http://192.168.1.103:8080/";
     //    public static final String SERVER_URL = "http://192.168.1.28:8080/api/";
-//    public static final String SERVER_URL = "http://192.168.1.27:8888/api/";
+    public static final String SERVER_URL = "http://192.168.1.27:8888/api/";
     public static String SLASH = "/";
+    public static final String WEB_RESOURCE_URL = "http://192.168.1.27/";
+    public static final String ROOT_USER_AVATAR_URL = WEB_RESOURCE_URL + "phpsso_server/uploadfile/avatar/";
+
+    public enum UserAvatarType {
+        TYPE_30X30("30X30.jpg"),
+        TYPE_45X45("45x45.jpg"),
+        TYPE_90x90("90x90.jpg"),
+        TYPE_180x180("180x180.jpg");
+
+        private String type;
+
+        UserAvatarType(String value) {
+            this.type = value;
+        }
+
+        public String getValue() {
+            return type;
+        }
+    }
 }

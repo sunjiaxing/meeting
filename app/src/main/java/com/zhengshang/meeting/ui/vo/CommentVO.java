@@ -12,6 +12,7 @@ public class CommentVO implements Serializable{
     private int id;
     private String userId;
     private String userName;
+    private String userAvatar;
     private String createTime;
     private String content;
     private List<ReplyVO> replies;
@@ -63,7 +64,11 @@ public class CommentVO implements Serializable{
         return replies;
     }
 
-    public void setReplies(List<ReplyVO> replies) {
-        this.replies = replies;
+    public String getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(String userAvatar) {
+        this.userAvatar = userAvatar;
     }
 }

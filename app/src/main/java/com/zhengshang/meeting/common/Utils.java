@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 通用辅助类
  * Created by sun on 2015/12/10.
  */
 public class Utils {
@@ -78,6 +79,7 @@ public class Utils {
 
     /**
      * 获取屏幕宽度
+     * @param context
      */
     public static int getScreenWidth(Context context) {
         if (context == null) {
@@ -91,6 +93,7 @@ public class Utils {
 
     /**
      * 获取屏幕高度
+     * @param context
      */
     public static int getScreenHeight(Context context) {
         if (context == null) {
@@ -113,6 +116,8 @@ public class Utils {
 
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     * @param context
+     * @param dpValue
      */
     public static int dip2px(Context context, float dpValue) {
         if (context != null) {
@@ -124,6 +129,8 @@ public class Utils {
 
     /**
      * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
+     * @param context
+     * @param pxValue
      */
     public static int px2dip(Context context, float pxValue) {
         if (context != null) {
@@ -137,10 +144,11 @@ public class Utils {
      * 格式化时间 返回类型【xx月xx日 xx:xx】
      *
      * @param time
+     * @param hasYear
      * @return
      */
     public static String formateTime(long time, boolean hasYear) {
-        SimpleDateFormat sdf = null;
+        SimpleDateFormat sdf;
         if (hasYear) {
             sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
         } else {
@@ -244,6 +252,7 @@ public class Utils {
 
     /**
      * 格式化评论时间
+     *
      * @param millsDate 时间的毫秒值
      * @return
      */
@@ -263,5 +272,27 @@ public class Utils {
         }
         sdf = new SimpleDateFormat(headStr + "HH:mm");
         return sdf.format(formateDate);
+    }
+
+    /**
+     * 获取用户头像链接
+     *
+     * @param userId 用户id
+     * @param type   头像类型
+     * @return 头像链接
+     */
+    public static String getUserAvatar(String userId, BonConstants.UserAvatarType type) {
+        if (Utils.isEmpty(userId)) {
+            return null;
+        }
+        try {
+            int id = Integer.parseInt(userId);
+            return BonConstants.ROOT_USER_AVATAR_URL
+                    + (int) Math.ceil(id / 10000d) + BonConstants.SLASH
+                    + (int) Math.ceil(id % 10000d / 1000) + BonConstants.SLASH
+                    + userId + BonConstants.SLASH + type.getValue();
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 }

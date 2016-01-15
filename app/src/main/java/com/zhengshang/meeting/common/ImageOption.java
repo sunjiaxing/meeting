@@ -11,9 +11,6 @@ import com.zhengshang.meeting.R;
 
 /**
  * 用于universal-image-loader
- * 
- * @author sun 2015年1月19日 下午1:34:53
- * 
  */
 public class ImageOption {
 	private static DisplayImageOptions nomalOption;
@@ -21,7 +18,6 @@ public class ImageOption {
 	/**
 	 * 创建普通的option
 	 * 
-	 * @author sun 下午1:34:40
 	 * @return
 	 */
 	public static DisplayImageOptions createNomalOption() {
@@ -55,8 +51,7 @@ public class ImageOption {
 	}
 	/**
 	 * 创建指定 默认图的option
-	 * 
-	 * @author sun 2015年9月17日16:44:26
+	 *
 	 * @param _default
 	 * @return
 	 */

@@ -3,8 +3,10 @@ package com.zhengshang.meeting.ui.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.BonConstants;
+import com.zhengshang.meeting.common.ImageOption;
 import com.zhengshang.meeting.dao.ConfigDao;
 import com.zhengshang.meeting.ui.vo.CommentVO;
 import com.zhengshang.meeting.ui.vo.ReplyVO;
@@ -155,8 +157,8 @@ public class CommentExpandableAdapter extends BaseExpandableListAdapter {
                 return true;
             }
         });
-//        ImageLoader.getInstance().displayImage(commentVO.getAvatarUrl(), iv,
-//                ImageOption.createNomalOption());
+        ImageLoader.getInstance().displayImage(commentVO.getUserAvatar(), iv,
+                ImageOption.createNomalOption());
         tvUserName.setText(commentVO.getUserName());
         String content = commentVO.getContent();
         // 判断评论 长度
