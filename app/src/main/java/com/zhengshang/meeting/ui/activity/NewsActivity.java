@@ -122,7 +122,7 @@ public class NewsActivity extends BaseActivity implements
                 List<NewsChannelVO> userNewsTypes = newsService.getUserNewsTypes();
                 if (Utils.isEmpty(userNewsTypes)) {
                     // 获取全部栏目
-                    newsService.getAllNewsTypes();
+                    newsService.updateNewsType();
                     userNewsTypes = newsService.getUserNewsTypes();
                 }
                 setReturnData(userNewsTypes);
@@ -363,8 +363,10 @@ public class NewsActivity extends BaseActivity implements
         int fragmentId;
         switch (action) {
             case TaskAction.ACTION_GET_NEWS_TYPE:// 获取新闻分类成功
-                newsTypes = (List<NewsChannelVO>) data;
-                refreshUI(saveInstance);
+                if (data != null) {
+                    newsTypes = (List<NewsChannelVO>) data;
+                    refreshUI(saveInstance);
+                }
                 break;
             case TaskAction.ACTION_GET_NEWS_FROM_DB:// 获取缓存数据
             case TaskAction.ACTION_REFRESH_NEWS:// 刷新
@@ -385,6 +387,10 @@ public class NewsActivity extends BaseActivity implements
 
     @Override
     protected void onTaskFail(int action, String errorMessage) {
+        if (action == TaskAction.ACTION_GET_NEWS_TYPE) {
+            showToast(errorMessage);
+            return;
+        }
         NewsPagerItemFragment fra;
         for (BaseFragment base : fragmentList) {
             fra = (NewsPagerItemFragment) base;

@@ -167,7 +167,6 @@ public class NewsDao extends BaseDao {
      * 读取新闻
      *
      * @param catId
-     * @author sun
      */
     public List<News> getOnlineNewsFromDB(String catId) {
         List<News> newsList = null;
@@ -178,7 +177,7 @@ public class NewsDao extends BaseDao {
             cursor = db.rawQuery(sql, new String[]{catId});
             News lm;
             if (cursor != null && cursor.getCount() > 0) {
-                List<News> topList = new ArrayList<>();
+//                List<News> topList = new ArrayList<>();
                 newsList = new ArrayList<>();
                 while (cursor.moveToNext()) {
                     lm = new News();

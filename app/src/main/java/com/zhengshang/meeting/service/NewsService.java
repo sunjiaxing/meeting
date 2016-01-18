@@ -67,13 +67,9 @@ public class NewsService extends BaseService {
     /**
      * 更新新闻类型
      */
-    public void updateNewsType() {
-        try {
-            if (!Utils.isEmpty(getNewsTypeFromWeb(false))) {
-                configDao.setNewsChannelUpdate(false);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void updateNewsType() throws JSONException {
+        if (!Utils.isEmpty(getNewsTypeFromWeb(true))) {
+            configDao.setNewsChannelUpdate(true);
         }
     }
 
@@ -99,7 +95,7 @@ public class NewsService extends BaseService {
     /**
      * 根据标记获取新闻栏目
      *
-     * @param isUpdateTime 新闻栏目的版本
+     * @param isUpdateTime 是否 记录 更新新闻栏目的时间
      * @return
      * @throws JSONException
      */

@@ -36,7 +36,7 @@ public class TaskService extends Service implements TaskResultListener {
                 Task task = TaskManager.getTaskQueue().take();
                 if (task != null) {
                     task.setResultListener(this);
-                    if (intent.getBooleanExtra(TaskKey.KEY_WITH_QUEUE, false)) {
+                    if (!intent.getBooleanExtra(TaskKey.KEY_WITH_QUEUE, false)) {
                         morePool.execute(task);
                     } else {
                         singlePool.execute(task);

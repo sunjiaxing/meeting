@@ -34,8 +34,8 @@ import cz.msebera.android.httpclient.util.EntityUtils;
  */
 public class HttpUtilsApache {
 
-    private static final int connectionTimeout = 5000 * 10;
-    private static final int readTimeout = 15000 * 10;
+    private static final int connectionTimeout = 5000;
+    private static final int readTimeout = 15000;
     private static final Boolean DEBUG = false;
     private static final String TAG = "HttpUtilsApache";
 
@@ -213,8 +213,8 @@ public class HttpUtilsApache {
      * 释放连接
      *
      * @param httpClient httpclient
-     * @param request 请求
-     * @param response 响应
+     * @param request    请求
+     * @param response   响应
      */
     private static void releaseConnection(CloseableHttpClient httpClient,
                                           HttpUriRequest request, CloseableHttpResponse response) {
