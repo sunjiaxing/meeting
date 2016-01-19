@@ -168,7 +168,7 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
         TaskManager.pushTask(new Task(TaskAction.ACTION_GET_NEWS_DETAIL) {
             @Override
             protected void doBackground() throws Exception {
-                setReturnData(new Object[]{newsService.getNewsDetailFromWeb(newsId, catId), commentService.getCommentList(newsId, catId)});
+                setReturnData(new Object[]{newsService.getNewsDetailFromWeb(newsId, catId), commentService.getCommentList(newsId)});
             }
         }, this);
     }
@@ -359,7 +359,7 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
             @Override
             protected void doBackground() throws Exception {
 //                setNeedCallBack(false);  测试时注释此行代码 以便输出错误信息
-                commentService.sendComment(newsId, catId, content);
+                commentService.sendComment(newsId, content);
             }
         }, this);
     }
@@ -457,7 +457,7 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
             @Override
             protected void doBackground() throws Exception {
 //                setNeedCallBack(false); 测试时注释此行代码 以便输出错误信息
-                commentService.sendReply(newsId,catId,parentId,content);
+                commentService.sendReply(newsId,parentId,content);
             }
         },this);
     }

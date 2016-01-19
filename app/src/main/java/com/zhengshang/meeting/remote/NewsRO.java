@@ -40,8 +40,8 @@ public class NewsRO extends BaseRO {
     }
 
     public enum RemoteNewsUrl implements IBaseURL {
-        GET_NEWS_TYPE(IParam.CATEGORIES), GET_NEWS_LIST(IParam.LIST_FOR_ORIENTATION), NEWS_DETAIL(
-                IParam.DETAIL_NEW);
+        GET_NEWS_TYPE(IParam.CATEGORIES), GET_NEWS_LIST(IParam.LIST), NEWS_DETAIL(
+                IParam.DETAIL);
         private static final String NAMESPACE = IParam.NEWS;
         private String url;
 
@@ -130,19 +130,16 @@ public class NewsRO extends BaseRO {
     /**
      * 获取新闻详情
      *
-     * @param id
-     * @param catId
-     * @param token
+     * @param id 新闻id
      * @return
      * @throws JSONException
      */
-    public NewsDetailDto getNewsDetail(String id, String catId, String token)
+    public NewsDetailDto getNewsDetail(String id)
             throws JSONException {
         String url = getServerUrl()
                 + RemoteNewsUrl.NEWS_DETAIL.getURL() + IParam.WENHAO
-                + IParam.CAT_ID + IParam.EQUALS_STRING + catId + IParam.AND
                 + IParam.NEWS_ID + IParam.EQUALS_STRING + id;
-        String result = httpGetRequest(url, getHeaderParam(IParam.TOKEN, token));
+        String result = httpGetRequest(url, null);
         JSONObject json = new JSONObject(result);
         if (json.getInt(IParam.STATUS) == 1) {
             String temp = json.getString(IParam.DETAIL);

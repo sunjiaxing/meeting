@@ -390,8 +390,8 @@ public class NewsService extends BaseService {
     /**
      * 网络请求获取新闻详情
      *
-     * @param id
-     * @param catId
+     * @param id 新闻id
+     * @param catId 栏目id
      * @return
      * @throws JSONException
      */
@@ -401,8 +401,7 @@ public class NewsService extends BaseService {
         // 设置新闻已读状态
         newsDao.setReadState(id, catId, 1);
         // 访问服务器
-        NewsDetailDto dto = newsRO.getNewsDetail(id, catId,
-                null);
+        NewsDetailDto dto = newsRO.getNewsDetail(id);
         if (dto != null) {
             // 数据转换
             vo = new NewsDetailVO();

@@ -34,12 +34,11 @@ public class CommentService extends BaseService {
      * 获取评论列表
      *
      * @param newsId 新闻id
-     * @param catId  栏目id
      * @return
      * @throws JSONException
      */
-    public List<CommentVO> getCommentList(String newsId, String catId) throws JSONException {
-        List<CommentDto> dtos = commentRO.getCommentList(newsId, catId);
+    public List<CommentVO> getCommentList(String newsId) throws JSONException {
+        List<CommentDto> dtos = commentRO.getCommentList(newsId);
         List<CommentVO> showData = null;
         if (!Utils.isEmpty(dtos)) {
             showData = new ArrayList<>();
@@ -78,17 +77,13 @@ public class CommentService extends BaseService {
      * 发表评论
      *
      * @param newsId  新闻id
-     * @param catId   新闻栏目id
      * @param content 评论内容
      * @throws JSONException
      */
-    public void sendComment(String newsId, String catId, String content) throws JSONException {
+    public void sendComment(String newsId, String content) throws JSONException {
         // 数据校验
         if (Utils.isEmpty(newsId)) {
             throw new AppException("param --> newsId can not be null");
-        }
-        if (Utils.isEmpty(catId)) {
-            throw new AppException("param --> catId can not be null");
         }
         if (Utils.isEmpty(content)) {
             throw new AppException("param --> content can not be null");
@@ -100,24 +95,21 @@ public class CommentService extends BaseService {
         if (Utils.isEmpty(userId)) {
             throw new AppException("user not login");
         }
-        commentRO.addComment(newsId, catId, userId, content);
+        commentRO.addComment(newsId, userId, content);
     }
 
     /**
      * 发表回复
-     * @param newsId 新闻id
-     * @param catId 新闻栏目id
+     *
+     * @param newsId   新闻id
      * @param parentId 评论id
-     * @param content 回复内容
+     * @param content  回复内容
      * @throws JSONException
      */
-    public void sendReply(String newsId, String catId, int parentId, String content) throws JSONException {
+    public void sendReply(String newsId, int parentId, String content) throws JSONException {
         // 数据校验
         if (Utils.isEmpty(newsId)) {
             throw new AppException("param --> newsId can not be null ");
-        }
-        if (Utils.isEmpty(catId)) {
-            throw new AppException("param --> catId can not be null ");
         }
         if (Utils.isEmpty(content)) {
             throw new AppException("param --> content can not be null ");
@@ -132,6 +124,6 @@ public class CommentService extends BaseService {
         if (Utils.isEmpty(userId)) {
             throw new AppException("user not login");
         }
-        commentRO.addReply(newsId, catId, userId, parentId, content);
+        commentRO.addReply(newsId, userId, parentId, content);
     }
 }

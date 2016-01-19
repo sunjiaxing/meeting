@@ -36,11 +36,14 @@
             android:name=".ui.activity.LoginActivity_"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activity.UserCenterActivity_"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activity.CommentInputActivity_"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/comment_tool_style"
-            android:windowSoftInputMode="stateAlwaysVisible|adjustResize"
-            android:screenOrientation="portrait" />
+            android:windowSoftInputMode="stateAlwaysVisible|adjustResize" />
         <activity
             android:name=".ui.activity.TestActivity_"
             android:screenOrientation="portrait" />

@@ -44,14 +44,12 @@ public class CommentRO extends BaseRO {
      * 获取评论列表
      *
      * @param newsId 新闻id
-     * @param catId 新闻栏目id
      * @return 评论 集合
      * @throws JSONException
      */
-    public List<CommentDto> getCommentList(String newsId, String catId) throws JSONException {
+    public List<CommentDto> getCommentList(String newsId) throws JSONException {
         String url = getServerUrl() + RemoteCommentURL.GET_COMMENT_LIST.getURL()
-                + IParam.WENHAO + IParam.NEWS_ID + IParam.EQUALS_STRING + newsId
-                + IParam.AND + IParam.CAT_ID + IParam.EQUALS_STRING + catId;
+                + IParam.WENHAO + IParam.NEWS_ID + IParam.EQUALS_STRING + newsId;
         String result = httpGetRequest(url, null);
         JSONObject json = new JSONObject(result);
         if (json.getInt(IParam.STATUS) == 1) {
@@ -73,17 +71,15 @@ public class CommentRO extends BaseRO {
      * 发表评论
      *
      * @param newsId  新闻id
-     * @param catId   新闻栏目id
      * @param userId  用户id
      * @param content 评论内容
      * @return boolean
      * @throws JSONException
      */
-    public boolean addComment(String newsId, String catId, String userId, String content) throws JSONException {
+    public boolean addComment(String newsId, String userId, String content) throws JSONException {
         String url = getServerUrl() + RemoteCommentURL.ADD_COMMENT.getURL();
         Map<String, Object> params = new HashMap<>();
         params.put(IParam.NEWS_ID, newsId);
-        params.put(IParam.CAT_ID, catId);
         params.put(IParam.USER_ID, userId);
         params.put(IParam.CONTENT, content);
         String result = httpPostRequest(url, null, params);
@@ -97,19 +93,18 @@ public class CommentRO extends BaseRO {
 
     /**
      * 发表回复
-     * @param newsId 新闻id
-     * @param catId 新闻栏目id
-     * @param userId 用户id
+     *
+     * @param newsId   新闻id
+     * @param userId   用户id
      * @param parentId 评论的id
-     * @param content 回复内容
+     * @param content  回复内容
      * @return Boolean
      * @throws JSONException
      */
-    public boolean addReply(String newsId, String catId, String userId, int parentId, String content) throws JSONException {
+    public boolean addReply(String newsId, String userId, int parentId, String content) throws JSONException {
         String url = getServerUrl() + RemoteCommentURL.ADD_REPLY.getURL();
         Map<String, Object> params = new HashMap<>();
         params.put(IParam.NEWS_ID, newsId);
-        params.put(IParam.CAT_ID, catId);
         params.put(IParam.USER_ID, userId);
         params.put(IParam.PARENT_ID, parentId);
         params.put(IParam.CONTENT, content);

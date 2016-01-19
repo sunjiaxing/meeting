@@ -3,6 +3,7 @@ package com.zhengshang.meeting.ui.activity;
 
 import android.content.Intent;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -51,6 +53,8 @@ public class NewsActivity extends BaseActivity implements
     ImageView ivRight;
     @ViewById(R.id.tv_title)
     TextView tvTitle;
+    @ViewById(R.id.btn_right)
+    Button btnRight;
     @ViewById(R.id.vp_news_list)
     ViewPager mPager;
     @ViewById(R.id.right_handle_layout)
@@ -71,12 +75,14 @@ public class NewsActivity extends BaseActivity implements
     private NewsService newsService;
     private List<BaseFragment> fragmentList;
     private Bundle saveInstance;
+    private UserService userService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.saveInstance = savedInstanceState;
         newsService = new NewsService(this);
+        userService = new UserService(this);
     }
 
     @AfterViews
@@ -99,8 +105,11 @@ public class NewsActivity extends BaseActivity implements
         }
         ivBack.setVisibility(View.VISIBLE);
         tvTitle.setText(getString(R.string.news));
-        ivRight.setVisibility(View.VISIBLE);
-        ivRight.setBackgroundResource(R.drawable.btn_more);
+//        ivRight.setVisibility(View.VISIBLE);
+//        ivRight.setBackgroundResource(R.drawable.btn_more);
+        btnRight.setVisibility(View.VISIBLE);
+        btnRight.setBackgroundColor(Color.TRANSPARENT);
+        btnRight.setText("用户中心");
 
         mPager.addOnPageChangeListener(this);
         if (Utils.isEmpty(newsTypes)) {
@@ -108,6 +117,15 @@ public class NewsActivity extends BaseActivity implements
             updateNewsChannel();
         } else {
             refreshUI(saveInstance);
+        }
+    }
+
+    @Click(R.id.btn_right)
+    void toUserCenter() {
+        if (userService.checkLoginState()) {
+            UserCenterActivity_.intent(this).start();
+        } else {
+            LoginActivity_.intent(this).startForResult(1);
         }
     }
 
@@ -196,7 +214,6 @@ public class NewsActivity extends BaseActivity implements
      *
      * @param position
      * @return
-     * @author sun 下午5:33:51
      */
     private String getFragmentTag(int position) {
         return "android:switcher:" + R.id.vp_news_list + ":" + position;
@@ -349,6 +366,8 @@ public class NewsActivity extends BaseActivity implements
             // 操作栏目
             newsTypes = (List<NewsChannelVO>) data.getSerializableExtra(IParam.LIST);
             afterSaveNewsChannel();
+        } else if (requestCode == 1 && resultCode == RESULT_OK) {
+            toUserCenter();
         }
     }
 
