@@ -178,8 +178,6 @@ public class NewsService extends BaseService {
     public NewsSubjectVO getNewsSubject(int specialId) throws JSONException {
         NewsSubjectDto dto = newsRO.getNewsSubject(specialId);
         if (dto != null) {
-            // 设置已读状态
-            newsDao.setReadState(specialId, 1);
             // 数据转换
             NewsSubjectVO vo = new NewsSubjectVO();
             vo.setId(dto.getId());
@@ -194,6 +192,16 @@ public class NewsService extends BaseService {
             return vo;
         }
         return null;
+    }
+
+    /**
+     * 设置阅读状态
+     * @param newsId 新闻id
+     * @param catId 栏目id
+     * @param readState 阅读状态
+     */
+    public void setReadState(String newsId, String catId, int readState) {
+        newsDao.setReadState(newsId, catId, readState);
     }
 
     /**
@@ -460,17 +468,12 @@ public class NewsService extends BaseService {
      * 网络请求获取新闻详情
      *
      * @param id    新闻id
-     * @param catId 栏目id
      * @return
      * @throws JSONException
      */
-    public NewsDetailVO getNewsDetailFromWeb(String id, String catId)
+    public NewsDetailVO getNewsDetailFromWeb(String id)
             throws JSONException {
         NewsDetailVO vo = null;
-        if (!Utils.isEmpty(catId)) {
-            // 设置新闻已读状态
-            newsDao.setReadState(id, catId, 1);
-        }
         // 访问服务器
         NewsDetailDto dto = newsRO.getNewsDetail(id);
         if (dto != null) {

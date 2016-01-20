@@ -66,7 +66,6 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     @ViewById(R.id.tv_switch)
     TextView tvSwitch;
 
-    private String catId;
     private String newsId;
     private AnimationDrawable anim;
     private NewsService newsService;
@@ -94,7 +93,6 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
 
     @AfterViews
     void init() {
-        catId = getIntent().getStringExtra(IParam.CAT_ID);
         newsId = getIntent().getStringExtra(IParam.NEWS_ID);
         String title = getIntent().getStringExtra(IParam.TITLE);
         anim = (AnimationDrawable) findViewById(R.id.iv_loading_in)
@@ -168,7 +166,7 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
         TaskManager.pushTask(new Task(TaskAction.ACTION_GET_NEWS_DETAIL) {
             @Override
             protected void doBackground() throws Exception {
-                setReturnData(new Object[]{newsService.getNewsDetailFromWeb(newsId, catId), commentService.getCommentList(newsId)});
+                setReturnData(new Object[]{newsService.getNewsDetailFromWeb(newsId), commentService.getCommentList(newsId)});
             }
         }, this);
     }

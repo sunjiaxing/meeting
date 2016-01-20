@@ -379,17 +379,24 @@ public class NewsPagerItemFragment extends BaseFragment implements
     @ItemClick(R.id.lv_drag)
     void onItemClick(int position) {
         // 获取选中的news
-        NewsVO model = news.get(hasTop ? position - 1 : position - 2);
+        final NewsVO model = news.get(hasTop ? position - 1 : position - 2);
         if (model == null) {
             return;
         }
+        // 设置阅读状态
+        model.setRead(true);
+        TaskManager.pushTask(new Task(TaskAction.ACTION_SET_NEWS_READ_STATE) {
+            @Override
+            protected void doBackground() throws Exception {
+                setNeedCallBack(false);
+                newsService.setReadState(model.getId(), newsType.getTypeId(), 1);
+            }
+        }, getActivity());
+        adapter.setData(news, hasTop);
+        // 刷新适配器
+        adapter.notifyDataSetChanged();
         if (!model.isSubject()) {
             // 不是专题--按以前的逻辑
-            // 设置阅读状态
-            model.setRead(true);
-            adapter.setData(news, hasTop);
-            // 刷新适配器
-            adapter.notifyDataSetChanged();
             // 判断iconAdUrl
             if (!Utils.isEmpty(model.getIconAdUrl())) {
                 Intent intent = new Intent(getActivity(), ShowUrlActivity.class);

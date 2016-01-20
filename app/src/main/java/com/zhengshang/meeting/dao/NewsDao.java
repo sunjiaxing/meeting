@@ -338,22 +338,6 @@ public class NewsDao extends BaseDao {
     }
 
     /**
-     * 设置专题 已读状态
-     * @param specialId
-     * @param readState
-     */
-    public void setReadState(int specialId, int readState) {
-        try {
-            sql = "update " + News.KEY_TABLE_NAME + " set "
-                    + News.KEY_COLUMN_IS_READ + "= ?" + " where "
-                    + News.KEY_COLUMN_SUBJECT_ID + "= ? ";
-            db.execSQL(sql, new Object[]{readState, specialId});
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * 根据新闻id删除列表中的新闻
      *
      * @param newsId 新闻id
