@@ -67,8 +67,8 @@ public class NewsDao extends BaseDao {
     /**
      * 判断新闻类型是否存在
      *
-     * @param typeId
-     * @param masterId
+     * @param typeId   栏目id
+     * @param masterId 用户id
      * @return
      */
     private boolean isExistNewsType(String typeId, String masterId) {
@@ -91,8 +91,8 @@ public class NewsDao extends BaseDao {
     /**
      * 读取对应类型的栏目信息
      *
-     * @param isAll
-     * @param masterId
+     * @param isAll    是否获取所有
+     * @param masterId 用户id
      * @return
      */
     public List<NewsChannel> getNewsType(boolean isAll, String masterId) {
@@ -135,8 +135,8 @@ public class NewsDao extends BaseDao {
     /**
      * 更新为我的栏目
      *
-     * @param newsTypes
-     * @param masterId
+     * @param newsTypes 新闻栏目集合
+     * @param masterId  用户id
      */
     public void saveToMyChannel(List<NewsChannel> newsTypes, String masterId) {
         try {
@@ -166,7 +166,7 @@ public class NewsDao extends BaseDao {
     /**
      * 读取新闻
      *
-     * @param catId
+     * @param catId 栏目id
      */
     public List<News> getOnlineNewsFromDB(String catId) {
         List<News> newsList = null;
@@ -177,7 +177,6 @@ public class NewsDao extends BaseDao {
             cursor = db.rawQuery(sql, new String[]{catId});
             News lm;
             if (cursor != null && cursor.getCount() > 0) {
-//                List<News> topList = new ArrayList<>();
                 newsList = new ArrayList<>();
                 while (cursor.moveToNext()) {
                     lm = new News();
@@ -199,21 +198,14 @@ public class NewsDao extends BaseDao {
                             .getColumnIndex(News.KEY_COLUMN_CREATE_TIME)));
                     lm.setSubject(cursor.getInt(cursor
                             .getColumnIndex(News.KEY_COLUMN_SUBJECT)));
+                    lm.setSubjectId(cursor.getInt(cursor
+                            .getColumnIndex(News.KEY_COLUMN_SUBJECT_ID)));
                     lm.setIconAdUrl(cursor.getString(cursor
                             .getColumnIndex(News.KEY_COLUMN_AD_URL)));
+
                     lm.setCatId(catId);
-//                    if (lm.getTop() == 1) {
-//                        topList.add(lm);
-//                    } else {
                     newsList.add(lm);
-//                    }
                 }
-//                if (topList.size() > 0) {
-//                    News model = topList.get(0);
-//                    model.setTop(1);
-//                    model.setTopNews(topList);
-//                    newsList.add(0, model);
-//                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -226,7 +218,7 @@ public class NewsDao extends BaseDao {
     /**
      * 删除新闻标志对应类型下的所有数据
      *
-     * @param catId
+     * @param catId 栏目id
      */
     public void deleteAllByCatId(String catId) {
         sql = "delete from " + News.KEY_TABLE_NAME + " where "
@@ -240,8 +232,8 @@ public class NewsDao extends BaseDao {
     /**
      * 获取新闻阅读状态
      *
-     * @param newsId
-     * @param catId
+     * @param newsId 新闻id
+     * @param catId 栏目id
      * @return
      */
     public int getReadState(String newsId, String catId) {
@@ -268,7 +260,7 @@ public class NewsDao extends BaseDao {
     /**
      * 保存新闻
      *
-     * @param n
+     * @param n 新闻对象
      */
 
     public void saveNews(News n) {
@@ -297,6 +289,9 @@ public class NewsDao extends BaseDao {
         if (n.getSubject() != 0) {
             values.put(News.KEY_COLUMN_SUBJECT, n.getSubject());
         }
+        if (n.getSubjectId() != 0) {
+            values.put(News.KEY_COLUMN_SUBJECT_ID, n.getSubjectId());
+        }
         values.put(News.KEY_COLUMN_IS_OPEN_BLANK, n.getIsOpenBlank());
         values.put(News.KEY_COLUMN_CREATE_TIME, n.getCreateTime());
         if (!Utils.isEmpty(n.getIconAdUrl())) {
@@ -312,7 +307,7 @@ public class NewsDao extends BaseDao {
     /**
      * 保存新闻
      *
-     * @param data
+     * @param data 新闻集合
      */
     public void saveNews(List<News> data) {
         if (!Utils.isEmpty(data)) {
@@ -325,8 +320,9 @@ public class NewsDao extends BaseDao {
     /**
      * 设置新闻阅读状态
      *
-     * @param newsId
-     * @param readState
+     * @param newsId 新闻id
+     * @param catId 栏目id
+     * @param readState 阅读状态
      */
     public void setReadState(String newsId, String catId, int readState) {
         try {
@@ -344,7 +340,7 @@ public class NewsDao extends BaseDao {
     /**
      * 根据新闻id删除列表中的新闻
      *
-     * @param newsId
+     * @param newsId 新闻id
      */
     public void deleteNewsByID(String newsId) {
         try {

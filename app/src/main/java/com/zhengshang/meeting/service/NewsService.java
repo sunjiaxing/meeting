@@ -12,12 +12,8 @@ import org.json.JSONException;
 
 import android.content.Context;
 
-import com.taskmanager.Task;
-import com.taskmanager.TaskManager;
 import com.zhengshang.meeting.common.BonConstants;
-import com.zhengshang.meeting.common.TaskAction;
 import com.zhengshang.meeting.common.Utils;
-import com.zhengshang.meeting.dao.ConfigDao;
 import com.zhengshang.meeting.dao.NewsDao;
 import com.zhengshang.meeting.dao.entity.News;
 import com.zhengshang.meeting.dao.entity.NewsChannel;
@@ -133,8 +129,7 @@ public class NewsService extends BaseService {
         // 数据转换
         List<NewsChannel> saveData = new ArrayList<>();
         if (!Utils.isEmpty(data)) {
-//			String masterId = masterDao.getId();
-            String masterId = "0";
+            String masterId = configDao.getUserId();
             for (NewsChannelDto dto : data) {
                 NewsChannel type = new NewsChannel();
                 type.setTypeId(dto.getTypeId());
@@ -209,6 +204,7 @@ public class NewsService extends BaseService {
         // 数据转换
         List<NewsChannel> saveData = new ArrayList<>();
         if (!Utils.isEmpty(data)) {
+            String masterId = configDao.getUserId();
             for (NewsChannelVO vo : data) {
                 NewsChannel type = new NewsChannel();
                 type.setTypeId(vo.getTypeId());
@@ -216,7 +212,7 @@ public class NewsService extends BaseService {
                 type.setIsLock(vo.isLock() ? 1 : 0);
                 type.setIsMine(1);
                 type.setPosition(vo.getPosition());
-                type.setMasterId("0");
+                type.setMasterId(masterId);
                 saveData.add(type);
             }
         }
@@ -226,7 +222,7 @@ public class NewsService extends BaseService {
     /**
      * 从数据库中获取缓存的新闻
      *
-     * @param catId
+     * @param catId 栏目id
      * @return
      */
     public List<NewsVO> getNewsFromDB(String catId) {
@@ -239,18 +235,7 @@ public class NewsService extends BaseService {
             topData = new ArrayList<>();
             NewsVO vo;
             for (News news : dbData) {
-                vo = new NewsVO();
-                vo.setId(news.getNewsId());
-                vo.setCatId(news.getCatId());
-                vo.setTitle(news.getTitle());
-                vo.setSummary(news.getSummary());
-                vo.setSubject(news.getSubject() == 1);
-                vo.setIconPath(news.getIconPath());
-                vo.setCreateTime(news.getCreateTime());
-                vo.setIsOpenBlank(news.getIsOpenBlank() == 1);
-                vo.setRead(news.getIsRead() == 1);
-                vo.setTop(news.getTop() == 1);
-                vo.setIconAdUrl(news.getIconAdUrl());
+                vo = parseToVO(news);
                 if (vo.isTop()) {
                     topData.add(vo);
                 } else {
@@ -273,10 +258,33 @@ public class NewsService extends BaseService {
     }
 
     /**
+     * 转换成 vo
+     *
+     * @param news 数据库存储实体
+     * @return
+     */
+    private NewsVO parseToVO(News news) {
+        NewsVO vo = new NewsVO();
+        vo.setId(news.getNewsId());
+        vo.setCatId(news.getCatId());
+        vo.setTitle(news.getTitle());
+        vo.setSummary(Utils.substringSummary(news.getSummary()));
+        vo.setSubject(news.getSubject() == 1);
+        vo.setSubjectId(news.getSubjectId());
+        vo.setIconPath(news.getIconPath());
+        vo.setCreateTime(news.getCreateTime());
+        vo.setIsOpenBlank(news.getIsOpenBlank() == 1);
+        vo.setRead(news.getIsRead() == 1);
+        vo.setTop(news.getTop() == 1);
+        vo.setIconAdUrl(news.getIconAdUrl());
+        return vo;
+    }
+
+    /**
      * (新闻) 获取网络数据
      *
-     * @param catId
-     * @param minTime
+     * @param catId   栏目id
+     * @param minTime 最小时间
      * @return
      * @throws JSONException
      */
@@ -284,8 +292,7 @@ public class NewsService extends BaseService {
             throws JSONException {
         List<NewsVO> showData = new ArrayList<>();
         // 获取数据
-        List<NewsDto> webData = newsRO.refreshNews(catId,
-                BonConstants.LIMIT_GET_NEWS, minTime, null);
+        List<NewsDto> webData = newsRO.refreshNews(catId, BonConstants.LIMIT_GET_NEWS, minTime);
         try {
             News news;
             NewsVO vo;
@@ -294,46 +301,15 @@ public class NewsService extends BaseService {
             List<NewsVO> topData = new ArrayList<>();
             // 同时转换为 vo 和 db
             for (NewsDto dto : webData) {
-                news = new News();
-                vo = new NewsVO();
                 readState = newsDao.getReadState(dto.getId(), catId);
-                news.setIsAd(dto.getIsAd());
-                news.setNewsId(dto.getId());
-                news.setSummary(dto.getSummary());
-                news.setCatId(catId);
-                news.setTop(dto.getTop());
-                news.setCreateTime(dto.getCreateTime());
-                news.setIsRead(readState);
-
-                vo.setId(dto.getId());
-                vo.setSummary(dto.getSummary());
+                vo = parseToVO(dto);
                 vo.setCatId(catId);
-                vo.setTop(dto.getTop() == 1);
-                vo.setCreateTime(dto.getCreateTime());
                 vo.setRead(readState == 1);
 
-                if (dto.getIsAd() == 1) {
-                    // 广告单独处理
-                    news.setTitle(dto.getAdTitle());
-                    news.setIconPath(dto.getAdImgUrl());
-                    news.setIconAdUrl(dto.getAdUrl());
-                    news.setIsOpenBlank(dto.getIsOpenBlank());
+                news = parseToDB(dto);
+                news.setCatId(catId);
+                news.setIsRead(readState);
 
-                    vo.setTitle(dto.getAdTitle());
-                    vo.setIconPath(dto.getAdImgUrl());
-                    vo.setIconAdUrl(dto.getAdUrl());
-                    vo.setIsOpenBlank(dto.getIsOpenBlank() == 1);
-                } else {
-                    news.setTitle(dto.getTitle());
-                    vo.setTitle(dto.getTitle());
-                    if (dto.getTop() == 1) {
-                        news.setIconPath(dto.getImgUrl());
-                        vo.setIconPath(dto.getImgUrl());
-                    } else {
-                        news.setIconPath(dto.getIconUrl());
-                        vo.setIconPath(dto.getIconUrl());
-                    }
-                }
                 // 添加db集合
                 dbData.add(news);
                 // 添加vo集合
@@ -373,6 +349,69 @@ public class NewsService extends BaseService {
         return showData;
     }
 
+    /**
+     * 转换 成VO
+     *
+     * @param dto 新闻 网络请求返回数据 对象
+     * @return
+     */
+    private NewsVO parseToVO(NewsDto dto) {
+        NewsVO vo = new NewsVO();
+        vo.setId(dto.getId());
+        vo.setSummary(Utils.substringSummary(dto.getSummary()));
+        vo.setTop(dto.getTop() == 1);
+        vo.setCreateTime(dto.getCreateTime());
+        vo.setSubject(dto.getIsSpecial() == 1);
+        vo.setSubjectId(dto.getSpecialId());
+        if (dto.getIsAd() == 1) {
+            // 广告单独处理
+            vo.setTitle(dto.getAdTitle());
+            vo.setIconPath(dto.getAdImgUrl());
+            vo.setIconAdUrl(dto.getAdUrl());
+            vo.setIsOpenBlank(dto.getIsOpenBlank() == 1);
+        } else {
+            vo.setTitle(dto.getTitle());
+            if (dto.getTop() == 1) {
+                vo.setIconPath(dto.getImgUrl());
+            } else {
+                vo.setIconPath(dto.getIconUrl());
+            }
+        }
+        return vo;
+    }
+
+    /**
+     * 转换成 数据库存储数据
+     *
+     * @param dto 新闻 网络请求返回数据 对象
+     * @return
+     */
+    private News parseToDB(NewsDto dto) {
+        News news = new News();
+        news.setIsAd(dto.getIsAd());
+        news.setNewsId(dto.getId());
+        news.setSummary(dto.getSummary());
+        news.setSubject(dto.getIsSpecial());
+        news.setSubjectId(dto.getSpecialId());
+        news.setTop(dto.getTop());
+        news.setCreateTime(dto.getCreateTime());
+        if (dto.getIsAd() == 1) {
+            // 广告单独处理
+            news.setTitle(dto.getAdTitle());
+            news.setIconPath(dto.getAdImgUrl());
+            news.setIconAdUrl(dto.getAdUrl());
+            news.setIsOpenBlank(dto.getIsOpenBlank());
+        } else {
+            news.setTitle(dto.getTitle());
+            if (dto.getTop() == 1) {
+                news.setIconPath(dto.getImgUrl());
+            } else {
+                news.setIconPath(dto.getIconUrl());
+            }
+        }
+        return news;
+    }
+
     private class NewsOrderByCreateTime implements Comparator<NewsVO> {
 
         @Override
@@ -390,7 +429,7 @@ public class NewsService extends BaseService {
     /**
      * 网络请求获取新闻详情
      *
-     * @param id 新闻id
+     * @param id    新闻id
      * @param catId 栏目id
      * @return
      * @throws JSONException
@@ -428,7 +467,7 @@ public class NewsService extends BaseService {
     /**
      * 获取不同类别的点击时间
      *
-     * @param catID
+     * @param catID 栏目id
      * @return
      */
     public long getCatClickTime(String catID) {
@@ -438,7 +477,7 @@ public class NewsService extends BaseService {
     /**
      * 判断是否需要刷新
      *
-     * @param catId
+     * @param catId 栏目id
      * @return
      */
     public boolean needRefresh(String catId) {

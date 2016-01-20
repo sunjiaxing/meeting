@@ -21,9 +21,6 @@ import com.zhengshang.meeting.ui.vo.NewsVO;
 
 /**
  * 新闻列表适配器
- * 
- * @author sun
- * 
  */
 public class OnlineNewsAdapter extends QuickFlingAdapter {
 	private NewsVO news;
@@ -45,7 +42,7 @@ public class OnlineNewsAdapter extends QuickFlingAdapter {
 	 * @param list
 	 */
 	public void setData(List<NewsVO> list, boolean hasTop) {
-		this.data = new ArrayList<NewsVO>(list);
+		this.data = new ArrayList<>(list);
 		this.hasTop = hasTop;
 	}
 
@@ -121,7 +118,7 @@ public class OnlineNewsAdapter extends QuickFlingAdapter {
 			// if (news != null && news.getSummary().length() > 25) {
 			// viewHolder.instro.setText(news.getSummary().substring(0, 25)
 			// + "...");
-			// } else {
+			// } else {0
 			viewHolder.instro.setText(Html.fromHtml(news.getSummary()));
 			// }
 		} else {

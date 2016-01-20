@@ -79,6 +79,7 @@ public class Utils {
 
     /**
      * 获取屏幕宽度
+     *
      * @param context
      */
     public static int getScreenWidth(Context context) {
@@ -93,6 +94,7 @@ public class Utils {
 
     /**
      * 获取屏幕高度
+     *
      * @param context
      */
     public static int getScreenHeight(Context context) {
@@ -116,6 +118,7 @@ public class Utils {
 
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     *
      * @param context
      * @param dpValue
      */
@@ -129,6 +132,7 @@ public class Utils {
 
     /**
      * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
+     *
      * @param context
      * @param pxValue
      */
@@ -294,5 +298,21 @@ public class Utils {
         } catch (NumberFormatException e) {
             return null;
         }
+    }
+
+    /**
+     * 截取 新闻 描述
+     *
+     * @param summary 新闻描述
+     * @return
+     */
+    public static String substringSummary(String summary) {
+        if (isEmpty(summary)) {
+            return null;
+        }
+        if (summary.length() > BonConstants.LENGTH_SHOW_SUMMARY) {
+            return summary.substring(0, BonConstants.LENGTH_SHOW_SUMMARY);
+        }
+        return summary;
     }
 }

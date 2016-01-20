@@ -97,18 +97,17 @@ public class NewsRO extends BaseRO {
      * @param catId   : 分类id
      * @param limit   ：每次获取的长度
      * @param minTime 加载更多使用的
-     * @param token
      * @return
      * @throws JSONException
      */
-    public List<NewsDto> refreshNews(String catId, int limit, long minTime, String token) throws JSONException {
+    public List<NewsDto> refreshNews(String catId, int limit, long minTime) throws JSONException {
         List<NewsDto> newsList;
         String url = getServerUrl()
                 + RemoteNewsUrl.GET_NEWS_LIST.getURL() + IParam.WENHAO
                 + IParam.CAT_ID + IParam.EQUALS_STRING + catId + IParam.AND
                 + IParam.LIMIT + IParam.EQUALS_STRING + limit + IParam.AND
                 + IParam.MIN_TIME + IParam.EQUALS_STRING + minTime;
-        String result = httpGetRequest(url, getHeaderParam(IParam.TOKEN, token));
+        String result = httpGetRequest(url, null);
         JSONObject json = new JSONObject(result);
         NewsDto news;
         if (json.getInt(IParam.STATUS) == 1) {

@@ -50,6 +50,7 @@ public interface IParam {
     String ICON_URL = "iconUrl";
     String IMG_URL = "imgUrl";
     String IS_AD = "isAd";
+    String IS_SPECIAL = "isSpecial";
     String ICON_AD_URL = "iconAdUrl";
     String IMGS = "imgs";
     String IS_OPEN_BLANK = "isOpenBlank";
@@ -95,6 +96,7 @@ public interface IParam {
     String SUMMARY = "summary";
     String SUBJECT = "subject";
     String SHORT_URL = "shortUrl";
+    String SPECIAL_ID = "specialId";
 
     // T
     String TITLE = "title";

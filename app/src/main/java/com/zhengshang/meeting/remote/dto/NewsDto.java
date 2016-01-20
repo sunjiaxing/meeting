@@ -24,6 +24,9 @@ public class NewsDto {
     private String adImgUrl;
     private int isOpenBlank;
 
+    private int isSpecial;
+    private int specialId;
+
     public int getIsAd() {
         return isAd;
     }
@@ -76,6 +79,14 @@ public class NewsDto {
         return isOpenBlank;
     }
 
+    public int getIsSpecial() {
+        return isSpecial;
+    }
+
+    public int getSpecialId() {
+        return specialId;
+    }
+
     /**
      * 解析json
      *
@@ -121,6 +132,12 @@ public class NewsDto {
         }
         if (json.has(IParam.IS_OPEN_BLANK) && !json.isNull(IParam.IS_OPEN_BLANK)) {
             this.isOpenBlank = json.getInt(IParam.IS_OPEN_BLANK);
+        }
+        if (json.has(IParam.IS_SPECIAL) && !json.isNull(IParam.IS_SPECIAL)) {
+            this.isSpecial = json.getInt(IParam.IS_SPECIAL);
+        }
+        if (json.has(IParam.SPECIAL_ID) && !json.isNull(IParam.SPECIAL_ID)) {
+            this.specialId = json.getInt(IParam.SPECIAL_ID);
         }
     }
 }

@@ -2,8 +2,6 @@ package com.zhengshang.meeting.dao.entity;
 
 /**
  * 新闻实体类
- *
- * @author sun
  */
 public class News {
 
@@ -19,6 +17,7 @@ public class News {
     public static final String KEY_COLUMN_CREATE_TIME = "create_time";
     public static final String KEY_COLUMN_IS_READ = "is_read";
     public static final String KEY_COLUMN_SUBJECT = "subject";
+    public static final String KEY_COLUMN_SUBJECT_ID = "subjectId";
     public static final String KEY_COLUMN_AD_URL = "ad_url";
     public static final String KEY_COLUMN_REMARK = "remark";
 
@@ -26,15 +25,21 @@ public class News {
 
     public static final String CREAT_TABLE = "CREATE TABLE " + KEY_TABLE_NAME
             + " (" + KEY_COLUMN_TABLE_ID + " INTEGER PRIMARY KEY,"
-            + KEY_COLUMN_ID + " TEXT," + KEY_COLUMN_TITLE + " TEXT,"
-            + KEY_COLUMN_ICON_PATH + " TEXT," + KEY_COLUMN_SUMMARY + " TEXT,"
-            + KEY_COLUMN_CAT_ID + " TEXT," + KEY_COLUMN_TOP
-            + " INTEGER DEFAULT 0," + KEY_COLUMN_IS_OPEN_BLANK + " INTEGER,"
-            + KEY_COLUMN_CREATE_TIME + " LONG," + KEY_COLUMN_IS_READ
-            + " INTEGER DEFAULT 0," + KEY_COLUMN_SUBJECT
-            + " INTEGER DEFAULT 0 ," + KEY_COLUMN_IS_AD
-            + " INTEGER DEFAULT 0," + KEY_COLUMN_AD_URL + " TEXT,"
-            + KEY_COLUMN_REMARK + " TEXT " + ")";
+            + KEY_COLUMN_ID + " TEXT,"
+            + KEY_COLUMN_TITLE + " TEXT,"
+            + KEY_COLUMN_ICON_PATH + " TEXT,"
+            + KEY_COLUMN_SUMMARY + " TEXT,"
+            + KEY_COLUMN_CAT_ID + " TEXT,"
+            + KEY_COLUMN_TOP + " INTEGER DEFAULT 0,"
+            + KEY_COLUMN_IS_OPEN_BLANK + " INTEGER,"
+            + KEY_COLUMN_CREATE_TIME + " LONG,"
+            + KEY_COLUMN_IS_READ + " INTEGER DEFAULT 0,"
+            + KEY_COLUMN_SUBJECT + " INTEGER DEFAULT 0 ,"
+            + KEY_COLUMN_SUBJECT_ID + " INTEGER ,"
+            + KEY_COLUMN_IS_AD + " INTEGER DEFAULT 0,"
+            + KEY_COLUMN_AD_URL + " TEXT,"
+            + KEY_COLUMN_REMARK + " TEXT "
+            + ")";
 
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS "
             + KEY_TABLE_NAME;
@@ -54,6 +59,7 @@ public class News {
     private int isOpenBlank;
     private int isRead;// 新闻阅读状态
     private int subject;//是否是专题
+    private int subjectId;
     private long createTime;//新闻创建时间
     private String iconAdUrl;// 广告链接
     private long updateTime;
@@ -161,5 +167,13 @@ public class News {
 
     public void setIsOpenBlank(int isOpenBlank) {
         this.isOpenBlank = isOpenBlank;
+    }
+
+    public int getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(int subjectId) {
+        this.subjectId = subjectId;
     }
 }

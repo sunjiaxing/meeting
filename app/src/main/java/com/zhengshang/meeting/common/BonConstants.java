@@ -63,6 +63,9 @@ public class BonConstants {
     public static final int LIMIT_LOGO_LAST = 10;
 
 
+    public static final int LENGTH_SHOW_SUMMARY = 50;
+
+
     /**
      * 跳转到新闻详情
      */

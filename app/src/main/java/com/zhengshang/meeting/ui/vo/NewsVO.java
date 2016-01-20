@@ -17,6 +17,7 @@ public class NewsVO implements Serializable {
     private String title;
     private boolean isRead;
     private boolean subject;
+    private int subjectId;
     private String summary;
     private List<NewsVO> topNews;// 头条列表
     private boolean isOpenBlank;// 是否外部浏览器打开
@@ -120,5 +121,13 @@ public class NewsVO implements Serializable {
 
     public void setIsOpenBlank(boolean isOpenBlank) {
         this.isOpenBlank = isOpenBlank;
+    }
+
+    public int getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(int subjectId) {
+        this.subjectId = subjectId;
     }
 }
