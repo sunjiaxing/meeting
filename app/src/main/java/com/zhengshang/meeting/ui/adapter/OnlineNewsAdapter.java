@@ -16,7 +16,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.ImageOption;
 import com.zhengshang.meeting.common.Utils;
-import com.zhengshang.meeting.ui.component.DragListView;
 import com.zhengshang.meeting.ui.vo.NewsVO;
 
 /**
@@ -28,7 +27,7 @@ public class OnlineNewsAdapter extends QuickFlingAdapter {
 	private boolean hasTop = false;
 	private LayoutParams params;
 
-	public OnlineNewsAdapter(Context ctx, DragListView lv) {
+	public OnlineNewsAdapter(Context ctx) {
 		super(ctx);
 		int screenW = Utils.getScreenWidth(context);
 		int imgW = screenW / 4;
@@ -38,8 +37,9 @@ public class OnlineNewsAdapter extends QuickFlingAdapter {
 
 	/**
 	 * 设置数据
-	 * 
-	 * @param list
+	 *
+	 * @param list 数据集合
+     * @param hasTop 是否有顶部滚动数据
 	 */
 	public void setData(List<NewsVO> list, boolean hasTop) {
 		this.data = new ArrayList<>(list);

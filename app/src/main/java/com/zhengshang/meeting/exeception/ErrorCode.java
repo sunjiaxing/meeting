@@ -25,6 +25,15 @@ public class ErrorCode {
             case 1004:
                 str = "评论已被删除";
                 break;
+            case 1005:
+                str = "新闻不存在";
+                break;
+            case 1006:
+                str = "参数不正确";
+                break;
+            case 1007:
+                str = "专题不存在";
+                break;
             default:
                 str = "系统异常,请稍后重试！";
                 break;

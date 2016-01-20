@@ -23,8 +23,10 @@ import com.zhengshang.meeting.remote.NewsRO;
 import com.zhengshang.meeting.remote.dto.NewsChannelDto;
 import com.zhengshang.meeting.remote.dto.NewsDetailDto;
 import com.zhengshang.meeting.remote.dto.NewsDto;
+import com.zhengshang.meeting.remote.dto.NewsSubjectDto;
 import com.zhengshang.meeting.ui.vo.NewsChannelVO;
 import com.zhengshang.meeting.ui.vo.NewsDetailVO;
+import com.zhengshang.meeting.ui.vo.NewsSubjectVO;
 import com.zhengshang.meeting.ui.vo.NewsVO;
 
 /**
@@ -164,6 +166,34 @@ public class NewsService extends BaseService {
         }
         Collections.sort(showData, new NewsTypeOrder());
         return showData;
+    }
+
+    /**
+     * 获取新闻专题内容
+     *
+     * @param specialId 专题id
+     * @return
+     * @throws JSONException
+     */
+    public NewsSubjectVO getNewsSubject(int specialId) throws JSONException {
+        NewsSubjectDto dto = newsRO.getNewsSubject(specialId);
+        if (dto != null) {
+            // 设置已读状态
+            newsDao.setReadState(specialId, 1);
+            // 数据转换
+            NewsSubjectVO vo = new NewsSubjectVO();
+            vo.setId(dto.getId());
+            vo.setTitle(dto.getTitle());
+            vo.setBanner(dto.getBanner());
+            vo.setDescription(dto.getDescription());
+            if (!Utils.isEmpty(dto.getNewsDtoList())) {
+                for (NewsDto newsDto : dto.getNewsDtoList()) {
+                    vo.getNewsVOList().add(parseToVO(newsDto));
+                }
+            }
+            return vo;
+        }
+        return null;
     }
 
     /**
@@ -437,8 +467,10 @@ public class NewsService extends BaseService {
     public NewsDetailVO getNewsDetailFromWeb(String id, String catId)
             throws JSONException {
         NewsDetailVO vo = null;
-        // 设置新闻已读状态
-        newsDao.setReadState(id, catId, 1);
+        if (!Utils.isEmpty(catId)) {
+            // 设置新闻已读状态
+            newsDao.setReadState(id, catId, 1);
+        }
         // 访问服务器
         NewsDetailDto dto = newsRO.getNewsDetail(id);
         if (dto != null) {

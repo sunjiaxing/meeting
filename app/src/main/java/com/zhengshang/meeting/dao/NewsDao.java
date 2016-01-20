@@ -233,7 +233,7 @@ public class NewsDao extends BaseDao {
      * 获取新闻阅读状态
      *
      * @param newsId 新闻id
-     * @param catId 栏目id
+     * @param catId  栏目id
      * @return
      */
     public int getReadState(String newsId, String catId) {
@@ -320,8 +320,8 @@ public class NewsDao extends BaseDao {
     /**
      * 设置新闻阅读状态
      *
-     * @param newsId 新闻id
-     * @param catId 栏目id
+     * @param newsId    新闻id
+     * @param catId     栏目id
      * @param readState 阅读状态
      */
     public void setReadState(String newsId, String catId, int readState) {
@@ -332,6 +332,22 @@ public class NewsDao extends BaseDao {
                     + " = ?";
             db.execSQL(sql, new String[]{String.valueOf(readState), newsId,
                     catId});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 设置专题 已读状态
+     * @param specialId
+     * @param readState
+     */
+    public void setReadState(int specialId, int readState) {
+        try {
+            sql = "update " + News.KEY_TABLE_NAME + " set "
+                    + News.KEY_COLUMN_IS_READ + "= ?" + " where "
+                    + News.KEY_COLUMN_SUBJECT_ID + "= ? ";
+            db.execSQL(sql, new Object[]{readState, specialId});
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -21,6 +21,7 @@ public interface IParam {
     String COUNT_COMMENT = "countComment";
     String CAT_ID = "catId";
     String CONTENT = "content";
+    String CONTAINS = "contains";
     String COMMENT = "comment";
     String CONTENT_URL = "contentUrl";
     String CATEGORIES = "categories";
@@ -97,6 +98,7 @@ public interface IParam {
     String SUBJECT = "subject";
     String SHORT_URL = "shortUrl";
     String SPECIAL_ID = "specialId";
+    String SPECIAL = "special";
 
     // T
     String TITLE = "title";

@@ -24,6 +24,7 @@ import com.zhengshang.meeting.exeception.AppException;
 import com.zhengshang.meeting.remote.dto.NewsChannelDto;
 import com.zhengshang.meeting.remote.dto.NewsDetailDto;
 import com.zhengshang.meeting.remote.dto.NewsDto;
+import com.zhengshang.meeting.remote.dto.NewsSubjectDto;
 
 /**
  * news ro
@@ -41,7 +42,7 @@ public class NewsRO extends BaseRO {
 
     public enum RemoteNewsUrl implements IBaseURL {
         GET_NEWS_TYPE(IParam.CATEGORIES), GET_NEWS_LIST(IParam.LIST), NEWS_DETAIL(
-                IParam.DETAIL);
+                IParam.DETAIL),NEWS_SUBJECT(IParam.SPECIAL);
         private static final String NAMESPACE = IParam.NEWS;
         private String url;
 
@@ -151,6 +152,27 @@ public class NewsRO extends BaseRO {
             throw new AppException(json.getInt(IParam.ERROR_CODE));
         }
     }
+
+    /**
+     * 获取新闻专题
+     * @param specialId 专题id
+     * @return
+     * @throws JSONException
+     */
+    public NewsSubjectDto getNewsSubject(int specialId) throws JSONException {
+        String url = getServerUrl() + RemoteNewsUrl.NEWS_SUBJECT.getURL()
+                + IParam.WENHAO + IParam.SPECIAL_ID + IParam.EQUALS_STRING + specialId;
+        String result = httpGetRequest(url, null);
+        JSONObject json = new JSONObject(result);
+        if (json.getInt(IParam.STATUS) == 1) {
+            NewsSubjectDto dto = new NewsSubjectDto();
+            dto.parseJson(json.getJSONObject(IParam.SPECIAL));
+            return dto;
+        } else {
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
+        }
+    }
+
 
     /**
      * 版本更新

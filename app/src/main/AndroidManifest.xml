@@ -45,6 +45,9 @@
             android:theme="@style/comment_tool_style"
             android:windowSoftInputMode="stateAlwaysVisible|adjustResize" />
         <activity
+            android:name=".ui.activity.NewsSubjectActivity_"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activity.TestActivity_"
             android:screenOrientation="portrait" />
 

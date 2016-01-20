@@ -3,6 +3,7 @@ package com.zhengshang.meeting.common;
 import com.taskmanager.TaskKey;
 
 /**
+ * 任务 识别 action
  * Created by sun on 2015/12/10.
  */
 public interface TaskAction extends TaskKey {
@@ -18,5 +19,6 @@ public interface TaskAction extends TaskKey {
     int ACTION_SEND_COMMENT = 9;
     int ACTION_SEND_REPLY = 10;
     int ACTION_GET_USER_INFO = 11;
+    int ACTION_GET_NEWS_SUBJECT = 12;
 
 }

@@ -18,6 +18,7 @@ import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.service.NewsService;
 import com.zhengshang.meeting.ui.activity.NewsDetailActivity_;
+import com.zhengshang.meeting.ui.activity.NewsSubjectActivity_;
 import com.zhengshang.meeting.ui.activity.ShowUrlActivity;
 import com.zhengshang.meeting.ui.adapter.OnlineNewsAdapter;
 import com.zhengshang.meeting.ui.component.DragListView;
@@ -285,8 +286,6 @@ public class NewsPagerItemFragment extends BaseFragment implements
 
     /**
      * 设置加载更多状态
-     *
-     * @author sun 上午10:37:49
      */
     private void setLoadMoreState() {
         if (!Utils.isEmpty(news)) {
@@ -351,7 +350,7 @@ public class NewsPagerItemFragment extends BaseFragment implements
                 }
             }
             if (adapter == null) {
-                adapter = new OnlineNewsAdapter(getActivity(), listview);
+                adapter = new OnlineNewsAdapter(getActivity());
                 adapter.setData(news, hasTop);
                 listview.setAdapter(adapter);
             } else {
@@ -381,7 +380,10 @@ public class NewsPagerItemFragment extends BaseFragment implements
     void onItemClick(int position) {
         // 获取选中的news
         NewsVO model = news.get(hasTop ? position - 1 : position - 2);
-        if (model != null && !model.isSubject()) {
+        if (model == null) {
+            return;
+        }
+        if (!model.isSubject()) {
             // 不是专题--按以前的逻辑
             // 设置阅读状态
             model.setRead(true);
@@ -400,9 +402,9 @@ public class NewsPagerItemFragment extends BaseFragment implements
             }
         } else {
             // 是专题--特殊处理
-            // mManager.sendMessage(mManager.obtainMessage(
-            // OnlineNewsManager.STATE_GET_SUBJECT_LIST,
-            // model.id, 0));
+            NewsSubjectActivity_.intent(this).
+                    extra(IParam.SPECIAL_ID, model.getSubjectId()).
+                    extra(IParam.TITLE, model.getTitle()).start();
         }
     }
 
