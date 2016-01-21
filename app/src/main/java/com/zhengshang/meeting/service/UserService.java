@@ -7,10 +7,15 @@ import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.dao.UserDao;
 import com.zhengshang.meeting.dao.entity.User;
 import com.zhengshang.meeting.remote.UserRO;
+import com.zhengshang.meeting.remote.dto.FavoriteDto;
 import com.zhengshang.meeting.remote.dto.UserDto;
+import com.zhengshang.meeting.ui.vo.FavoriteVO;
 import com.zhengshang.meeting.ui.vo.UserVO;
 
 import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 用户 service
@@ -81,6 +86,7 @@ public class UserService extends BaseService {
 
     /**
      * 获取登录用户信息
+     *
      * @return
      */
     public UserVO getLoginUserInfo() {
@@ -100,9 +106,46 @@ public class UserService extends BaseService {
 
     /**
      * 获取登录用户 id
+     *
      * @return
      */
-    public String getLoginUserId(){
+    public String getLoginUserId() {
         return configDao.getUserId();
     }
+
+    /**
+     * 收藏 新闻
+     *
+     * @param newsId 新闻id
+     * @throws JSONException
+     */
+    public void favoriteNews(String newsId) throws JSONException {
+        userRO.addFavorite(configDao.getUserId(), newsId);
+    }
+
+    /**
+     * 获取收藏列表
+     * @return
+     * @throws JSONException
+     */
+    public List<FavoriteVO> getFavoriteList() throws JSONException {
+        List<FavoriteDto> favoriteList = userRO.getFavoriteList(configDao.getUserId());
+        List<FavoriteVO> showData = null;
+        if (!Utils.isEmpty(favoriteList)) {
+            showData = new ArrayList<>();
+            FavoriteVO vo;
+            for (FavoriteDto dto : favoriteList) {
+                vo = new FavoriteVO();
+                vo.setId(dto.getId());
+                vo.setTitle(dto.getTitle());
+                vo.setSummary(dto.getSummary());
+                vo.setFavoriteType(dto.getFavoriteType());
+                vo.setIconUrl(dto.getIconUrl());
+                vo.setCreateTime(Utils.formateCommentTime(dto.getAddTime()));
+                showData.add(vo);
+            }
+        }
+        return showData;
+    }
+
 }

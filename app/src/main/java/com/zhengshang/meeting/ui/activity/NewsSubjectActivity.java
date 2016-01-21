@@ -33,7 +33,7 @@ import org.androidannotations.annotations.ViewById;
  * Created by sun on 2016/1/20.
  */
 @EActivity(R.layout.layout_news_subject)
-public class NewsSubjectActivity extends BaseActivity {
+public class NewsSubjectActivity extends BaseActivity implements DragListView.OnRefreshLoadMoreListener {
 
     @ViewById(R.id.iv_back)
     ImageView ivBack;
@@ -70,8 +70,10 @@ public class NewsSubjectActivity extends BaseActivity {
         listView.setPullType(DragListView.ListViewPullType.LV_ONLY_REFRESH);
         listView.setDividerHeight(0);
         listView.setFastScrollEnabled(true);
+        listView.setOnRefreshListener(this);
         initHeader();
         newsService = new NewsService(this);
+        startLoadingSelf();
         getNewsSubject();
     }
 
@@ -89,7 +91,6 @@ public class NewsSubjectActivity extends BaseActivity {
      * 获取新闻专题
      */
     private void getNewsSubject() {
-        startLoadingSelf();
         TaskManager.pushTask(new Task(TaskAction.ACTION_GET_NEWS_SUBJECT) {
             @Override
             protected void doBackground() throws Exception {
@@ -143,6 +144,7 @@ public class NewsSubjectActivity extends BaseActivity {
         switch (action) {
             case TaskAction.ACTION_GET_NEWS_SUBJECT:
                 stopLoadingSelf();
+                listView.onRefreshComplete();
                 if (data != null) {
                     subjectVO = (NewsSubjectVO) data;
                     ImageLoader.getInstance().displayImage(subjectVO.getBanner(), ivBanner, ImageOption.createNomalOption());
@@ -165,6 +167,7 @@ public class NewsSubjectActivity extends BaseActivity {
         switch (action) {
             case TaskAction.ACTION_GET_NEWS_SUBJECT:
                 stopLoadingSelf();
+                listView.onRefreshComplete();
                 showErrorMsg(errorMessage);
                 break;
             default:
@@ -177,6 +180,8 @@ public class NewsSubjectActivity extends BaseActivity {
     void back() {
         finish();
     }
+
+
     @ItemClick(R.id.lv_drag)
     void onItemClick(int position){
         // 获取选中的news
@@ -212,5 +217,19 @@ public class NewsSubjectActivity extends BaseActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+    @Click(R.id.btn_refresh)
+    void clickRefresh(){
+        startLoadingSelf();
+        getNewsSubject();
+    }
+    @Override
+    public void onRefresh() {
+        getNewsSubject();
+    }
+
+    @Override
+    public void onLoadMore() {
+
     }
 }

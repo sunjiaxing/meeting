@@ -1,6 +1,7 @@
 package com.zhengshang.meeting.remote;
 
 /**
+ * 参数
  * Created by sun on 2015/12/10.
  */
 public interface IParam {
@@ -13,6 +14,8 @@ public interface IParam {
     String AD_ID = "adId";
     String ADD_COMMENT = "addComment";
     String ADD_REPLY = "addReply";
+    String ADD_FAVORITE = "addFavorite";
+    String ADD_TIME = "addTime";
 
     // B
     // C
@@ -39,6 +42,8 @@ public interface IParam {
 
     // F
     String FOCUS = "focus";
+    String FAVORITE = "favorite";
+    String FAVORITE_TYPE = "favoriteType";
 
     // G
     String GROUP_ID = "groupId";

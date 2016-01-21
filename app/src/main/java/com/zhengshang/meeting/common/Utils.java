@@ -272,9 +272,9 @@ public class Utils {
         } else if (today - 2 == formateDate.getDate()) {
             headStr = "前天";
         } else {
-            headStr = "MM-dd ";
+            headStr = "MM-dd";
         }
-        sdf = new SimpleDateFormat(headStr + "HH:mm");
+        sdf = new SimpleDateFormat(headStr + " HH:mm");
         return sdf.format(formateDate);
     }
 

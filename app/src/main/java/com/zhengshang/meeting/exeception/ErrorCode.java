@@ -34,6 +34,9 @@ public class ErrorCode {
             case 1007:
                 str = "专题不存在";
                 break;
+            case 1008:
+                str = "已经收藏过了";
+                break;
             default:
                 str = "系统异常,请稍后重试！";
                 break;

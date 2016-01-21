@@ -21,5 +21,7 @@ public interface TaskAction extends TaskKey {
     int ACTION_GET_USER_INFO = 11;
     int ACTION_GET_NEWS_SUBJECT = 12;
     int ACTION_SET_NEWS_READ_STATE = 13;
+    int ACTION_FAVORITE_NEWS = 14;
+    int ACTION_GET_FAVORITE_LIST = 15;
 
 }

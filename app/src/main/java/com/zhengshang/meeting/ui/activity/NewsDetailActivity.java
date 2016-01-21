@@ -65,6 +65,8 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     TextView tvCommentTip;
     @ViewById(R.id.tv_switch)
     TextView tvSwitch;
+    @ViewById(R.id.btn_favorite)
+    Button btnFavorite;
 
     private String newsId;
     private AnimationDrawable anim;
@@ -223,6 +225,9 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
                 }
                 refreshUI();
                 break;
+            case TaskAction.ACTION_FAVORITE_NEWS:// 收藏
+                showToast("收藏成功");
+                break;
         }
     }
 
@@ -290,6 +295,9 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
                 stopLoadingSelf();
                 showErrorMsg(errorMessage);
                 break;
+            default:
+                super.onTaskFail(action, errorMessage);
+                break;
         }
     }
 
@@ -315,13 +323,14 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
             clickToComment();
         } else if (requestCode == 1 && resultCode == RESULT_OK) {
             String content = data.getStringExtra(IParam.CONTENT);
-            Log.e("=================", "onActivityResult: " + content);
             sendComment(content);
         } else if (requestCode == 2 && resultCode == RESULT_OK) {
             String content = data.getStringExtra(IParam.CONTENT);
             sendReply(content);
         } else if (requestCode == 3 && resultCode == RESULT_OK) {
             clickToReply(groupPos, childPos);
+        } else if (requestCode == 4 && resultCode == RESULT_OK) {
+            favorite();
         }
     }
 
@@ -455,8 +464,28 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
             @Override
             protected void doBackground() throws Exception {
 //                setNeedCallBack(false); 测试时注释此行代码 以便输出错误信息
-                commentService.sendReply(newsId,parentId,content);
+                commentService.sendReply(newsId, parentId, content);
             }
-        },this);
+        }, this);
+    }
+
+    /**
+     * 收藏
+     */
+    @Click(R.id.btn_favorite)
+    void favorite() {
+        if (detailVO != null) {
+            if (userService.checkLoginState()) {
+                btnFavorite.setEnabled(false);
+                TaskManager.pushTask(new Task(TaskAction.ACTION_FAVORITE_NEWS) {
+                    @Override
+                    protected void doBackground() throws Exception {
+                        userService.favoriteNews(detailVO.getId());
+                    }
+                }, this);
+            } else {
+                LoginActivity_.intent(this).startForResult(4);
+            }
+        }
     }
 }
