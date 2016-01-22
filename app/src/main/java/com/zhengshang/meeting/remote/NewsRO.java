@@ -28,8 +28,6 @@ import com.zhengshang.meeting.remote.dto.NewsSubjectDto;
 
 /**
  * news ro
- *
- * @author sun
  */
 public class NewsRO extends BaseRO {
 

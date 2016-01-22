@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 编辑新闻栏目 activity
  * Created by sun on 2016/1/4.
  */
 @EActivity(R.layout.layout_news_channel)
@@ -122,6 +123,7 @@ public class NewsChannelActivity extends BaseActivity {
                 refreshUI();
                 break;
             case TaskAction.ACTION_SAVE_NEWS_TYPE:
+                stopLoading();
                 showToast("保存成功");
                 isChange = false;
                 Intent intent = new Intent();
@@ -136,8 +138,8 @@ public class NewsChannelActivity extends BaseActivity {
     protected void onTaskFail(int action, String errorMessage) {
         switch (action) {
             case TaskAction.ACTION_SAVE_NEWS_TYPE:
-                // TODO 结束进度
-
+                // 结束进度
+                stopLoading();
                 showToast("保存失败");
                 break;
             default:
@@ -232,20 +234,20 @@ public class NewsChannelActivity extends BaseActivity {
     @Click(R.id.btn_right)
     void complete() {
         if (isChange) {
-            // TODO 加载进度圈
-
+            // 加载进度圈
+            startLoading("栏目保存中...");
             // 整理栏目索引
             tidyNewsTypeIndex(newsTypes);
             // 整理数据库中的栏目数据
             TaskManager.pushTask(new Task(TaskAction.ACTION_SAVE_NEWS_TYPE, this.getLocalClassName()) {
                 @Override
                 protected void doBackground() {
-                    // 不需要返回处理
-//                    setNeedCallBack(false);
                     // 执行操作
                     newsService.saveNewsType(newsTypes);
                 }
             }, this);
+        } else {
+            finish();
         }
     }
 

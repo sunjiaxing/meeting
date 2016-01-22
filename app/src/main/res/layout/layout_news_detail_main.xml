@@ -85,5 +85,19 @@
             android:textColor="@color/news_content_color"
             android:text="收藏"
             android:background="@drawable/news_category_edit_shape" />
+
+        <Button
+            android:id="@+id/btn_share"
+            android:layout_width="50dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/news_content_color"
+            android:text="分享"
+            android:background="@drawable/news_category_edit_shape" />
     </LinearLayout>
 </RelativeLayout>

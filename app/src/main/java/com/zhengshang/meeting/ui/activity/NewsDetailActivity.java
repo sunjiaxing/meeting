@@ -67,6 +67,8 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     TextView tvSwitch;
     @ViewById(R.id.btn_favorite)
     Button btnFavorite;
+    @ViewById(R.id.btn_share)
+    Button btnShare;
 
     private String newsId;
     private AnimationDrawable anim;
@@ -281,10 +283,8 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
             // 传递给 fragment
             newsDetailFragment.setUrl(detailVO.getContentUrl());
         }
-
         // 添加评论列表数据
         commentListFrament.setData(commentList);
-
     }
 
 
@@ -487,5 +487,10 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
                 LoginActivity_.intent(this).startForResult(4);
             }
         }
+    }
+
+    @Click(R.id.btn_share)
+    void share(){
+        showToast("功能尚未开发");
     }
 }
