@@ -65,6 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/update_time"
+                android:visibility="gone"
                 android:textColor="@color/news_content_color"
                 android:textSize="12sp" />
         </LinearLayout>

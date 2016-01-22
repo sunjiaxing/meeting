@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.FileNameGenerator;
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
@@ -14,6 +13,7 @@ import com.zhengshang.meeting.common.MD5;
 import java.io.File;
 
 /**
+ * 全局 application
  * Created by sun on 2015/12/10.
  */
 public class MeetingApp extends Application implements Thread.UncaughtExceptionHandler {
@@ -22,15 +22,13 @@ public class MeetingApp extends Application implements Thread.UncaughtExceptionH
     @Override
     public void onCreate() {
         super.onCreate();
-        this.instance = this;
-        Thread.setDefaultUncaughtExceptionHandler(this);
+        instance = this;
+//        Thread.setDefaultUncaughtExceptionHandler(this);
         initImageLoader();
     }
 
     /**
      * 初始化imageLoader
-     *
-     * @author sun
      */
     private void initImageLoader() {
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
@@ -51,6 +49,7 @@ public class MeetingApp extends Application implements Thread.UncaughtExceptionH
                     }
                 })// 文件名称 自定义md5
                 .build();
+
         // Initialize ImageLoader with configuration.
         ImageLoader.getInstance().init(config);
     }

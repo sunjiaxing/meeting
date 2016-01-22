@@ -147,18 +147,26 @@ public class NewsSubjectActivity extends BaseActivity implements DragListView.On
                 listView.onRefreshComplete();
                 if (data != null) {
                     subjectVO = (NewsSubjectVO) data;
-                    ImageLoader.getInstance().displayImage(subjectVO.getBanner(), ivBanner, ImageOption.createNomalOption());
-                    tvDesc.setText(subjectVO.getDescription());
-                    if (adapter == null) {
-                        adapter = new OnlineNewsAdapter(this);
-                        adapter.setData(subjectVO.getNewsVOList(), false);
-                        listView.setAdapter(adapter);
-                    } else {
-                        adapter.setData(subjectVO.getNewsVOList(), false);
-                        adapter.notifyDataSetChanged();
-                    }
+                    refreshUI();
                 }
                 break;
+        }
+    }
+
+    /**
+     * 刷新界面
+     */
+    private void refreshUI() {
+        listView.setLastRefreshTime(Utils.formateTime(System.currentTimeMillis(), false));
+        ImageLoader.getInstance().displayImage(subjectVO.getBanner(), ivBanner, ImageOption.createNomalOption());
+        tvDesc.setText(subjectVO.getDescription());
+        if (adapter == null) {
+            adapter = new OnlineNewsAdapter(this);
+            adapter.setData(subjectVO.getNewsVOList(), false);
+            listView.setAdapter(adapter);
+        } else {
+            adapter.setData(subjectVO.getNewsVOList(), false);
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -183,7 +191,7 @@ public class NewsSubjectActivity extends BaseActivity implements DragListView.On
 
 
     @ItemClick(R.id.lv_drag)
-    void onItemClick(int position){
+    void onItemClick(int position) {
         // 获取选中的news
         NewsVO model = subjectVO.getNewsVOList().get(position - 2);
         if (model != null && !model.isSubject()) {
@@ -218,11 +226,13 @@ public class NewsSubjectActivity extends BaseActivity implements DragListView.On
         }
         return super.onKeyDown(keyCode, event);
     }
+
     @Click(R.id.btn_refresh)
-    void clickRefresh(){
+    void clickRefresh() {
         startLoadingSelf();
         getNewsSubject();
     }
+
     @Override
     public void onRefresh() {
         getNewsSubject();

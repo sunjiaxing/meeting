@@ -8,9 +8,17 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
 /**
+ * 任务管理
  * Created by sun on 2015/12/1.
  */
 public class TaskManager {
+
+    public static boolean DEBUG = true;
+
+    public static void setDebug(boolean debug) {
+        DEBUG = debug;
+    }
+
     private static BlockingQueue<Task> taskQueue = new LinkedBlockingDeque<>();
 
     public static BlockingQueue<Task> getTaskQueue() {
@@ -42,7 +50,7 @@ public class TaskManager {
         try {
             taskQueue.put(task);
             Intent intent = new Intent(context, TaskService.class);
-            intent.putExtra(TaskKey.KEY_WITH_QUEUE, true);
+            intent.putExtra(TaskKey.KEY_WITH_SINGLE, true);
             context.startService(intent);
         } catch (Exception e) {
             e.printStackTrace();

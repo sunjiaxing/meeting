@@ -114,6 +114,7 @@ public class NewsService extends BaseService {
             configDao.setNewsTypeState(time);
         }
         List<NewsChannel> saveData = parseNewsChannel2SaveDataFromDto(webData);
+        newsDao.deleteAllChannel();
         // 更新
         newsDao.updateNewsType(saveData);
 
@@ -138,8 +139,11 @@ public class NewsService extends BaseService {
                 type.setName(dto.getName());
                 type.setIsLock(dto.getIsLock());
                 type.setIsMine(1);
-                type.setPosition(dto.getPosition());
                 type.setMasterId(masterId);
+                NewsChannel channel = newsDao.getNewsTypeById(dto.getTypeId(), masterId);
+                if (channel != null) {
+                    type.setPosition(channel.getPosition());
+                }
                 saveData.add(type);
             }
         }
@@ -196,8 +200,9 @@ public class NewsService extends BaseService {
 
     /**
      * 设置阅读状态
-     * @param newsId 新闻id
-     * @param catId 栏目id
+     *
+     * @param newsId    新闻id
+     * @param catId     栏目id
      * @param readState 阅读状态
      */
     public void setReadState(String newsId, String catId, int readState) {
@@ -467,7 +472,7 @@ public class NewsService extends BaseService {
     /**
      * 网络请求获取新闻详情
      *
-     * @param id    新闻id
+     * @param id 新闻id
      * @return
      * @throws JSONException
      */

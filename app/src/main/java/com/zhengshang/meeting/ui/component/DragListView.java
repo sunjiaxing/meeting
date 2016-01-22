@@ -231,6 +231,7 @@ public class DragListView extends ListView implements OnScrollListener,
      */
     public void setLastRefreshTime(String time) {
         if (tvLastRefreshTime != null) {
+            tvLastRefreshTime.setVisibility(VISIBLE);
             tvLastRefreshTime.setText(time);
         }
     }

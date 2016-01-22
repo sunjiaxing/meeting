@@ -31,7 +31,7 @@ public class Utils {
     /**
      * json 数组非空判断
      *
-     * @param array
+     * @param array json 数组
      * @return true 表示空，false表示非空
      */
     public static boolean isEmpty(JSONArray array) {
@@ -44,7 +44,7 @@ public class Utils {
     /**
      * 字符串非空判断
      *
-     * @param str
+     * @param str 字符串
      * @return true 表示空，false表示非空
      */
     public static boolean isEmpty(String str) {
@@ -54,7 +54,7 @@ public class Utils {
     /**
      * 集合非空判断
      *
-     * @param <T>
+     * @param <T> list集合
      * @return true 表示空，false表示非空
      */
     public static <T> boolean isEmpty(List<T> t) {
@@ -67,7 +67,7 @@ public class Utils {
     /**
      * 数组非空判断
      *
-     * @param <T>
+     * @param <T> 数组
      * @return true 表示空，false表示非空
      */
     public static <T> boolean isEmpty(T[] t) {

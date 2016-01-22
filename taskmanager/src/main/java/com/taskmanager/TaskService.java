@@ -36,7 +36,7 @@ public class TaskService extends Service implements TaskResultListener {
                 Task task = TaskManager.getTaskQueue().take();
                 if (task != null) {
                     task.setResultListener(this);
-                    if (!intent.getBooleanExtra(TaskKey.KEY_WITH_QUEUE, false)) {
+                    if (!intent.getBooleanExtra(TaskKey.KEY_WITH_SINGLE, false)) {
                         morePool.execute(task);
                     } else {
                         singlePool.execute(task);
@@ -44,13 +44,16 @@ public class TaskService extends Service implements TaskResultListener {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtils.e(e.getMessage());
+            LogUtils.writeInFile(e.getMessage());
         }
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onSuccess(String className, int action, Object returnData) {
+        // TODO 检测 className 是否有效
+
         Intent intent = new Intent(className);
         intent.putExtra(TaskKey.KEY_TASK_SUCCESS, true);
         intent.putExtra(TaskKey.KEY_TASK_ACTION, action);

@@ -1,6 +1,7 @@
 package com.zhengshang.meeting.ui.activity;
 
 import android.graphics.drawable.AnimationDrawable;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -11,13 +12,16 @@ import com.taskmanager.TaskManager;
 import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.TaskAction;
 import com.zhengshang.meeting.common.Utils;
+import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.service.UserService;
+import com.zhengshang.meeting.ui.adapter.FavoriteAdapter;
 import com.zhengshang.meeting.ui.component.DragListView;
 import com.zhengshang.meeting.ui.vo.FavoriteVO;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
@@ -47,6 +51,7 @@ public class FavoriteActivity extends BaseActivity implements DragListView.OnRef
     private AnimationDrawable anim;
     private List<FavoriteVO> favoriteList;
     private UserService userService;
+    private FavoriteAdapter adapter;
 
     @AfterViews
     void init() {
@@ -130,8 +135,19 @@ public class FavoriteActivity extends BaseActivity implements DragListView.OnRef
         }
     }
 
+    /**
+     * 刷新界面显示
+     */
     private void refreshUI() {
-
+        if (adapter == null) {
+            adapter = new FavoriteAdapter(this);
+            adapter.setData(favoriteList);
+            listView.setAdapter(adapter);
+        } else {
+            adapter.setData(favoriteList);
+            adapter.notifyDataSetChanged();
+        }
+        listView.setLastRefreshTime(Utils.formateTime(System.currentTimeMillis(), false));
     }
 
     @Click(R.id.btn_refresh)
@@ -162,5 +178,30 @@ public class FavoriteActivity extends BaseActivity implements DragListView.OnRef
     @Override
     public void onLoadMore() {
 
+    }
+
+    @Click(R.id.iv_back)
+    void back() {
+        finish();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            back();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @ItemClick(R.id.lv_drag)
+    void onItemClick(int position) {
+        FavoriteVO favoriteVO = favoriteList.get(position - 1);
+        if (favoriteVO.getFavoriteType() == 1) {
+            NewsSubjectActivity_.intent(this)
+                    .extra(IParam.NEWS_ID, favoriteVO.getId())
+                    .extra(IParam.TITLE, favoriteVO.getTitle())
+                    .startForResult(0);
+        }
     }
 }

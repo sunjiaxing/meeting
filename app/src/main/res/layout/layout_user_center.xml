@@ -31,6 +31,29 @@
     </RelativeLayout>
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="15dp"
+        android:background="@color/line_color" />
+
+    <TextView
+        android:id="@+id/tv_favorite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/comment_item_white_bg"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:text="我的收藏"
+        android:textColor="@color/news_content_color"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color" />
+
+    <TextView
         android:id="@+id/tv_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,8 +63,8 @@
         android:background="@drawable/button_default"
         android:gravity="center"
         android:padding="8dp"
-        android:visibility="gone"
         android:text="退出登录"
         android:textColor="@color/color_white"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:visibility="visible" />
 </LinearLayout>

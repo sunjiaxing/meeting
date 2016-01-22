@@ -162,7 +162,7 @@ public class CommentExpandableAdapter extends BaseExpandableListAdapter {
         tvUserName.setText(commentVO.getUserName());
         String content = commentVO.getContent();
         // 判断评论 长度
-        if (content.length() > BonConstants.LIMIT_COMMENT_LENGTH) {
+        if (content != null && content.length() > BonConstants.LIMIT_COMMENT_LENGTH) {
             content = content.substring(0, BonConstants.LIMIT_COMMENT_LENGTH);
         }
         tvContent.setText(content);

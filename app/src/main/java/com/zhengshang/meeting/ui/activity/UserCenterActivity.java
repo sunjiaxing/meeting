@@ -40,6 +40,9 @@ public class UserCenterActivity extends BaseActivity {
     TextView tvUserName;
     @ViewById(R.id.tv_logout)
     TextView tvLogout;
+    @ViewById(R.id.tv_favorite)
+    TextView tvFavorite;
+
     private UserService userService;
     private UserVO userVO;
 
@@ -108,5 +111,10 @@ public class UserCenterActivity extends BaseActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Click(R.id.tv_favorite)
+    void toFavorite() {
+        FavoriteActivity_.intent(this).start();
     }
 }

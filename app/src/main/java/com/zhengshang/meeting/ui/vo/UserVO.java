@@ -1,9 +1,12 @@
 package com.zhengshang.meeting.ui.vo;
 
+import java.io.Serializable;
+
 /**
+ * 用户 VO
  * Created by sun on 2016/1/13.
  */
-public class UserVO {
+public class UserVO implements Serializable{
     private String userId;
     private String userName;
     private String nickName;

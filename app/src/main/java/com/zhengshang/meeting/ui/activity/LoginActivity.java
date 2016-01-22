@@ -2,6 +2,7 @@ package com.zhengshang.meeting.ui.activity;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -150,5 +151,19 @@ public class LoginActivity extends BaseActivity {
                 showToastLongTime(errorMessage);
                 break;
         }
+    }
+
+    @Click(R.id.iv_back)
+    void back() {
+        finish();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            back();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

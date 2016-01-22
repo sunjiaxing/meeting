@@ -2,10 +2,12 @@ package com.zhengshang.meeting.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 
 import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.dao.entity.News;
 import com.zhengshang.meeting.dao.entity.NewsChannel;
+import com.zhengshang.meeting.exeception.AppException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -353,5 +355,41 @@ public class NewsDao extends BaseDao {
         } finally {
             db.endTransaction();
         }
+    }
+
+    /**
+     * 获取新闻栏目
+     *
+     * @param typeId   栏目id
+     * @param masterId 用户id
+     * @return
+     */
+    public NewsChannel getNewsTypeById(String typeId, String masterId) {
+        try {
+            sql = "select * from " + NewsChannel.KEY_TABLE_NAME + " where "
+                    + NewsChannel.KEY_COLUMN_TYPE_ID + " = ? and "
+                    + NewsChannel.KEY_COLUMN_MASTER_ID + " = ? ";
+            cursor = db.rawQuery(sql, new String[]{typeId, masterId});
+            if (cursor != null && cursor.getCount() > 0) {
+                if (cursor.moveToFirst()) {
+                    NewsChannel newsChannel = new NewsChannel();
+                    newsChannel.setTypeId(typeId);
+                    newsChannel.setMasterId(masterId);
+                    newsChannel.setIsMine(cursor.getInt(cursor.getColumnIndex(NewsChannel.KEY_COLUMN_IS_MINE)));
+                    newsChannel.setPosition(cursor.getInt(cursor.getColumnIndex(NewsChannel.KEY_COLUMN_POSITION)));
+                    newsChannel.setName(cursor.getString(cursor.getColumnIndex(NewsChannel.KEY_COLUMN_NAME)));
+                    return newsChannel;
+                }
+            }
+            return null;
+        } catch (Exception e) {
+            throw new AppException(e.getMessage());
+        } finally {
+            releaseConnection();
+        }
+    }
+
+    public void deleteAllChannel() {
+        db.execSQL(NewsChannel.DELETE_TABLE_DATA);
     }
 }
