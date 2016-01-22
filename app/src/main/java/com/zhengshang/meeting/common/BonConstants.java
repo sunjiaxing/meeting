@@ -1,6 +1,7 @@
 package com.zhengshang.meeting.common;
 
 /**
+ * 常量类
  * Created by sun on 2015/12/10.
  */
 public class BonConstants {

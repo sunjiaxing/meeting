@@ -232,7 +232,7 @@ public class DragListView extends ListView implements OnScrollListener,
     public void setLastRefreshTime(String time) {
         if (tvLastRefreshTime != null) {
             tvLastRefreshTime.setVisibility(VISIBLE);
-            tvLastRefreshTime.setText(time);
+            tvLastRefreshTime.setText(getResources().getString(R.string.update_time) + time);
         }
     }
 

@@ -92,8 +92,8 @@ public class ChannelGallery extends HorizontalScrollView implements View.OnClick
             NewsChannelVO vo;
             TextView tv;
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            params.leftMargin = 5;
-            params.rightMargin = 5;
+            params.leftMargin = 8;
+            params.rightMargin = 8;
             for (int i = 0; i < data.size(); i++) {
                 vo = data.get(i);
                 tv = new TextView(getContext());
@@ -102,7 +102,7 @@ public class ChannelGallery extends HorizontalScrollView implements View.OnClick
                 tv.setTextSize(16);
                 tv.setTextColor(getResources().getColor(R.color.news_content_color));
                 tv.setBackgroundColor(Color.TRANSPARENT);
-                tv.setPadding(5, 2, 5, 2);
+                tv.setPadding(8, 2, 8, 2);
                 tv.setMinWidth(70);
                 tv.setGravity(Gravity.CENTER);
                 tv.setOnClickListener(this);

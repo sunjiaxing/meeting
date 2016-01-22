@@ -323,8 +323,7 @@ public class NewsPagerItemFragment extends BaseFragment implements
     private void updateRefreshTimeTip() {
         if (listview != null && newsType != null) {
             // 设置listview上的更新时间
-            listview.setLastRefreshTime("上次刷新 : "
-                    + Utils.formateTime(
+            listview.setLastRefreshTime(Utils.formateTime(
                     newsService.getCatClickTime(newsType.getTypeId()),
                     false));
         }

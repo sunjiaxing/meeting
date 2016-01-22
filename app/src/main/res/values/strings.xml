@@ -8,13 +8,13 @@
     <string name="no_comment_tip">0评论</string>
     <string name="drop_down">下拉可以刷新</string>
     <string name="release_update">松开可以刷新</string>
-    <string name="update_time">上次刷新 : </string>
+    <string name="update_time">上次刷新：</string>
     <string name="get_more">查看更多</string>
     <string name="loading">加载中&#8230;</string>
     <string name="no_data_tip">已经没有了哦</string>
     <string name="my_channel">栏目设置</string>
     <string name="more_channel">更多栏目</string>
-    <string name="channel_tip">(点击加减号，增删栏目)</string>
+    <string name="channel_tip">(点击加减号，增删栏目，长按变换位置)</string>
     <string name="back_main">首页</string>
     <string name="news">资讯</string>
     <string name="share">分享</string>
