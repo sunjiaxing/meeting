@@ -170,7 +170,7 @@ public class NewsActivity extends BaseActivity implements
         // 加载栏目
         updateGallery(newsTypes);
         // 判断栏目更新
-        notifyNewsChannelUpdate(newsService.getNewsChannelUpdate());
+//        notifyNewsChannelUpdate(newsService.getNewsChannelUpdate());
         // 加载新闻
         listViewPagerAdapter = new ListViewPagerAdapter(
                 getSupportFragmentManager());

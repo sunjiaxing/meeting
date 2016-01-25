@@ -262,10 +262,10 @@ public class NewsPagerItemFragment extends BaseFragment implements
             case TaskAction.ACTION_REFRESH_NEWS:
                 stopLoadingSelf();
                 listview.onRefreshComplete();
-                showErrorMsg(errorMsg);
+                showErrorMsg(message);
                 break;
             default:
-                showErrorMsg(errorMsg);
+                showErrorMsg(message);
                 break;
         }
     }

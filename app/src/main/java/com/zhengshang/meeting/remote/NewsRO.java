@@ -16,7 +16,6 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
-import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.BonConstants;
 import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.dao.ConfigDao;

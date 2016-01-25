@@ -13,7 +13,6 @@ import com.zhengshang.meeting.ui.component.TlcyDialog;
  * @author sun
  */
 public class BaseFragment extends Fragment {
-    protected String errorMsg;
     private BaseActivity mActivity;
 
     /**

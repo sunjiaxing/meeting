@@ -128,7 +128,7 @@ public class OnlineNewsFirstView extends FrameLayout implements
 			dianView[i].setVisibility(View.GONE);
 		}
 		try {
-			topList = new ArrayList<NewsVO>(news.getTopNews());
+			topList = new ArrayList<>(news.getTopNews());
 			// Collections.copy(topList, news.topNews);
 		} catch (Exception e) {
 			e.printStackTrace();
