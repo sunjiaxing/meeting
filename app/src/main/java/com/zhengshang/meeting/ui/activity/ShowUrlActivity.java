@@ -18,8 +18,6 @@ import com.zhengshang.meeting.ui.component.CustomerWebview;
 
 /**
  * 显示Url信息的activity
- *
- * @author sun
  */
 public class ShowUrlActivity extends BaseActivity implements OnClickListener {
 

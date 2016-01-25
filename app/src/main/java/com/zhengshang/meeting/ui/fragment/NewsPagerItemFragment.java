@@ -278,8 +278,10 @@ public class NewsPagerItemFragment extends BaseFragment implements
             @Override
             protected void doBackground() throws Exception {
                 minTime = 0;
-                setReturnData(new Object[]{NewsPagerItemFragment.this.hashCode(), newsService.getNewsListFromWeb(newsType.getTypeId(),
-                        minTime)});
+                setReturnData(new Object[]{
+                        NewsPagerItemFragment.this.hashCode(),
+                        newsService.getNewsListFromWeb(newsType.getChildId(), newsType.getModelName(), minTime)
+                });
             }
         }, getActivity());
     }
@@ -289,7 +291,7 @@ public class NewsPagerItemFragment extends BaseFragment implements
      */
     private void setLoadMoreState() {
         if (!Utils.isEmpty(news)) {
-            int totalNewsCount = 0;
+            int totalNewsCount;
             if (!Utils.isEmpty(news.get(0).getTopNews())) {
                 totalNewsCount = news.size() + news.get(0).getTopNews().size()
                         - 1;
@@ -311,8 +313,10 @@ public class NewsPagerItemFragment extends BaseFragment implements
             @Override
             protected void doBackground() throws Exception {
                 minTime = news.get(news.size() - 1).getCreateTime();
-                setReturnData(new Object[]{NewsPagerItemFragment.this.hashCode(), newsService.getNewsListFromWeb(
-                        newsType.getTypeId(), minTime)});
+                setReturnData(new Object[]{
+                        NewsPagerItemFragment.this.hashCode(),
+                        newsService.getNewsListFromWeb(newsType.getChildId(), newsType.getModelName(), minTime)
+                });
             }
         }, getActivity());
     }

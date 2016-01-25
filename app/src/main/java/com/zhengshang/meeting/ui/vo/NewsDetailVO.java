@@ -1,6 +1,8 @@
 package com.zhengshang.meeting.ui.vo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * newsDetail VO
@@ -23,6 +25,8 @@ public class NewsDetailVO implements Serializable {
     private String cTime;
     private String content;
     private String contentUrl;
+
+    private List<NewsVO> relations;
 
     // 广告相关内容
     private String adId;
@@ -141,5 +145,16 @@ public class NewsDetailVO implements Serializable {
 
     public void setContentUrl(String contentUrl) {
         this.contentUrl = contentUrl;
+    }
+
+    public List<NewsVO> getRelations() {
+        if (relations == null) {
+            relations = new ArrayList<>();
+        }
+        return relations;
+    }
+
+    public void setRelations(List<NewsVO> relations) {
+        this.relations = relations;
     }
 }

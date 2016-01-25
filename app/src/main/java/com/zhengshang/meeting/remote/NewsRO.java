@@ -39,7 +39,7 @@ public class NewsRO extends BaseRO {
 
     public enum RemoteNewsUrl implements IBaseURL {
         GET_NEWS_TYPE(IParam.CATEGORIES), GET_NEWS_LIST(IParam.LIST), NEWS_DETAIL(
-                IParam.DETAIL),NEWS_SUBJECT(IParam.SPECIAL);
+                IParam.DETAIL), NEWS_SUBJECT(IParam.SPECIAL);
         private static final String NAMESPACE = IParam.NEWS;
         private String url;
 
@@ -58,16 +58,15 @@ public class NewsRO extends BaseRO {
      * 根据标记获取新闻栏目
      *
      * @param time
-     * @param token
      * @throws JSONException
      */
-    public Map<String, Object> getNewsTypeByFlag(long time, String token)
+    public Map<String, Object> getNewsTypeByFlag(long time)
             throws JSONException {
         Map<String, Object> res = new HashMap<>();
         String url = getServerUrl()
                 + RemoteNewsUrl.GET_NEWS_TYPE.getURL() + IParam.WENHAO
                 + IParam.TIME + IParam.EQUALS_STRING + time;
-        String result = httpGetRequest(url, getHeaderParam(IParam.TOKEN, token));
+        String result = httpGetRequest(url, null);
         JSONObject json = new JSONObject(result);
         if (json.getInt(IParam.STATUS) == 1) {
             JSONArray jsonArray = json.getJSONArray(IParam.TYPES);
@@ -98,13 +97,14 @@ public class NewsRO extends BaseRO {
      * @return
      * @throws JSONException
      */
-    public List<NewsDto> refreshNews(String catId, int limit, long minTime) throws JSONException {
+    public List<NewsDto> refreshNews(String catId, String modelName, int limit, long minTime) throws JSONException {
         List<NewsDto> newsList;
         String url = getServerUrl()
                 + RemoteNewsUrl.GET_NEWS_LIST.getURL() + IParam.WENHAO
                 + IParam.CAT_ID + IParam.EQUALS_STRING + catId + IParam.AND
                 + IParam.LIMIT + IParam.EQUALS_STRING + limit + IParam.AND
-                + IParam.MIN_TIME + IParam.EQUALS_STRING + minTime;
+                + IParam.MIN_TIME + IParam.EQUALS_STRING + minTime + IParam.AND
+                + IParam.MODEL_NAME + IParam.EQUALS_STRING + modelName;
         String result = httpGetRequest(url, null);
         JSONObject json = new JSONObject(result);
         NewsDto news;
@@ -152,6 +152,7 @@ public class NewsRO extends BaseRO {
 
     /**
      * 获取新闻专题
+     *
      * @param specialId 专题id
      * @return
      * @throws JSONException

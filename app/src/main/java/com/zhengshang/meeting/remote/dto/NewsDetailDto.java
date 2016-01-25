@@ -1,9 +1,13 @@
 package com.zhengshang.meeting.remote.dto;
 
-import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.remote.IParam;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author sun
@@ -30,6 +34,12 @@ public class NewsDetailDto {
 	private String summary;
 	private String longUrl;
 	private String shortUrl;
+
+	private List<NewsDto> relations;
+
+	public List<NewsDto> getRelations() {
+		return relations;
+	}
 
 	public String getTitle() {
 		return title;
@@ -107,6 +117,19 @@ public class NewsDetailDto {
 		if (json.has(IParam.CREATE_TIME)) {
 			this.cTime = json.getLong(IParam.CREATE_TIME);
 		}
+		if (json.has(IParam.RELATIONS)){
+			JSONArray array = json.getJSONArray(IParam.RELATIONS);
+			if (array.length() > 0) {
+				this.relations = new ArrayList<>();
+				NewsDto newsDto;
+				for (int i = 0; i < array.length(); i++) {
+					newsDto = new NewsDto();
+					newsDto.parseJson(array.getJSONObject(i));
+					this.relations.add(newsDto);
+				}
+			}
+		}
+
 
 		// 用于对外分享的内容
 		if (json.has(IParam.SUMMARY)) {

@@ -112,6 +112,9 @@ img { vertical-align: middle; width:100%}
 </div>
 
 <!--文章结束-->
+<!--相关新闻开始-->
+@relation
+<!--相关新闻结束-->
 @ad
 </body>
 </html>

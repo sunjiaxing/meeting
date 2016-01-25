@@ -28,6 +28,7 @@ public interface IParam {
     String COMMENT = "comment";
     String CONTENT_URL = "contentUrl";
     String CATEGORIES = "categories";
+    String CHILD_ID = "childId";
 
     // D
     String DETAIL = "detail";
@@ -74,6 +75,7 @@ public interface IParam {
 
     // M
     String MIN_TIME = "minTime";
+    String MODEL_NAME = "modelName";
 
     // N
     String NEED_PARAM = "needParam";
@@ -94,6 +96,7 @@ public interface IParam {
     String REPLY_TO_USER_ID = "replyToUserId";
     String REPLY_TO_USER_NAME = "replyToUserName";
     String REPLIES = "replies";
+    String RELATIONS = "relations";
     String REGISTER_TIME = "registerTime";
 
     // S

@@ -25,6 +25,10 @@ public class NewsChannelVO implements Serializable {
      */
     private int position;
 
+    private String childId;
+
+    private String modelName;
+
     public String getTypeId() {
         return typeId;
     }
@@ -57,11 +61,27 @@ public class NewsChannelVO implements Serializable {
         this.position = position;
     }
 
+    public String getChildId() {
+        return childId;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
 
     public NewsChannelVO(String typeId, String name, boolean lock, int position) {
         this.typeId = typeId;
         this.name = name;
         this.isLock = lock;
         this.position = position;
+    }
+
+    public NewsChannelVO(String typeId, String name, boolean isLock, int position, String childId, String modelName) {
+        this.typeId = typeId;
+        this.name = name;
+        this.isLock = isLock;
+        this.position = position;
+        this.childId = childId;
+        this.modelName = modelName;
     }
 }

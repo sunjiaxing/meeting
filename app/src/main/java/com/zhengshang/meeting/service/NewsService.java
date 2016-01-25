@@ -84,7 +84,7 @@ public class NewsService extends BaseService {
         if (!Utils.isEmpty(data)) {
             for (NewsChannel tmp : data) {
                 showData.add(new NewsChannelVO(tmp.getTypeId(), tmp.getName(),
-                        tmp.getIsLock() == 1, tmp.getPosition()));
+                        tmp.getIsLock() == 1, tmp.getPosition(), tmp.getChildId(), tmp.getModelName()));
             }
         }
         return showData;
@@ -100,7 +100,7 @@ public class NewsService extends BaseService {
     private List<NewsChannelDto> getNewsTypeFromWeb(boolean isUpdateTime)
             throws JSONException {
         Map<String, Object> res = newsRO.getNewsTypeByFlag(
-                configDao.getNewsTypeState(), null);
+                configDao.getNewsTypeState());
         if (res == null || res.size() == 0) {
             return null;
         }
@@ -138,6 +138,8 @@ public class NewsService extends BaseService {
                 type.setTypeId(dto.getTypeId());
                 type.setName(dto.getName());
                 type.setIsLock(dto.getIsLock());
+                type.setChildId(dto.getChildId());
+                type.setModelName(dto.getModelName());
                 type.setIsMine(1);
                 type.setMasterId(masterId);
                 NewsChannel channel = newsDao.getNewsTypeById(dto.getTypeId(), masterId);
@@ -331,11 +333,11 @@ public class NewsService extends BaseService {
      * @return
      * @throws JSONException
      */
-    public List<NewsVO> getNewsListFromWeb(String catId, long minTime)
+    public List<NewsVO> getNewsListFromWeb(String catId, String modelName, long minTime)
             throws JSONException {
         List<NewsVO> showData = new ArrayList<>();
         // 获取数据
-        List<NewsDto> webData = newsRO.refreshNews(catId, BonConstants.LIMIT_GET_NEWS, minTime);
+        List<NewsDto> webData = newsRO.refreshNews(catId, modelName, BonConstants.LIMIT_GET_NEWS, minTime);
         try {
             News news;
             NewsVO vo;
@@ -490,6 +492,13 @@ public class NewsService extends BaseService {
             vo.setContentUrl(dto.getContentUrl());
             vo.setcFrom(dto.getcFrom());
             vo.setcTime(Utils.formateTime(dto.getcTime(), false));
+
+            // 处理 相关新闻
+            if (!Utils.isEmpty(dto.getRelations())) {
+                for (NewsDto newsDto : dto.getRelations()) {
+                    vo.getRelations().add(parseToVO(newsDto));
+                }
+            }
 
             vo.setSummary(dto.getSummary());
             vo.setShortUrl(dto.getShortUrl());

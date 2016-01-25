@@ -26,6 +26,7 @@ import com.zhengshang.meeting.ui.fragment.CommentListFrament;
 import com.zhengshang.meeting.ui.fragment.NewsDetailFragment;
 import com.zhengshang.meeting.ui.vo.CommentVO;
 import com.zhengshang.meeting.ui.vo.NewsDetailVO;
+import com.zhengshang.meeting.ui.vo.NewsVO;
 import com.zhengshang.meeting.ui.vo.ReplyVO;
 import com.zhengshang.meeting.ui.vo.UserVO;
 
@@ -245,6 +246,28 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
                             "来源:" + detailVO.getcFrom() + "  "
                                     + detailVO.getcTime())
                     .replace("@content", detailVO.getContent());
+            // 处理相关新闻
+            if (!Utils.isEmpty(detailVO.getRelations())) {
+                String relationHtml = "<div class=\"comment\">" +
+                        "  <div class=\"comment_top\"></div>" +
+                        "  <div class=\"comment_title\">相关新闻</div>";
+
+                for (int i = 0; i < detailVO.getRelations().size(); i++) {
+                    NewsVO vo = detailVO.getRelations().get(i);
+                    relationHtml += "<dl onclick=\"window.news.onClick(" + i + ")\">" +
+                            "    <dt><img src=\"" + vo.getIconPath() + "\" width=\"62\" height=\"62\"></dt>" +
+                            "    <dd>" +
+                            "      <h3><a class=\"name\">" + vo.getTitle() + "</a></h3>" +
+                            "      <h4>" + vo.getSummary() + "</h4>" +
+                            "    </dd>" +
+                            "  </dl>";
+                }
+                relationHtml += "  <div class=\"line_02\"></div></div>";
+                html = html.replace("@relation", relationHtml);
+            } else {
+                html = html.replace("@relation", "");
+            }
+            // 处理广告
             if (!Utils.isEmpty(detailVO.getAdIconUrl())
                     && !Utils.isEmpty(detailVO.getAdTitle())) {
                 try {
@@ -293,6 +316,10 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
             case TaskAction.ACTION_GET_NEWS_DETAIL:
                 stopLoadingSelf();
                 showErrorMsg(errorMessage);
+                break;
+            case TaskAction.ACTION_FAVORITE_NEWS:// 收藏
+                btnFavorite.setEnabled(true);
+                showToast(errorMessage);
                 break;
             default:
                 super.onTaskFail(action, errorMessage);
@@ -489,7 +516,7 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     }
 
     @Click(R.id.btn_share)
-    void share(){
+    void share() {
         showToast("功能尚未开发");
     }
 }

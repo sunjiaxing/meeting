@@ -41,6 +41,14 @@ public class NewsDao extends BaseDao {
                     values.put(NewsChannel.KEY_COLUMN_MASTER_ID,
                             tmp.getMasterId());
                 }
+                if (!Utils.isEmpty(tmp.getChildId())) {
+                    values.put(NewsChannel.KEY_COLUMN_CHILD_ID,
+                            tmp.getChildId());
+                }
+                if (!Utils.isEmpty(tmp.getModelName())) {
+                    values.put(NewsChannel.KEY_COLUMN_MODEL_NAME,
+                            tmp.getModelName());
+                }
                 if (tmp.getIsMine() > 0) {
                     values.put(NewsChannel.KEY_COLUMN_IS_MINE, tmp.getIsMine());
                 }
@@ -123,6 +131,8 @@ public class NewsDao extends BaseDao {
                             .getColumnIndex(NewsChannel.KEY_COLUMN_IS_MINE)));
                     newsType.setPosition(cursor.getInt(cursor
                             .getColumnIndex(NewsChannel.KEY_COLUMN_POSITION)));
+                    newsType.setChildId(cursor.getString(cursor.getColumnIndex(NewsChannel.KEY_COLUMN_CHILD_ID)));
+                    newsType.setModelName(cursor.getString(cursor.getColumnIndex(NewsChannel.KEY_COLUMN_MODEL_NAME)));
                     typeList.add(newsType);
                 }
             }
