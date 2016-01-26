@@ -9,6 +9,9 @@ import android.webkit.JavascriptInterface;
 
 import com.taskmanager.LogUtils;
 import com.zhengshang.meeting.R;
+import com.zhengshang.meeting.remote.IParam;
+import com.zhengshang.meeting.ui.activity.ImageActivity_;
+import com.zhengshang.meeting.ui.activity.NewsDetailActivity;
 import com.zhengshang.meeting.ui.component.CustomerWebview;
 
 /**
@@ -38,18 +41,18 @@ public class NewsDetailFragment extends BaseFragment {
         webview.addJavascriptInterface(new Object() {
             @JavascriptInterface
             public void onClick(String url) {
-                LogUtils.e(url);
+                ImageActivity_.intent(getActivity()).extra(IParam.URL, url).start();
             }
         }, "image");
 
         webview.addJavascriptInterface(new Object() {
             @JavascriptInterface
             public void onClick(int position) {
+                ((NewsDetailActivity)getActivity()).toDetail(position);
                 LogUtils.e("position：" + position);
             }
         }, "news");
     }
-
     /**
      * 设置 HTML
      *
@@ -68,5 +71,20 @@ public class NewsDetailFragment extends BaseFragment {
      */
     public void setUrl(String url) {
         webview.loadUrl(url);
+    }
+
+    /**
+     * 判断是否 可返回
+     * @return
+     */
+    public boolean canBack() {
+        return webview == null || webview.canGoBack();
+    }
+
+    /**
+     * webview后退
+     */
+    public void back() {
+        webview.canGoBack();
     }
 }

@@ -2,18 +2,16 @@ package com.zhengshang.meeting.ui.activity;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.taskmanager.Task;
 import com.taskmanager.TaskManager;
 import com.zhengshang.meeting.R;
+import com.zhengshang.meeting.common.BonConstants;
 import com.zhengshang.meeting.common.TaskAction;
 import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.remote.IParam;
@@ -79,7 +77,6 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     private NewsDetailFragment newsDetailFragment;
     private CommentListFrament commentListFrament;
     private List<BaseFragment> fragmentList;
-    private Bundle saveInstance;
     private CommentService commentService;
     private boolean isNews;
     private UserService userService;
@@ -88,12 +85,6 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     private int groupPos;
     private int childPos;
     private UserVO userVO;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-        this.saveInstance = savedInstanceState;
-    }
 
     @AfterViews
     void init() {
@@ -110,16 +101,6 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
         commentService = new CommentService(this);
         userService = new UserService(this);
         getNewsDetailAndComment();
-    }
-
-    /**
-     * 获取fragmentmanager中的缓存
-     *
-     * @param position
-     * @return
-     */
-    private String getFragmentTag(int position) {
-        return "android:switcher:" + R.id.vp_news_detail + ":" + position;
     }
 
     /**
@@ -144,15 +125,8 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
      */
     private void initFragment() {
         fragmentList = new ArrayList<>();
-        if (saveInstance == null) {
-            newsDetailFragment = new NewsDetailFragment();
-            commentListFrament = new CommentListFrament();
-        } else {
-            newsDetailFragment = (NewsDetailFragment) getSupportFragmentManager()
-                    .findFragmentByTag(getFragmentTag(0));
-            commentListFrament = (CommentListFrament) getSupportFragmentManager()
-                    .findFragmentByTag(getFragmentTag(1));
-        }
+        newsDetailFragment = new NewsDetailFragment();
+        commentListFrament = new CommentListFrament();
         fragmentList.add(newsDetailFragment);
         fragmentList.add(commentListFrament);
         ListViewPagerAdapter adapter = new ListViewPagerAdapter(getSupportFragmentManager());
@@ -335,7 +309,11 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            back();
+            if (newsDetailFragment != null && newsDetailFragment.canBack()) {
+                newsDetailFragment.back();
+            } else {
+                finish();
+            }
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -383,6 +361,7 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
         vo.setContent(content);
         vo.setUserId(userVO.getUserId());
         vo.setUserName(userVO.getNickName());
+        vo.setUserAvatar(Utils.getUserAvatar(userVO.getUserId(), BonConstants.UserAvatarType.TYPE_45X45));
         vo.setCreateTime(Utils.formateCommentTime(System.currentTimeMillis()));
         if (commentList == null) {
             commentList = new ArrayList<>();
@@ -521,5 +500,20 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     @Click(R.id.btn_share)
     void share() {
         showToast("功能尚未开发");
+    }
+
+    /**
+     * 跳转 详情
+     *
+     * @param position pos
+     */
+    public void toDetail(int position) {
+        if (detailVO != null && !Utils.isEmpty(detailVO.getRelations())) {
+            NewsVO vo = detailVO.getRelations().get(position);
+            NewsDetailActivity_.intent(this)
+                    .extra(IParam.NEWS_ID, vo.getId())
+                    .extra(IParam.TITLE, vo.getTitle())
+                    .startForResult(0);
+        }
     }
 }
