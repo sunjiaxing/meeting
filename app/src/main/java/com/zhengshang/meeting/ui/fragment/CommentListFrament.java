@@ -76,6 +76,10 @@ public class CommentListFrament extends BaseFragment implements CommentExpandabl
         if (adapter != null) {
             adapter.setData(list);
             adapter.notifyDataSetChanged();
+        } else {
+            adapter = new CommentExpandableAdapter(getActivity());
+            adapter.setData(list);
+            listView.setAdapter(adapter);
         }
     }
 
@@ -92,7 +96,7 @@ public class CommentListFrament extends BaseFragment implements CommentExpandabl
     @Override
     public void onClickReply(int groupPos, int childPos) {
         Log.e("============", "onClickReply: " + groupPos + "   " + childPos);
-        ((NewsDetailActivity)getActivity()).clickToReply(groupPos,childPos);
+        ((NewsDetailActivity) getActivity()).clickToReply(groupPos, childPos);
     }
 
     @Override

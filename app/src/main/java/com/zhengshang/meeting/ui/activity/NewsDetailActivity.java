@@ -384,6 +384,9 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
         vo.setUserId(userVO.getUserId());
         vo.setUserName(userVO.getNickName());
         vo.setCreateTime(Utils.formateCommentTime(System.currentTimeMillis()));
+        if (commentList == null) {
+            commentList = new ArrayList<>();
+        }
         commentList.add(0, vo);
         commentListFrament.refreshUI(commentList);
 
