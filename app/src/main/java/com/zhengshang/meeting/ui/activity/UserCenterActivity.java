@@ -9,10 +9,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.taskmanager.Task;
 import com.taskmanager.TaskManager;
 import com.zhengshang.meeting.R;
-import com.zhengshang.meeting.common.BonConstants;
 import com.zhengshang.meeting.common.ImageOption;
 import com.zhengshang.meeting.common.TaskAction;
-import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.service.UserService;
 import com.zhengshang.meeting.ui.vo.UserVO;
 
@@ -97,9 +95,9 @@ public class UserCenterActivity extends BaseActivity {
         if (userVO != null) {
             tvLogout.setVisibility(View.VISIBLE);
             ImageLoader.getInstance().displayImage(
-                    Utils.getUserAvatar(userVO.getUserId(), BonConstants.UserAvatarType.TYPE_180x180),
+                    userVO.getUserAvatar(),
                     ivUserAvatar,
-                    ImageOption.createRoundOption(50));
+                    ImageOption.createNomalOption());
             tvUserName.setText(userVO.getNickName());
         }
     }

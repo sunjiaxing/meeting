@@ -104,12 +104,13 @@ public class NewsActivity extends BaseActivity implements
             ivRedPoint.setVisibility(View.GONE);
         }
         ivBack.setVisibility(View.VISIBLE);
+        ivBack.setBackgroundResource(R.drawable.btn_user_center);
         tvTitle.setText(getString(R.string.news));
 //        ivRight.setVisibility(View.VISIBLE);
 //        ivRight.setBackgroundResource(R.drawable.btn_more);
-        btnRight.setVisibility(View.VISIBLE);
-        btnRight.setBackgroundColor(Color.TRANSPARENT);
-        btnRight.setText("用户中心");
+//        btnRight.setVisibility(View.VISIBLE);
+//        btnRight.setBackgroundColor(Color.TRANSPARENT);
+//        btnRight.setText("用户中心");
 
         mPager.addOnPageChangeListener(this);
         if (Utils.isEmpty(newsTypes)) {
@@ -120,7 +121,7 @@ public class NewsActivity extends BaseActivity implements
         }
     }
 
-    @Click(R.id.btn_right)
+    @Click(R.id.iv_back)
     void toUserCenter() {
         if (userService.checkLoginState()) {
             UserCenterActivity_.intent(this).start();
@@ -321,8 +322,10 @@ public class NewsActivity extends BaseActivity implements
      */
     @Click(R.id.tv_handle_news_type_open)
     void clickTypeOpen() {
-        startActivityForResult(new Intent(this, NewsChannelActivity_.class), 0);
-//        startActivityForResult(new Intent(this, TestActivity_.class), 0);
+        NewsChannelActivity_.intent(this).startForResult(0);
+//        Intent intent = new Intent(this, TestActivity_.class);
+//        intent.putExtra(IParam.URL,"from news");
+//        startActivityForResult(intent, 0);
     }
 
 
@@ -371,7 +374,6 @@ public class NewsActivity extends BaseActivity implements
         }
     }
 
-    @Click(R.id.iv_back)
     void back() {
         finish();
     }

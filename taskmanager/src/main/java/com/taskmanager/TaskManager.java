@@ -1,6 +1,7 @@
 package com.taskmanager;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 
@@ -28,10 +29,10 @@ public class TaskManager {
     /**
      * 并发执行任务
      *
-     * @param task
-     * @param context
+     * @param task    任务
+     * @param context 上下文
      */
-    public static void pushTask(Task task, Context context) {
+    private static void pushTask(Task task, Context context) {
         try {
             taskQueue.put(task);
             context.startService(new Intent(context, TaskService.class));
@@ -43,10 +44,10 @@ public class TaskManager {
     /**
      * 放入到任务队列中排队执行
      *
-     * @param task
-     * @param context
+     * @param task    任务
+     * @param context 上下文
      */
-    public static void pushTaskWithQueue(Task task, Context context) {
+    private static void pushTaskWithQueue(Task task, Context context) {
         try {
             taskQueue.put(task);
             Intent intent = new Intent(context, TaskService.class);
@@ -57,18 +58,50 @@ public class TaskManager {
         }
     }
 
+    /**
+     * 并发执行任务
+     *
+     * @param task     任务
+     * @param activity activity
+     */
     public static void pushTask(Task task, Activity activity) {
         if (task != null) {
-            task.setClassName(activity.getLocalClassName());
+            task.setClassName(activity.toString());
             pushTask(task, activity.getBaseContext());
         }
     }
 
+    /**
+     * 放入到任务队列中排队执行
+     *
+     * @param task     任务
+     * @param activity activity
+     */
     public static void pushTaskWithQueue(Task task, Activity activity) {
         if (task != null) {
-            task.setClassName(activity.getLocalClassName());
+            task.setClassName(activity.toString());
             pushTaskWithQueue(task, activity.getBaseContext());
         }
+    }
+
+    /**
+     * 并发执行任务
+     *
+     * @param task     任务
+     * @param fragment fragment
+     */
+    public static void pushTask(Task task, Fragment fragment) {
+        pushTask(task, fragment.getActivity());
+    }
+
+    /**
+     * 放入到任务队列中排队执行
+     *
+     * @param task     任务
+     * @param fragment fragment
+     */
+    public static void pushTaskWithQueue(Task task, Fragment fragment) {
+        pushTaskWithQueue(task, fragment.getActivity());
     }
 
     public static void clearAllTask() {

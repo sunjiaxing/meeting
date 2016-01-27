@@ -28,7 +28,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.NewsDetailActivity_"
-            android:launchMode="standard"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.NewsChannelActivity_"

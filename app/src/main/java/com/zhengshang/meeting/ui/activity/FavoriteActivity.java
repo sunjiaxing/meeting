@@ -198,7 +198,7 @@ public class FavoriteActivity extends BaseActivity implements DragListView.OnRef
     void onItemClick(int position) {
         FavoriteVO favoriteVO = favoriteList.get(position - 1);
         if (favoriteVO.getFavoriteType() == 1) {
-            NewsSubjectActivity_.intent(this)
+            NewsDetailActivity_.intent(this)
                     .extra(IParam.NEWS_ID, favoriteVO.getId())
                     .extra(IParam.TITLE, favoriteVO.getTitle())
                     .startForResult(0);

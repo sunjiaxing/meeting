@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 
-import com.taskmanager.LogUtils;
 import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.ui.activity.ImageActivity_;
@@ -49,7 +48,6 @@ public class NewsDetailFragment extends BaseFragment {
             @JavascriptInterface
             public void onClick(int position) {
                 ((NewsDetailActivity)getActivity()).toDetail(position);
-                LogUtils.e("position：" + position);
             }
         }, "news");
     }

@@ -26,11 +26,7 @@ public abstract class BaseActivity extends TaskActivity {
     private boolean isShowing = true;// 当前activity是否显示中
     private Dialog loadingDialog;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
 
-    }
 
     public void startLoading(String message, boolean cancelable, DialogInterface.OnCancelListener listener) {
         if (loadingDialog == null || !loadingDialog.isShowing()) {

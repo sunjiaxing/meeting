@@ -6,11 +6,12 @@ import java.io.Serializable;
  * 用户 VO
  * Created by sun on 2016/1/13.
  */
-public class UserVO implements Serializable{
+public class UserVO implements Serializable {
     private String userId;
     private String userName;
     private String nickName;
     private String email;
+    private String userAvatar;
 
     public String getUserId() {
         return userId;
@@ -42,5 +43,13 @@ public class UserVO implements Serializable{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(String userAvatar) {
+        this.userAvatar = userAvatar;
     }
 }

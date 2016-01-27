@@ -55,8 +55,8 @@ img { vertical-align: middle; width:100%}
 .comment .last-child{border-bottom: #e7e7e7  0px solid;}
 
 .comment dd h3{ height:15px; display:block; line-height:15px;margin:0px; }
-.comment dd h3 a.name{ height:15px; float:left; width:50%; display:block; font-size:13px; color:#00a0e9 ; font-weight:lighter; line-height:15px; }
-.comment dd h3 .counts{ height:15px; float:right; width:50%; display:block; text-align:right; font-size:11px; color:#999; font-weight:lighter;  line-height:15px;}
+.comment dd h3 a.name{ height:15px; float:left; width:90%; display:block; font-size:13px; color:#00a0e9 ; font-weight:lighter; line-height:15px; }
+.comment dd h3 .counts{ height:15px; float:right; width:10%; display:block; text-align:right; font-size:11px; color:#999; font-weight:lighter;  line-height:15px;}
 .comment dd h4 { height:28px; display:block; line-height:25px; font-weight:lighter; font-size:11px; color:#999;  margin:0px; }
 .comment dd p{ color:#333; font-size:15px; line-height:24px; margin-bottom:16px;}
 .comment .more{ height:43px; line-height:43px; font-size:13px; text-align:center;}

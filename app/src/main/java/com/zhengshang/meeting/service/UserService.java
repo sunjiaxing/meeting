@@ -100,6 +100,7 @@ public class UserService extends BaseService {
             vo.setUserName(user.getUserName());
             vo.setNickName(user.getNickName());
             vo.setEmail(user.getEmail());
+            vo.setUserAvatar(Utils.getUserAvatar(userId, BonConstants.UserAvatarType.TYPE_180x180));
             return vo;
         }
     }
@@ -125,6 +126,7 @@ public class UserService extends BaseService {
 
     /**
      * 获取收藏列表
+     *
      * @return
      * @throws JSONException
      */
