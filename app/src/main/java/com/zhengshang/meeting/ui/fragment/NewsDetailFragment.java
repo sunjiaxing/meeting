@@ -1,7 +1,6 @@
 package com.zhengshang.meeting.ui.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,29 +12,28 @@ import com.zhengshang.meeting.ui.activity.ImageActivity_;
 import com.zhengshang.meeting.ui.activity.NewsDetailActivity;
 import com.zhengshang.meeting.ui.component.CustomerWebview;
 
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ViewById;
+
 /**
  * 新闻详情 fragment
  * Created by sun on 2016/1/8.
  */
+@EFragment(R.layout.layout_news_webview)
 public class NewsDetailFragment extends BaseFragment {
 
-    private CustomerWebview webview;
+    @ViewById(R.id.webview_detail)
+    CustomerWebview webview;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.layout_news_webview, null);
+        return null;
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        webview = (CustomerWebview) view.findViewById(R.id.webview_detail);
+    @AfterViews
+    void init() {
         // 给webview 注入图片点击 事件
         webview.addJavascriptInterface(new Object() {
             @JavascriptInterface
@@ -47,10 +45,11 @@ public class NewsDetailFragment extends BaseFragment {
         webview.addJavascriptInterface(new Object() {
             @JavascriptInterface
             public void onClick(int position) {
-                ((NewsDetailActivity)getActivity()).toDetail(position);
+                ((NewsDetailActivity) getActivity()).toDetail(position);
             }
         }, "news");
     }
+
     /**
      * 设置 HTML
      *
@@ -73,6 +72,7 @@ public class NewsDetailFragment extends BaseFragment {
 
     /**
      * 判断是否 可返回
+     *
      * @return
      */
     public boolean canBack() {

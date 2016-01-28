@@ -7,6 +7,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.taskmanager.Task;
@@ -26,9 +27,11 @@ import com.zhengshang.meeting.ui.component.OnlineNewsFirstView;
 import com.zhengshang.meeting.ui.vo.NewsChannelVO;
 import com.zhengshang.meeting.ui.vo.NewsVO;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ItemClick;
+import org.androidannotations.annotations.ViewById;
 
 /**
  * 新闻每个栏目的fragment
@@ -39,10 +42,19 @@ import org.androidannotations.annotations.ItemClick;
 public class NewsPagerItemFragment extends BaseFragment implements
         OnlineNewsFirstView.OnClickFirstView,
         DragListView.OnRefreshLoadMoreListener {
+
+    @ViewById(R.id.lv_drag)
     DragListView listview;
-    View layoutLoading, layoutError;
+    @ViewById(R.id.layout_loading)
+    View layoutLoading;
+    @ViewById(R.id.layout_error)
+    View layoutError;
+    @ViewById(R.id.tv_description)
     TextView tvErrorMsg;
+    @ViewById(R.id.btn_refresh)
     Button btnErrorRefresh;
+    @ViewById(R.id.iv_loading_in)
+    ImageView ivLoading;
 
     private NewsChannelVO newsType = null;
     private List<NewsVO> news;
@@ -60,15 +72,8 @@ public class NewsPagerItemFragment extends BaseFragment implements
         newsService = new NewsService(getActivity());
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        listview = (DragListView) view.findViewById(R.id.lv_drag);
-        layoutLoading = view.findViewById(R.id.layout_loading);
-        layoutError = view.findViewById(R.id.layout_error);
-        tvErrorMsg = (TextView) view.findViewById(R.id.tv_description);
-        btnErrorRefresh = (Button) view.findViewById(R.id.btn_refresh);
-
+    @AfterViews
+    void init() {
         listview.setVisibility(View.GONE);
         listview.setPullType(DragListView.ListViewPullType.LV_ALL);
         listview.setDividerHeight(0);
@@ -78,15 +83,14 @@ public class NewsPagerItemFragment extends BaseFragment implements
         firstView = new OnlineNewsFirstView(getActivity(),
                 R.layout.online_news_item_first, this);
         listview.addHeaderView(firstView, null, true);
-        anim = (AnimationDrawable) view.findViewById(R.id.iv_loading_in)
-                .getBackground();
+        anim = (AnimationDrawable) ivLoading.getBackground();
     }
 
     /**
      * 设置数据
      *
-     * @param type
-     * @param pos
+     * @param type 新闻栏目
+     * @param pos  位置
      */
     public void refreshCurrentView(NewsChannelVO type, int pos) {
         this.newsType = type;
@@ -160,8 +164,7 @@ public class NewsPagerItemFragment extends BaseFragment implements
     /**
      * 显示错误信息
      *
-     * @param msg
-     * @author
+     * @param msg 消息
      */
     private void showErrorMsg(String msg) {
         if (!isAdded()) {

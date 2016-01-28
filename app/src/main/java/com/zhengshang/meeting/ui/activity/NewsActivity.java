@@ -98,11 +98,11 @@ public class NewsActivity extends BaseActivity implements
             }
         });
         rightHandleLayout.setVisibility(View.GONE);
-        if (newsService.getNewsChannelUpdate()) {
-            ivRedPoint.setVisibility(View.VISIBLE);
-        } else {
-            ivRedPoint.setVisibility(View.GONE);
-        }
+//        if (newsService.getNewsChannelUpdate()) {
+//            ivRedPoint.setVisibility(View.VISIBLE);
+//        } else {
+//            ivRedPoint.setVisibility(View.GONE);
+//        }
         ivBack.setVisibility(View.VISIBLE);
         ivBack.setBackgroundResource(R.drawable.btn_user_center);
         tvTitle.setText(getString(R.string.news));

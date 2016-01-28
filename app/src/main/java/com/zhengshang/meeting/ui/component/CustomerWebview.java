@@ -9,6 +9,7 @@ import android.webkit.WebSettings.TextSize;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.taskmanager.LogUtils;
 import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.ui.activity.ShowUrlActivity;
 
@@ -83,7 +84,9 @@ public class CustomerWebview extends WebView {
             public void onPageFinished(WebView view, String url) {
                 view.getSettings().setJavaScriptEnabled(true);
                 super.onPageFinished(view, url);
-                addImageClickFunction();
+                if (url != null && !url.startsWith("http") && !url.startsWith("https")) {
+                    addImageClickFunction();
+                }
             }
         });
 

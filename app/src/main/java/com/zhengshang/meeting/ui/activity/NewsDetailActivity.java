@@ -21,7 +21,9 @@ import com.zhengshang.meeting.service.UserService;
 import com.zhengshang.meeting.ui.adapter.ListViewPagerAdapter;
 import com.zhengshang.meeting.ui.fragment.BaseFragment;
 import com.zhengshang.meeting.ui.fragment.CommentListFrament;
+import com.zhengshang.meeting.ui.fragment.CommentListFrament_;
 import com.zhengshang.meeting.ui.fragment.NewsDetailFragment;
+import com.zhengshang.meeting.ui.fragment.NewsDetailFragment_;
 import com.zhengshang.meeting.ui.vo.CommentVO;
 import com.zhengshang.meeting.ui.vo.NewsDetailVO;
 import com.zhengshang.meeting.ui.vo.NewsVO;
@@ -125,8 +127,8 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
      */
     private void initFragment() {
         fragmentList = new ArrayList<>();
-        newsDetailFragment = new NewsDetailFragment();
-        commentListFrament = new CommentListFrament();
+        newsDetailFragment = new NewsDetailFragment_();
+        commentListFrament = new CommentListFrament_();
         fragmentList.add(newsDetailFragment);
         fragmentList.add(commentListFrament);
         ListViewPagerAdapter adapter = new ListViewPagerAdapter(getSupportFragmentManager());

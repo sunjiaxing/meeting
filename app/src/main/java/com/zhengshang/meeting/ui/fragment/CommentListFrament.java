@@ -13,31 +13,31 @@ import com.zhengshang.meeting.ui.activity.NewsDetailActivity;
 import com.zhengshang.meeting.ui.adapter.CommentExpandableAdapter;
 import com.zhengshang.meeting.ui.vo.CommentVO;
 
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ViewById;
+
 import java.util.List;
 
 /**
  * 评论列表 fragment
  * Created by sun on 2016/1/8.
  */
+@EFragment(R.layout.layout_listview)
 public class CommentListFrament extends BaseFragment implements CommentExpandableAdapter.CommentListener {
-    private ExpandableListView listView;
+    @ViewById(R.id.listview)
+    ExpandableListView listView;
     private List<CommentVO> list;
     private CommentExpandableAdapter adapter;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.layout_listview, null);
+        return null;
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        listView = (ExpandableListView) view.findViewById(R.id.listview);
+    @AfterViews
+    void init() {
         listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
 
             @Override
@@ -71,6 +71,7 @@ public class CommentListFrament extends BaseFragment implements CommentExpandabl
 
     /**
      * 刷新界面
+     *
      * @param data 评论数据
      */
     public void refreshUI(List<CommentVO> data) {

@@ -8,31 +8,42 @@
         android:id="@+id/head_layout"
         layout="@layout/title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/galleryLayout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_below="@+id/head_layout"
-        android:background="@color/color_white"
+        android:background="#ededed"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false">
+
+        <ImageView
+            android:id="@+id/iv_user_info"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:src="@drawable/btn_user_center" />
 
         <com.zhengshang.meeting.ui.component.ChannelGallery
             android:id="@+id/channel_gallery"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_alignParentLeft="true"
             android:layout_marginRight="40dp"
+            android:layout_toRightOf="@+id/iv_user_info"
             android:background="#ededed"
             android:paddingLeft="5dp" />
 
         <RelativeLayout
             android:id="@+id/right_handle_layout"
             android:layout_width="40dp"
-            android:layout_height="45dp"
+            android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="#ededed">
@@ -51,9 +62,9 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="3dp"
                 android:layout_marginTop="2dp"
-                android:visibility="gone"
                 android:contentDescription="@null"
-                android:src="@mipmap/red_point" />
+                android:src="@mipmap/red_point"
+                android:visibility="gone" />
         </RelativeLayout>
     </RelativeLayout>
 
