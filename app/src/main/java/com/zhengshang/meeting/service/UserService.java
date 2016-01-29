@@ -138,7 +138,8 @@ public class UserService extends BaseService {
             FavoriteVO vo;
             for (FavoriteDto dto : favoriteList) {
                 vo = new FavoriteVO();
-                vo.setId(dto.getId());
+                vo.setNewsId(dto.getNewsId());
+                vo.setFavoriteId(dto.getFavoriteId());
                 vo.setTitle(dto.getTitle());
                 vo.setSummary(dto.getSummary());
                 vo.setFavoriteType(dto.getFavoriteType());
@@ -150,4 +151,19 @@ public class UserService extends BaseService {
         return showData;
     }
 
+    /**
+     * 删除全部收藏
+     */
+    public void deleteAllFavorite() throws JSONException {
+        userRO.deleteAllFavorite(configDao.getUserId());
+    }
+
+    /**
+     * 删除指定收藏
+     *
+     * @param id 收藏id
+     */
+    public void deleteFavoriteById(String id) throws JSONException {
+        userRO.deleteFavoriteById(configDao.getUserId(), id);
+    }
 }

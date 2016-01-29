@@ -7,19 +7,28 @@ import java.io.Serializable;
  * Created by sun on 2016/1/21.
  */
 public class FavoriteVO implements Serializable{
-    private String id;
+    private String newsId;
     private int favoriteType;
     private String title;
     private String summary;
     private String iconUrl;
     private String createTime;
+    private String favoriteId;
 
-    public String getId() {
-        return id;
+    public String getNewsId() {
+        return newsId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setNewsId(String newsId) {
+        this.newsId = newsId;
+    }
+
+    public String getFavoriteId() {
+        return favoriteId;
+    }
+
+    public void setFavoriteId(String favoriteId) {
+        this.favoriteId = favoriteId;
     }
 
     public int getFavoriteType() {

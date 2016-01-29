@@ -63,6 +63,7 @@ public class ImageActivity extends BaseActivity {
             }
 
             @Override
+
             public void onLoadingCancelled(String imageUri, View view) {
                 progressBar.setVisibility(View.GONE);
             }

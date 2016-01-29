@@ -1,5 +1,7 @@
 package com.zhengshang.meeting.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.AnimationDrawable;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,6 +24,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ItemClick;
+import org.androidannotations.annotations.ItemLongClick;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
@@ -128,8 +131,14 @@ public class FavoriteActivity extends BaseActivity implements DragListView.OnRef
                 listView.onRefreshComplete();
                 if (data != null) {
                     favoriteList = (List<FavoriteVO>) data;
-                    refreshUI();
                 }
+                refreshUI();
+                break;
+            case TaskAction.ACTION_DELETE_ALL_FAVORITE:
+            case TaskAction.ACTION_DELETE_FAVORITE:
+                stopLoading();
+                showToast("删除成功");
+                getFavoriteList();
                 break;
 
         }
@@ -164,6 +173,10 @@ public class FavoriteActivity extends BaseActivity implements DragListView.OnRef
                 listView.onRefreshComplete();
                 showErrorMsg(errorMessage);
                 break;
+            case TaskAction.ACTION_DELETE_ALL_FAVORITE:
+            case TaskAction.ACTION_DELETE_FAVORITE:
+                stopLoading();
+                showToast(errorMessage);
             default:
                 super.onTaskFail(action, errorMessage);
                 break;
@@ -199,9 +212,56 @@ public class FavoriteActivity extends BaseActivity implements DragListView.OnRef
         FavoriteVO favoriteVO = favoriteList.get(position - 1);
         if (favoriteVO.getFavoriteType() == 1) {
             NewsDetailActivity_.intent(this)
-                    .extra(IParam.NEWS_ID, favoriteVO.getId())
+                    .extra(IParam.NEWS_ID, favoriteVO.getNewsId())
                     .extra(IParam.TITLE, favoriteVO.getTitle())
                     .startForResult(0);
+        }
+    }
+
+    @ItemLongClick(R.id.lv_drag)
+    void onItemLongClick(int position) {
+        final FavoriteVO favoriteVO = favoriteList.get(position - 1);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setItems(new String[]{"删除选中数据", "删除全部数据"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:// 删除当前
+                        deleteFavorite(favoriteVO.getFavoriteId());
+                        break;
+                    case 1:// 删除全部
+                        deleteFavorite(null);
+                        break;
+                }
+            }
+        }).show();
+
+
+    }
+
+    /**
+     * 删除收藏
+     *
+     * @param id 收藏id
+     */
+    private void deleteFavorite(final String id) {
+        startLoading("删除中...");
+        if (id == null) {
+            // 删除全部
+            TaskManager.pushTask(new Task(TaskAction.ACTION_DELETE_ALL_FAVORITE) {
+                @Override
+                protected void doBackground() throws Exception {
+                    userService.deleteAllFavorite();
+                }
+            }, this);
+        } else {
+            // 删除选中
+            TaskManager.pushTask(new Task(TaskAction.ACTION_DELETE_FAVORITE) {
+                @Override
+                protected void doBackground() throws Exception {
+                    userService.deleteFavoriteById(id);
+                }
+            }, this);
         }
     }
 }

@@ -3,7 +3,6 @@ package com.zhengshang.meeting.ui.activity;
 
 import android.content.Intent;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -69,6 +68,8 @@ public class NewsActivity extends BaseActivity implements
     LinearLayout btnShouYe;
     @ViewById(R.id.channel_gallery)
     ChannelGallery channelGallery;
+    @ViewById(R.id.iv_user_info)
+    ImageView ivUserCenter;
 
     private ListViewPagerAdapter listViewPagerAdapter;
     private List<NewsChannelVO> newsTypes = new ArrayList<>();
@@ -121,7 +122,7 @@ public class NewsActivity extends BaseActivity implements
         }
     }
 
-    @Click(R.id.iv_back)
+    @Click(R.id.iv_user_info)
     void toUserCenter() {
         if (userService.checkLoginState()) {
             UserCenterActivity_.intent(this).start();

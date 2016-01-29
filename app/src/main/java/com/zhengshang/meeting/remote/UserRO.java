@@ -27,7 +27,9 @@ public class UserRO extends BaseRO {
     }
 
     public enum RemoteUserURL implements IBaseURL {
-        LOGIN(IParam.LOGIN), ADD_FAVORITE(IParam.ADD_FAVORITE), FAVORITE_LIST(IParam.FAVORITE);
+        LOGIN(IParam.LOGIN), ADD_FAVORITE(IParam.ADD_FAVORITE),
+        FAVORITE_LIST(IParam.FAVORITE), DELETE_FAVORITE(IParam.DELETE_FAVORITE),
+        DELETE_ALL_FAVORITE(IParam.DELETE_ALL_FAVORITE);
         private static final String NAMESPACE = IParam.USER;
         private String url;
 
@@ -111,6 +113,45 @@ public class UserRO extends BaseRO {
                 }
             }
             return list;
+        } else {
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
+        }
+    }
+
+    /**
+     * 删除 所有收藏
+     *
+     * @param userId 用户id
+     * @return
+     * @throws JSONException
+     */
+    public boolean deleteAllFavorite(String userId) throws JSONException {
+        String url = getServerUrl() + RemoteUserURL.DELETE_ALL_FAVORITE.getURL()
+                + IParam.WENHAO + IParam.USER_ID + IParam.EQUALS_STRING + userId;
+        String result = httpGetRequest(url, null);
+        JSONObject json = new JSONObject(result);
+        if (json.getInt(IParam.STATUS) == 1) {
+            return true;
+        } else {
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
+        }
+    }
+
+    /**
+     * 删除指定 收藏
+     * @param userId 用户id
+     * @param id 收藏id
+     * @return
+     * @throws JSONException
+     */
+    public boolean deleteFavoriteById(String userId, String id) throws JSONException {
+        String url = getServerUrl() + RemoteUserURL.DELETE_FAVORITE.getURL()
+                + IParam.WENHAO + IParam.USER_ID + IParam.EQUALS_STRING + userId
+                + IParam.AND + IParam.FAVORITE_ID + IParam.EQUALS_STRING + id;
+        String result = httpGetRequest(url, null);
+        JSONObject json = new JSONObject(result);
+        if (json.getInt(IParam.STATUS) == 1) {
+            return true;
         } else {
             throw new AppException(json.getInt(IParam.ERROR_CODE));
         }

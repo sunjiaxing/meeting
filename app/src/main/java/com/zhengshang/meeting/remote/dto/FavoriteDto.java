@@ -10,15 +10,20 @@ import org.json.JSONObject;
  * Created by sun on 2016/1/21.
  */
 public class FavoriteDto {
-    private String id;
+    private String newsId;
     private int favoriteType;
     private String title;
     private String summary;
     private String iconUrl;
     private long addTime;
+    private String favoriteId;
 
-    public String getId() {
-        return id;
+    public String getNewsId() {
+        return newsId;
+    }
+
+    public String getFavoriteId() {
+        return favoriteId;
     }
 
     public int getFavoriteType() {
@@ -45,8 +50,11 @@ public class FavoriteDto {
         if (json == null) {
             return;
         }
-        if (json.has(IParam.ID)) {
-            this.id = json.getString(IParam.ID);
+        if (json.has(IParam.NEWS_ID)) {
+            this.newsId = json.getString(IParam.NEWS_ID);
+        }
+        if (json.has(IParam.FAVORITE_ID)) {
+            this.favoriteId = json.getString(IParam.FAVORITE_ID);
         }
         if (json.has(IParam.FAVORITE_TYPE)) {
             this.favoriteType = json.getInt(IParam.FAVORITE_TYPE);

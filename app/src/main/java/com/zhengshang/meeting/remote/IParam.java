@@ -34,7 +34,8 @@ public interface IParam {
     String DETAIL = "detail";
     String DESCRIPTION = "description";
     String DESC = "desc";
-    String DETAIL_NEW = "detailNew";
+    String DELETE_FAVORITE = "deleteFavorite";
+    String DELETE_ALL_FAVORITE = "deleteAllFavorite";
 
     // E
     String ERROR_CODE = "errorCode";
@@ -44,6 +45,7 @@ public interface IParam {
     // F
     String FOCUS = "focus";
     String FAVORITE = "favorite";
+    String FAVORITE_ID = "favoriteId";
     String FAVORITE_TYPE = "favoriteType";
 
     // G
