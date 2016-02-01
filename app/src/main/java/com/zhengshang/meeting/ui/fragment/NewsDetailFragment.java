@@ -1,9 +1,5 @@
 package com.zhengshang.meeting.ui.fragment;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 
 import com.zhengshang.meeting.R;
@@ -25,12 +21,6 @@ public class NewsDetailFragment extends BaseFragment {
 
     @ViewById(R.id.webview_detail)
     CustomerWebview webview;
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return null;
-    }
 
     @AfterViews
     void init() {

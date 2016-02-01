@@ -565,7 +565,7 @@ public class NewsService extends BaseService {
         // 数据转换
         List<NewsChannel> saveData = parseNewsChannel2SaveDataFromVO(newsTypes);
         // 修改状态
-        newsDao.saveToMyChannel(saveData, "0");
+        newsDao.saveToMyChannel(saveData, configDao.getUserId());
     }
 
 

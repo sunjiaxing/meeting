@@ -1,10 +1,7 @@
 package com.zhengshang.meeting.ui.fragment;
 
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.zhengshang.meeting.R;
@@ -29,12 +26,6 @@ public class CommentListFrament extends BaseFragment implements CommentExpandabl
     ExpandableListView listView;
     private List<CommentVO> list;
     private CommentExpandableAdapter adapter;
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return null;
-    }
 
     @AfterViews
     void init() {

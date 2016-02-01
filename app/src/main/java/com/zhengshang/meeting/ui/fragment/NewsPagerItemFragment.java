@@ -35,8 +35,6 @@ import org.androidannotations.annotations.ViewById;
 
 /**
  * 新闻每个栏目的fragment
- *
- * @author sun
  */
 @EFragment(R.layout.listview_in_viewpager)
 public class NewsPagerItemFragment extends BaseFragment implements
@@ -194,7 +192,7 @@ public class NewsPagerItemFragment extends BaseFragment implements
                     if (newsService == null) {
                         newsService = new NewsService(getActivity());
                     }
-                    setReturnData(new Object[]{NewsPagerItemFragment.this.hashCode(), newsService.getNewsFromDB(newsType.getTypeId())});
+                    setReturnData(new Object[]{NewsPagerItemFragment.this.hashCode(), newsService.getNewsFromDB(newsType.getChildId())});
                 }
             }, getActivity());
         }
@@ -395,7 +393,7 @@ public class NewsPagerItemFragment extends BaseFragment implements
             @Override
             protected void doBackground() throws Exception {
                 setNeedCallBack(false);
-                newsService.setReadState(model.getId(), newsType.getTypeId(), 1);
+                newsService.setReadState(model.getId(), newsType.getChildId(), 1);
             }
         }, getActivity());
         adapter.setData(news, hasTop);
