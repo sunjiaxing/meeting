@@ -40,6 +40,19 @@
             android:background="#ededed"
             android:paddingLeft="5dp" />
 
+        <TextView
+            android:id="@+id/tv_single_channel"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_toRightOf="@+id/iv_user_info"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:text="@string/loading"
+            android:textColor="@color/news_content_color"
+            android:textSize="17sp"
+            android:visibility="gone" />
+
         <RelativeLayout
             android:id="@+id/right_handle_layout"
             android:layout_width="40dp"

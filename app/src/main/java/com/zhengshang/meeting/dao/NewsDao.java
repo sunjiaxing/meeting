@@ -49,9 +49,7 @@ public class NewsDao extends BaseDao {
                     values.put(NewsChannel.KEY_COLUMN_MODEL_NAME,
                             tmp.getModelName());
                 }
-                if (tmp.getIsMine() > 0) {
-                    values.put(NewsChannel.KEY_COLUMN_IS_MINE, tmp.getIsMine());
-                }
+                values.put(NewsChannel.KEY_COLUMN_IS_MINE, tmp.getIsMine());
                 values.put(NewsChannel.KEY_COLUMN_IS_LOCK, tmp.getIsLock());
                 if (isExistNewsType(tmp.getTypeId(), tmp.getMasterId())) {
                     db.update(NewsChannel.KEY_TABLE_NAME, values,
@@ -172,6 +170,30 @@ public class NewsDao extends BaseDao {
             e.printStackTrace();
         } finally {
             endTransaction();
+        }
+    }
+
+    /**
+     * 判断是否是用户自己选中的栏目
+     * @param masterId 用户id
+     * @param channelId 栏目id
+     * @return
+     */
+    public boolean isMine(String masterId, String channelId) {
+        try {
+            sql = "select * from " + NewsChannel.KEY_TABLE_NAME + " where "
+                    + NewsChannel.KEY_COLUMN_MASTER_ID + " = ? and "
+                    + NewsChannel.KEY_COLUMN_TYPE_ID + " = ? and "
+                    + NewsChannel.KEY_COLUMN_IS_MINE + " = 1";
+            cursor = db.rawQuery(sql, new String[]{masterId, channelId});
+            if (cursor.getCount() > 0) {
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            throw new AppException("method isMine Exception");
+        } finally {
+            releaseConnection();
         }
     }
 

@@ -50,16 +50,8 @@ public class NewsService extends BaseService {
      * @throws JSONException
      */
     public List<NewsChannelVO> getAllNewsTypes() throws JSONException {
-        List<NewsChannelVO> showData;
-        List<NewsChannel> dbData = newsDao.getNewsType(true, configDao.getUserId());
-        if (!Utils.isEmpty(dbData)) {
-            showData = parseNewsChannel2ShowDataFromDB(dbData);
-        } else {
-            configDao.setNewsTypeState(0);
-            List<NewsChannelDto> dtoList = getNewsTypeFromWeb(true);
-            showData = parseNewsChannel2ShowDataFromDto(dtoList);
-        }
-        return showData;
+
+        return getNewsTypes(true);
     }
 
     /**
@@ -109,11 +101,15 @@ public class NewsService extends BaseService {
         if (Utils.isEmpty(webData)) {
             return null;
         }
+        List<NewsChannel> saveData = parseNewsChannel2SaveDataFromDto(webData);
         if (isUpdateTime) {
             long time = (Long) res.get(IParam.TIME);
             configDao.setNewsTypeState(time);
+            // 处理用户 选中的栏目
+            for (NewsChannel channel : saveData) {
+                channel.setIsMine(newsDao.isMine(configDao.getUserId(), channel.getTypeId()) ? 1 : 0);
+            }
         }
-        List<NewsChannel> saveData = parseNewsChannel2SaveDataFromDto(webData);
         newsDao.deleteAllChannel();
         // 更新
         newsDao.updateNewsType(saveData);
@@ -165,7 +161,7 @@ public class NewsService extends BaseService {
         if (!Utils.isEmpty(data)) {
             for (NewsChannelDto dto : data) {
                 showData.add(new NewsChannelVO(dto.getTypeId(), dto.getName(),
-                        dto.getIsLock() == 1, dto.getPosition()));
+                        dto.getIsLock() == 1, dto.getPosition(), dto.getChildId(), dto.getModelName()));
             }
         } else {
             throw new AppException("获取新闻栏目失败！");
@@ -229,11 +225,27 @@ public class NewsService extends BaseService {
      * @throws JSONException
      */
     public List<NewsChannelVO> getUserNewsTypes() throws JSONException {
-        List<NewsChannelVO> showData = null;
+
+        return getNewsTypes(false);
+    }
+
+    /**
+     * 获取新闻栏目
+     *
+     * @param isAll 是否所有
+     * @return
+     * @throws JSONException
+     */
+    public List<NewsChannelVO> getNewsTypes(boolean isAll) throws JSONException {
+        List<NewsChannelVO> showData;
         List<NewsChannel> dbData = newsDao
-                .getNewsType(false, configDao.getUserId());
+                .getNewsType(isAll, configDao.getUserId());
         if (!Utils.isEmpty(dbData)) {
             showData = parseNewsChannel2ShowDataFromDB(dbData);
+        } else {
+            configDao.setNewsTypeState(0);
+            List<NewsChannelDto> dtoList = getNewsTypeFromWeb(false);
+            showData = parseNewsChannel2ShowDataFromDto(dtoList);
         }
         return showData;
     }

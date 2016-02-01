@@ -69,13 +69,6 @@ public class NewsChannelVO implements Serializable {
         return modelName;
     }
 
-    public NewsChannelVO(String typeId, String name, boolean lock, int position) {
-        this.typeId = typeId;
-        this.name = name;
-        this.isLock = lock;
-        this.position = position;
-    }
-
     public NewsChannelVO(String typeId, String name, boolean isLock, int position, String childId, String modelName) {
         this.typeId = typeId;
         this.name = name;

@@ -70,6 +70,8 @@ public class NewsActivity extends BaseActivity implements
     ChannelGallery channelGallery;
     @ViewById(R.id.iv_user_info)
     ImageView ivUserCenter;
+    @ViewById(R.id.tv_single_channel)
+    TextView tvSingleChannel;
 
     private ListViewPagerAdapter listViewPagerAdapter;
     private List<NewsChannelVO> newsTypes = new ArrayList<>();
@@ -247,8 +249,16 @@ public class NewsActivity extends BaseActivity implements
      */
     public void updateGallery(List<NewsChannelVO> data) {
         if (data != null && data.size() > 0) {
-            // 有栏目数据时显示操作按钮
-            channelGallery.setData(data);
+            if (data.size() == 1) {
+                channelGallery.setVisibility(View.GONE);
+                tvSingleChannel.setVisibility(View.VISIBLE);
+                tvSingleChannel.setText(data.get(0).getName());
+            } else {
+                // 有栏目数据时显示操作按钮
+                channelGallery.setVisibility(View.VISIBLE);
+                tvSingleChannel.setVisibility(View.GONE);
+                channelGallery.setData(data);
+            }
             rightHandleLayout.setVisibility(View.VISIBLE);
             if (mPager != null) {
                 mPager.setCurrentItem(0);
