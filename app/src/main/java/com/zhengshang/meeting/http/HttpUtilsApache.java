@@ -24,6 +24,8 @@ import cz.msebera.android.httpclient.client.methods.CloseableHttpResponse;
 import cz.msebera.android.httpclient.client.methods.HttpGet;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.client.methods.HttpUriRequest;
+import cz.msebera.android.httpclient.entity.ContentType;
+import cz.msebera.android.httpclient.entity.mime.MultipartEntityBuilder;
 import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
 import cz.msebera.android.httpclient.impl.client.HttpClients;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
@@ -36,7 +38,7 @@ public class HttpUtilsApache {
 
     private static final int connectionTimeout = 5000;
     private static final int readTimeout = 15000;
-    private static final Boolean DEBUG = false;
+    private static final Boolean DEBUG = true;
     private static final String TAG = "HttpUtilsApache";
 
     /**
@@ -94,11 +96,11 @@ public class HttpUtilsApache {
      * @param url    url
      * @param params 参数
      * @param header 请求头信息
-     * @param files  要上传的文件
+     * @param file   要上传的文件
      * @return
      */
     public static String postFile(String url, Map<String, Object> params, Map<String, String> header,
-                                  List<File> files) {
+                                  File file) {
         try {
             HttpPost httpPost = new HttpPost(url);
             // 处理header
@@ -110,26 +112,19 @@ public class HttpUtilsApache {
                 }
             }
 
-            List<NameValuePair> nvps = new ArrayList<>();
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             if (params != null) {
                 Iterator<?> iterator = params.keySet().iterator();
                 while (iterator.hasNext()) {
                     String key = iterator.next().toString();
-//                    builder.addTextBody(key, params.get(key) != null ? params
-//                            .get(key).toString() : "");
-                    nvps.add(new BasicNameValuePair(key, params.get(key) != null ? params
-                            .get(key).toString() : ""));
+                    builder.addTextBody(key, params.get(key) != null ? params
+                            .get(key).toString() : "");
                 }
             }
-//            if (files != null) {
-//                for (File file : files) {
-//                    builder.addBinaryBody(
-//                            isHead ? "avatarFile" : "pictureFile", file,
-//                            ContentType.DEFAULT_BINARY, file.getName());
-//                }
-//            }
-//            requestEntity = builder.build();
-            httpPost.setEntity(new UrlEncodedFormEntity(nvps, "utf8"));
+            if (file != null) {
+                builder.addBinaryBody("file", file, ContentType.APPLICATION_OCTET_STREAM, file.getName());
+            }
+            httpPost.setEntity(builder.build());
             return execute(httpPost);
         } catch (Exception e) {
             // 仅供测试使用

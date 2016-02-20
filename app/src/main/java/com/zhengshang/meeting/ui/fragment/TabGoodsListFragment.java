@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.Utils;
+import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.ui.activity.BaseActivity;
 import com.zhengshang.meeting.ui.activity.InputGoodsNameActivity_;
 import com.zhengshang.meeting.ui.component.DragListView;
@@ -117,6 +118,7 @@ public class TabGoodsListFragment extends BaseFragment implements DragListView.O
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+            String goodsName = data.getStringExtra(IParam.CONTENT);
 
         }
     }
