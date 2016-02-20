@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/input_goods_name_a4a6a4"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/head"
+        layout="@layout/title" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="60dp"
+        android:background="#e5e6e8" />
+
+    <EditText
+        android:id="@+id/edit_goods_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white"
+        android:gravity="center_vertical"
+        android:hint="请输入物品名称"
+        android:inputType="text"
+        android:maxLength="20"
+        android:paddingBottom="13dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="13dp"
+        android:singleLine="true"
+        android:textColor="#444"
+        android:textColorHint="#888"
+        android:textCursorDrawable="@null"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e5e6e8" />
+</LinearLayout>

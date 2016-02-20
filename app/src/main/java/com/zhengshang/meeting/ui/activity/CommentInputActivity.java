@@ -16,6 +16,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 /**
+ * 评论输入框
  * Created by sun on 2016/1/13.
  */
 @EActivity(R.layout.layout_comment_input)

@@ -1,18 +1,14 @@
-package com.zhengshang.meeting.ui.activity;
+package com.zhengshang.meeting.ui.fragment;
 
 
+import android.app.Activity;
 import android.content.Intent;
-
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,16 +20,16 @@ import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.service.NewsService;
 import com.zhengshang.meeting.service.UserService;
+import com.zhengshang.meeting.ui.activity.LoginActivity_;
+import com.zhengshang.meeting.ui.activity.NewsChannelActivity_;
+import com.zhengshang.meeting.ui.activity.UserCenterActivity_;
 import com.zhengshang.meeting.ui.adapter.ListViewPagerAdapter;
 import com.zhengshang.meeting.ui.component.ChannelGallery;
-import com.zhengshang.meeting.ui.fragment.BaseFragment;
-import com.zhengshang.meeting.ui.fragment.NewsPagerItemFragment;
-import com.zhengshang.meeting.ui.fragment.NewsPagerItemFragment_;
 import com.zhengshang.meeting.ui.vo.NewsChannelVO;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
@@ -42,18 +38,14 @@ import java.util.List;
 /**
  * 新闻资讯fragment
  */
-@EActivity(R.layout.online_news)
-public class NewsActivity extends BaseActivity implements
+@EFragment(R.layout.online_news)
+public class TabNewsFragment extends BaseFragment implements
         ViewPager.OnPageChangeListener {
     // 以下注入组件
     @ViewById(R.id.iv_back)
     ImageView ivBack;
-    @ViewById(R.id.iv_right)
-    ImageView ivRight;
     @ViewById(R.id.tv_title)
     TextView tvTitle;
-    @ViewById(R.id.btn_right)
-    Button btnRight;
     @ViewById(R.id.vp_news_list)
     ViewPager mPager;
     @ViewById(R.id.right_handle_layout)
@@ -62,10 +54,6 @@ public class NewsActivity extends BaseActivity implements
     ImageView ivRedPoint;
     @ViewById(R.id.tv_handle_news_type_open)
     TextView tvHandleNewsTypeOpen;
-    @ViewById(R.id.menuLayout)
-    View menuBgLayout;
-    @ViewById(R.id.btn_back_main)
-    LinearLayout btnShouYe;
     @ViewById(R.id.channel_gallery)
     ChannelGallery channelGallery;
     @ViewById(R.id.iv_user_info)
@@ -73,7 +61,6 @@ public class NewsActivity extends BaseActivity implements
     @ViewById(R.id.tv_single_channel)
     TextView tvSingleChannel;
 
-    private ListViewPagerAdapter listViewPagerAdapter;
     private List<NewsChannelVO> newsTypes = new ArrayList<>();
     private NewsService newsService;
     private List<BaseFragment> fragmentList;
@@ -84,8 +71,8 @@ public class NewsActivity extends BaseActivity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.saveInstance = savedInstanceState;
-        newsService = new NewsService(this);
-        userService = new UserService(this);
+        newsService = new NewsService(getActivity());
+        userService = new UserService(getActivity());
     }
 
     @AfterViews
@@ -109,11 +96,6 @@ public class NewsActivity extends BaseActivity implements
         ivBack.setVisibility(View.VISIBLE);
         ivBack.setBackgroundResource(R.drawable.btn_user_center);
         tvTitle.setText(getString(R.string.news));
-//        ivRight.setVisibility(View.VISIBLE);
-//        ivRight.setBackgroundResource(R.drawable.btn_more);
-//        btnRight.setVisibility(View.VISIBLE);
-//        btnRight.setBackgroundColor(Color.TRANSPARENT);
-//        btnRight.setText("用户中心");
 
         mPager.addOnPageChangeListener(this);
         if (Utils.isEmpty(newsTypes)) {
@@ -126,12 +108,11 @@ public class NewsActivity extends BaseActivity implements
 
     @Click(R.id.iv_user_info)
     void toUserCenter() {
-//        if (userService.checkLoginState()) {
-//            UserCenterActivity_.intent(this).start();
-//        } else {
-//            LoginActivity_.intent(this).startForResult(1);
-//        }
-        TestActivity_.intent(this).start();
+        if (userService.checkLoginState()) {
+            UserCenterActivity_.intent(this).start();
+        } else {
+            LoginActivity_.intent(this).startForResult(1);
+        }
     }
 
     /**
@@ -150,7 +131,7 @@ public class NewsActivity extends BaseActivity implements
                 }
                 setReturnData(userNewsTypes);
             }
-        }, this);
+        }, getActivity());
     }
 
     /**
@@ -163,13 +144,13 @@ public class NewsActivity extends BaseActivity implements
                 setNeedCallBack(false);
                 newsService.updateNewsType();
             }
-        }, this);
+        }, getActivity());
     }
 
     /**
      * 刷新界面
      *
-     * @param savedInstanceState
+     * @param savedInstanceState save
      */
     private void refreshUI(Bundle savedInstanceState) {
         // 加载栏目
@@ -177,8 +158,8 @@ public class NewsActivity extends BaseActivity implements
         // 判断栏目更新
 //        notifyNewsChannelUpdate(newsService.getNewsChannelUpdate());
         // 加载新闻
-        listViewPagerAdapter = new ListViewPagerAdapter(
-                getSupportFragmentManager());
+        ListViewPagerAdapter listViewPagerAdapter = new ListViewPagerAdapter(
+                getChildFragmentManager());
         listViewPagerAdapter.setData(createFragment2Show(newsTypes.size(),
                 savedInstanceState));
         mPager.setAdapter(listViewPagerAdapter);
@@ -193,9 +174,9 @@ public class NewsActivity extends BaseActivity implements
     /**
      * 构建要显示的 空 fragment
      *
-     * @param count
-     * @param savedInstanceState
-     * @return
+     * @param count fragment数量
+     * @param savedInstanceState save
+     * @return fragmentList
      */
     private List<BaseFragment> createFragment2Show(int count,
                                                    Bundle savedInstanceState) {
@@ -206,7 +187,7 @@ public class NewsActivity extends BaseActivity implements
             }
         } else {
             for (int i = 0; i < count; i++) {
-                NewsPagerItemFragment itemFragment = (NewsPagerItemFragment) getSupportFragmentManager()
+                NewsPagerItemFragment itemFragment = (NewsPagerItemFragment) getChildFragmentManager()
                         .findFragmentByTag(getFragmentTag(i));
                 fragmentList.add(itemFragment);
             }
@@ -215,19 +196,13 @@ public class NewsActivity extends BaseActivity implements
     }
 
     /**
-     * 获取fragment内存缓存
+     * 构建fragmentTag
      *
-     * @param position
-     * @return
+     * @param position 位置
+     * @return tag
      */
     private String getFragmentTag(int position) {
         return "android:switcher:" + R.id.vp_news_list + ":" + position;
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        controlMenuBg(false);
-        return super.onTouchEvent(event);
     }
 
     /***
@@ -246,7 +221,7 @@ public class NewsActivity extends BaseActivity implements
     /**
      * 更新新闻分类
      *
-     * @param data
+     * @param data voList
      */
     public void updateGallery(List<NewsChannelVO> data) {
         if (data != null && data.size() > 0) {
@@ -287,48 +262,6 @@ public class NewsActivity extends BaseActivity implements
             itemFragment.refreshCurrentView(newsTypes.get(position), position);
         }
     }
-
-    /**
-     * 控制菜单
-     *
-     * @param isOpen true 表示打开 false表示关闭
-     */
-    private void controlMenuBg(boolean isOpen) {
-        if (isOpen && menuBgLayout != null && !menuBgLayout.isShown()) {
-            menuBgLayout.setVisibility(View.VISIBLE);
-        } else {
-            menuBgLayout.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * 右侧按钮点击事件
-     */
-    @Click(R.id.iv_right)
-    void clickRightButton() {
-        controlMenuBg(true);
-    }
-
-    /**
-     * 菜单点击事件
-     */
-    @Click(R.id.menuLayout)
-    void clickMenuLayout() {
-        controlMenuBg(false);
-    }
-
-    /**
-     * 返回主页 点击事件
-     */
-    @Click(R.id.btn_back_main)
-    void clickBack2Main() {
-        // TODO returnToMain();
-        controlMenuBg(false);
-        // 暂定退出登录功能
-        new UserService(this).logout();
-        showToast("退出成功");
-    }
-
     /**
      * 分类展开 按钮
      */
@@ -343,7 +276,7 @@ public class NewsActivity extends BaseActivity implements
 
     void afterSaveNewsChannel() {
         // 清除原fragment在内存中的缓存
-        FragmentTransaction ft = getSupportFragmentManager()
+        FragmentTransaction ft = getChildFragmentManager()
                 .beginTransaction();
         for (BaseFragment item : fragmentList) {
             ft.remove(item);
@@ -354,44 +287,18 @@ public class NewsActivity extends BaseActivity implements
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-//		TODO StatService.onResume(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-//		TODO StatService.onPause(this);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            back();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 0 && resultCode == RESULT_OK) {
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
             // 操作栏目
             newsTypes = (List<NewsChannelVO>) data.getSerializableExtra(IParam.LIST);
             afterSaveNewsChannel();
-        } else if (requestCode == 1 && resultCode == RESULT_OK) {
+        } else if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             toUserCenter();
         }
     }
 
-    void back() {
-        finish();
-    }
-
-    @Override
-    protected void onTaskSuccess(int action, Object data) {
+    public void onTaskSuccess(int action, Object data) {
         Object[] dataArray;
         int fragmentId;
         switch (action) {
@@ -418,8 +325,7 @@ public class NewsActivity extends BaseActivity implements
         }
     }
 
-    @Override
-    protected void onTaskFail(int action, String errorMessage) {
+    public void onTaskFail(int action, String errorMessage) {
         if (action == TaskAction.ACTION_GET_NEWS_TYPE) {
             showToast(errorMessage);
             return;

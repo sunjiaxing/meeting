@@ -12,9 +12,10 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 /**
+ * 欢迎页面
  * Created by sun on 2015/12/14.
  */
-@EActivity(R.layout.layout_main)
+@EActivity(R.layout.layout_welcome)
 public class WelcomeActivity extends BaseActivity {
 
     @ViewById(R.id.iv_init)
@@ -27,7 +28,7 @@ public class WelcomeActivity extends BaseActivity {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (msg.what == 1) {
-                    NewsActivity_.intent(WelcomeActivity.this).start();
+                    MainActivity_.intent(WelcomeActivity.this).start();
                     finish();
                 }
             }

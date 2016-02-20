@@ -95,4 +95,8 @@ public class BonConstants {
             return type;
         }
     }
+
+    public enum BottomMenuSelected {
+        NEWS, GOODS
+    }
 }

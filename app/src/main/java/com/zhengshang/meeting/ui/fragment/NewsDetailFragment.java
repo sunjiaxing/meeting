@@ -1,5 +1,6 @@
 package com.zhengshang.meeting.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.webkit.JavascriptInterface;
 
 import com.zhengshang.meeting.R;
@@ -23,6 +24,7 @@ public class NewsDetailFragment extends BaseFragment {
     CustomerWebview webview;
 
     @AfterViews
+    @SuppressLint("JavascriptInterface")
     void init() {
         // 给webview 注入图片点击 事件
         webview.addJavascriptInterface(new Object() {

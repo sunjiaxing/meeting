@@ -23,6 +23,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.activity.MainActivity_"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activity.NewsActivity_"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
@@ -53,7 +57,13 @@
         <activity
             android:name=".ui.activity.ImageActivity_"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".ui.activity.GoodsListActivity_"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.InputGoodsNameActivity_"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustResize" />
         <activity
             android:name=".ui.activity.TestActivity_"
             android:screenOrientation="portrait" />

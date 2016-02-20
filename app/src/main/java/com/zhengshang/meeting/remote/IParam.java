@@ -50,6 +50,7 @@ public interface IParam {
 
     // G
     String GROUP_ID = "groupId";
+    String GOODS = "goods";
 
     // H
     String HINT = "hint";

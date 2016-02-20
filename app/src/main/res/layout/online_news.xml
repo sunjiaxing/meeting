@@ -88,13 +88,4 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/galleryLayout"
         android:background="@color/color_white" />
-
-    <include
-        android:id="@+id/menuLayout"
-        layout="@layout/menu_back_main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/head_layout"
-        android:visibility="gone" />
-
 </RelativeLayout>

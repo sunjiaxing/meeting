@@ -3,6 +3,7 @@ package com.zhengshang.meeting.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.Button;
 
@@ -25,6 +26,8 @@ public class TestActivity extends BaseActivity {
     private String test;
     private UserVO userVO;
 
+    SwipeRefreshLayout refreshLayout;
+
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
@@ -40,15 +43,8 @@ public class TestActivity extends BaseActivity {
 //    }
     @AfterViews
     void init(){
-        url = getIntent().getStringExtra(IParam.URL);
-        LogUtils.e(url);
-        test = url;
-        userVO = new UserVO();
-        if (url.equals("你好啊")){
-            userVO.setNickName(url);
-        } else {
-            userVO.setUserName(url);
-        }
+
+
     }
     @Click(R.id.btn)
     void click(){
