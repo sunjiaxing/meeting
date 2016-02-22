@@ -15,6 +15,7 @@ import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.ui.activity.BaseActivity;
 import com.zhengshang.meeting.ui.activity.InputGoodsNameActivity_;
+import com.zhengshang.meeting.ui.activity.InputOtherGoodsInfoActivity_;
 import com.zhengshang.meeting.ui.component.DragListView;
 import com.zhengshang.meeting.ui.vo.GoodsVO;
 
@@ -119,13 +120,14 @@ public class TabGoodsListFragment extends BaseFragment implements DragListView.O
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
             String goodsName = data.getStringExtra(IParam.CONTENT);
-
+            InputOtherGoodsInfoActivity_.intent(this).extra(IParam.GOODS_NAME, goodsName).start();
         }
     }
 
     public void onTaskSuccess(int action, Object data) {
 
     }
+
     public void onTaskFail(int action, String errorMessage) {
 
     }

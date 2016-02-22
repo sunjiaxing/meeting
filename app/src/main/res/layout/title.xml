@@ -3,7 +3,7 @@
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="@dimen/head_height"
-    android:background="#333" >
+    android:background="#333">
 
     <TextView
         android:id="@+id/tv_title"
@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/btn_right"
+        android:layout_toLeftOf="@+id/iv_right"
         android:visibility="gone" />
 
     <ImageView
@@ -57,12 +57,20 @@
         android:visibility="gone" />
 
     <Button
+        android:id="@+id/btn_right_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/btn_right"
+        android:textColor="@color/right_menu_color"
+        android:visibility="gone" />
+
+    <Button
         android:id="@+id/btn_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:text=""
         android:textColor="@color/right_menu_color"
         android:visibility="gone" />
 

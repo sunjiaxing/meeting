@@ -25,5 +25,6 @@ public interface TaskAction extends TaskKey {
     int ACTION_GET_FAVORITE_LIST = 15;
     int ACTION_DELETE_FAVORITE = 16;
     int ACTION_DELETE_ALL_FAVORITE = 17;
+    int ACTION_GET_SYSTEM_IMAGE = 18;
 
 }

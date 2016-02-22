@@ -51,6 +51,7 @@ public interface IParam {
     // G
     String GROUP_ID = "groupId";
     String GOODS = "goods";
+    String GOODS_NAME = "goodsName";
 
     // H
     String HINT = "hint";
@@ -60,6 +61,7 @@ public interface IParam {
     String ICON_URL = "iconUrl";
     String IMG_URL = "imgUrl";
     String IS_AD = "isAd";
+    String IS_SELECT_USER_HEAD = "isSelectUserHead";
     String IS_SPECIAL = "isSpecial";
     String ICON_AD_URL = "iconAdUrl";
     String IMGS = "imgs";
@@ -72,6 +74,7 @@ public interface IParam {
     String LIST = "list";
     String LOGIN = "login";
     String LAST_LOGIN_TIME = "lastLoginTime";
+    String LAST_NUM = "lastNum";
     String LIMIT = "limit";
     String LOGO_URL = "logoUrl";
     String LIST_FOR_ORIENTATION = "listForOrientation";

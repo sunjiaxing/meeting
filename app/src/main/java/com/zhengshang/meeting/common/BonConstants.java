@@ -18,6 +18,8 @@ public class BonConstants {
      */
     public static final String PATH_INIT_IMAGE_CACHE = PATH_ROOT + "init/";
 
+    public static final String PATH_TAKE_PHOTO = PATH_ROOT + "photo/";
+
 
     /**
      * 数据库名
@@ -65,6 +67,8 @@ public class BonConstants {
 
 
     public static final int LENGTH_SHOW_SUMMARY = 50;
+
+    public static final int AVATART_WHITH = 400;
 
 
     /**
