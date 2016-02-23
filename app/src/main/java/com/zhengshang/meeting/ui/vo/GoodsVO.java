@@ -10,13 +10,13 @@ import java.util.List;
 public class GoodsVO {
     private int id;
     private String name;
-    private String category;
+    private GoodsCategoryVO category;
     private double marketPrice;
     private double exchangePrice;
     private String coverUrl;
     private int scanNum;
     private int attentionNum;
-    private long validTime;
+    private ValidTimeVO validTime;
 
     private List<ImageVO> imageList;
 
@@ -34,14 +34,6 @@ public class GoodsVO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public double getMarketPrice() {
@@ -84,11 +76,19 @@ public class GoodsVO {
         this.attentionNum = attentionNum;
     }
 
-    public long getValidTime() {
+    public GoodsCategoryVO getCategory() {
+        return category;
+    }
+
+    public void setCategory(GoodsCategoryVO category) {
+        this.category = category;
+    }
+
+    public ValidTimeVO getValidTime() {
         return validTime;
     }
 
-    public void setValidTime(long validTime) {
+    public void setValidTime(ValidTimeVO validTime) {
         this.validTime = validTime;
     }
 

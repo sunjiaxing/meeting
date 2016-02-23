@@ -16,6 +16,7 @@ import com.zhengshang.meeting.remote.IParam;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
 /**
@@ -33,6 +34,9 @@ public class InputGoodsNameActivity extends BaseActivity {
     Button btnRight;
     @ViewById(R.id.edit_goods_name)
     EditText editGoodsName;
+    @Extra(IParam.GOODS_NAME)
+    String goodsName;
+
 
     @AfterViews
     void init() {
@@ -43,6 +47,7 @@ public class InputGoodsNameActivity extends BaseActivity {
         btnRight.setText("下一步");
         btnRight.setEnabled(false);
 
+        editGoodsName.setText(goodsName);
         editGoodsName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -66,14 +71,14 @@ public class InputGoodsNameActivity extends BaseActivity {
     }
 
     @Click(R.id.iv_back)
-    void back(){
+    void back() {
         finish();
     }
 
     @Click(R.id.btn_right)
-    void next(){
+    void next() {
         Intent data = new Intent();
-        data.putExtra(IParam.CONTENT,editGoodsName.getText().toString());
+        data.putExtra(IParam.CONTENT, editGoodsName.getText().toString());
         setResult(RESULT_OK, data);
         finish();
     }

@@ -34,6 +34,7 @@ public class BaseRO {
     }
 
     public interface IBaseURL {
+
         String getURL();
     }
 

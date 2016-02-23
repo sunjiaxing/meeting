@@ -71,6 +71,9 @@
             android:name=".ui.activity.ChooseImageActivity_"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activity.ChangeCoverActivity_"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activity.TestActivity_"
             android:screenOrientation="portrait" />
 

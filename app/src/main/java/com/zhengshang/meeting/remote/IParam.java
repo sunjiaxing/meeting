@@ -52,6 +52,7 @@ public interface IParam {
     String GROUP_ID = "groupId";
     String GOODS = "goods";
     String GOODS_NAME = "goodsName";
+    String GET_VALID_TIME = "getValidTime";
 
     // H
     String HINT = "hint";
@@ -131,6 +132,7 @@ public interface IParam {
 
     // V
     String VERSION_CODE = "versionCode";
+    String VALUE = "value";
 
     // W
     String WENHAO = "?";
