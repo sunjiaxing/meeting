@@ -26,10 +26,12 @@ import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.service.GoodsService;
 import com.zhengshang.meeting.ui.adapter.GoodsCategoryAdapter;
 import com.zhengshang.meeting.ui.adapter.SortListAdapter;
+import com.zhengshang.meeting.ui.adapter.ValidTimeAdapter;
 import com.zhengshang.meeting.ui.component.SortListView;
 import com.zhengshang.meeting.ui.vo.GoodsCategoryVO;
 import com.zhengshang.meeting.ui.vo.GoodsVO;
 import com.zhengshang.meeting.ui.vo.ImageVO;
+import com.zhengshang.meeting.ui.vo.ValidTimeVO;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -71,6 +73,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
     private List<String> imagePathList = new ArrayList<>();
     private GoodsService goodsService;
     private List<GoodsCategoryVO> categories;
+    private List<ValidTimeVO> validTime;
 
     @AfterViews
     void init() {
@@ -94,6 +97,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         goodsVO.setName(goodsName);
 
         getGoodsCategory();
+        getValidTime();
     }
 
     /**
@@ -101,6 +105,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
      */
     private void initHeader() {
         View header = LayoutInflater.from(this).inflate(R.layout.layout_header_input_goods, null);
+        header.setClickable(false);
         ivCover = (ImageView) header.findViewById(R.id.iv_cover);
         ivCover.setOnClickListener(this);
         // 设置封面图 高度
@@ -109,11 +114,11 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         tvGoodsName = (TextView) header.findViewById(R.id.tv_goods_name);
         tvGoodsName.setOnClickListener(this);
         tvSelectCategory = (TextView) header.findViewById(R.id.tv_select_category);
-        tvSelectCategory.setOnClickListener(this);
+        header.findViewById(R.id.layout_select_category).setOnClickListener(this);
         tvInputPrice = (TextView) header.findViewById(R.id.tv_input_price);
-        tvInputPrice.setOnClickListener(this);
+        header.findViewById(R.id.layout_input_price).setOnClickListener(this);
         tvSelectValidTime = (TextView) header.findViewById(R.id.tv_select_valid_time);
-        tvSelectValidTime.setOnClickListener(this);
+        header.findViewById(R.id.layout_select_valid_time).setOnClickListener(this);
         sortListView.addHeaderView(header);
     }
 
@@ -203,6 +208,11 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
                     this.categories = (List<GoodsCategoryVO>) data;
                 }
                 break;
+            case TaskAction.ACTION_GET_VALID_TIME:
+                if (data != null) {
+                    this.validTime = (List<ValidTimeVO>) data;
+                }
+                break;
         }
     }
 
@@ -225,13 +235,13 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
                     showToast("请先选择图片");
                 }
                 break;
-            case R.id.tv_select_category:// 选择品类
+            case R.id.layout_select_category:// 选择品类
                 selectCategory();
                 break;
-            case R.id.tv_input_price:// 输入市场价/兑换价
+            case R.id.layout_input_price:// 输入市场价/兑换价
                 inputPrice();
                 break;
-            case R.id.tv_select_valid_time:// 选择有效时间
+            case R.id.layout_select_valid_time:// 选择有效时间
                 selectValidTime();
                 break;
         }
@@ -241,7 +251,18 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
      * 选择有效时间
      */
     private void selectValidTime() {
-
+        ValidTimeAdapter validTimeAdapter = new ValidTimeAdapter(this);
+        validTimeAdapter.setData(validTime);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("选择有效时间");
+        builder.setAdapter(validTimeAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                goodsVO.setCategory(categories.get(which));
+                tvSelectValidTime.setText(goodsVO.getValidTime().getName());
+            }
+        });
+        builder.show();
     }
 
     /**
@@ -258,13 +279,15 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         GoodsCategoryAdapter categoryAdapter = new GoodsCategoryAdapter(this);
         categoryAdapter.setData(categories);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("选择品类");
         builder.setAdapter(categoryAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 goodsVO.setCategory(categories.get(which));
+                tvSelectCategory.setText(goodsVO.getCategory().getName());
             }
         });
-
+        builder.show();
     }
 
     /**
@@ -276,6 +299,19 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
             protected void doBackground() throws Exception {
 
                 setReturnData(goodsService.getGoodsCategories());
+            }
+        }, this);
+    }
+
+    /**
+     * 获取有效时间
+     */
+    private void getValidTime() {
+        TaskManager.pushTask(new Task(TaskAction.ACTION_GET_VALID_TIME) {
+            @Override
+            protected void doBackground() throws Exception {
+
+                setReturnData(goodsService.getValidTime());
             }
         }, this);
     }
