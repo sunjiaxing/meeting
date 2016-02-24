@@ -24,7 +24,7 @@ import java.util.List;
  * 输入 物品  用于排序的listview
  * Created by sun on 2016/2/22.
  */
-public class SortListAdapter extends BaseAdapter implements SortListView.DragListViewAdapter {
+public abstract class SortListAdapter extends BaseAdapter implements SortListView.DragListViewAdapter, View.OnClickListener {
     private List<ImageVO> goodsVOList;
     private LayoutInflater layoutInflater;
     private int hidePosition = AdapterView.INVALID_POSITION;
@@ -71,6 +71,8 @@ public class SortListAdapter extends BaseAdapter implements SortListView.DragLis
         } else {
             viewHolder.tvInputDesc.setText(R.string.input_image_desc_tip);
         }
+        viewHolder.tvInputDesc.setTag(position);
+        viewHolder.tvInputDesc.setOnClickListener(this);
         //hide时隐藏Text
         if (position != hidePosition) {
             convertView.setVisibility(View.VISIBLE);

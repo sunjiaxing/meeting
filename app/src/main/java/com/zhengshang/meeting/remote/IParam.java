@@ -52,6 +52,7 @@ public interface IParam {
     String GROUP_ID = "groupId";
     String GOODS = "goods";
     String GOODS_NAME = "goodsName";
+    String GOODS_ID = "goodsId";
     String GET_VALID_TIME = "getValidTime";
 
     // H
@@ -120,6 +121,7 @@ public interface IParam {
     String TOKEN = "token";
     String TIME = "time";
     String TYPES = "types";
+    String TYPE = "type";
     String TYPE_ID = "typeId";
     String TOP = "top";
 

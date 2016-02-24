@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <EditText
+        android:id="@+id/edit_market_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/default_input_bg_shape"
+        android:drawableLeft="@android:drawable/arrow_down_float"
+        android:hint="市场价"
+        android:inputType="numberDecimal"
+        android:maxLength="20"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:textColor="@color/news_content_color"
+        android:textCursorDrawable="@null"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/edit_exchange_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:background="@drawable/default_input_bg_shape"
+        android:drawableLeft="@android:drawable/arrow_down_float"
+        android:hint="兑换价"
+        android:inputType="numberDecimal"
+        android:maxLength="20"
+        android:padding="10dp"
+        android:textColor="@color/news_content_color"
+        android:textCursorDrawable="@null"
+        android:textSize="15sp" />
+</LinearLayout>

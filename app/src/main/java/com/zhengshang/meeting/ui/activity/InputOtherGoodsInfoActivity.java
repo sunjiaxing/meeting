@@ -4,18 +4,23 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
+import com.taskmanager.LogUtils;
 import com.taskmanager.Task;
 import com.taskmanager.TaskManager;
 import com.zhengshang.meeting.R;
@@ -74,6 +79,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
     private GoodsService goodsService;
     private List<GoodsCategoryVO> categories;
     private List<ValidTimeVO> validTime;
+    private AlertDialog inputImageDescDialog;
 
     @AfterViews
     void init() {
@@ -137,7 +143,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         footerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChooseImageActivity_.intent(InputOtherGoodsInfoActivity.this).extra(IParam.LAST_NUM, 20).startForResult(0);
+                ChooseImageActivity_.intent(InputOtherGoodsInfoActivity.this).extra(IParam.LAST_NUM, 20 - imagePathList.size()).startForResult(0);
             }
         });
         sortListView.addFooterView(footerView);
@@ -146,6 +152,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        LogUtils.i("onActivityResult");
         if (requestCode == 0 && resultCode == RESULT_OK) {
             List<String> imageList = (List<String>) data.getSerializableExtra(IParam.CONTENT);
             imagePathList.addAll(imageList);
@@ -153,17 +160,81 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
             List<ImageVO> imageVOList = buildImageVO(imageList);
             goodsVO.appendImageList(imageVOList);
             if (adapter == null) {
-                adapter = new SortListAdapter(this);
+                adapter = new SortListAdapter(this) {
+                    @Override
+                    public void onClick(View v) {
+                        int postion = (int) v.getTag();
+                        LogUtils.e("pos:" + postion);
+                        inputImageDesc(postion);
+                    }
+                };
                 adapter.setData(goodsVO.getImageList());
                 sortListView.setAdapter(adapter);
             } else {
                 adapter.setData(goodsVO.getImageList());
                 adapter.notifyDataSetChanged();
             }
-            setCover(imagePathList.get(0));
+            if (Utils.isEmpty(goodsVO.getCoverUrl())) {
+                setCover(imagePathList.get(0));
+            }
         } else if (requestCode == 1 && resultCode == RESULT_OK) {
             setCover(data.getStringExtra(IParam.CONTENT));
         }
+    }
+
+    /**
+     * 输入图片描述
+     *
+     * @param postion 图片位置
+     */
+    private void inputImageDesc(final int postion) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.layout_input_image_desc, null);
+        final EditText editContent = (EditText) view.findViewById(R.id.edit_content);
+        editContent.setText(goodsVO.getImageList().get(postion).getDesc());
+        final TextView tvLast = (TextView) view.findViewById(R.id.tv_last);
+        editContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                tvLast.setText((200 - s.length()) + "个字");
+            }
+        });
+
+        view.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (inputImageDescDialog != null) {
+                    inputImageDescDialog.dismiss();
+                }
+            }
+        });
+        view.findViewById(R.id.tv_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Utils.isEmpty(editContent.getText().toString())) {
+                    editContent.requestFocus();
+                    return;
+                }
+                if (inputImageDescDialog != null) {
+                    inputImageDescDialog.dismiss();
+                }
+                goodsVO.getImageList().get(postion).setDesc(editContent.getText().toString());
+                adapter.setData(goodsVO.getImageList());
+                adapter.notifyDataSetChanged();
+            }
+        });
+        builder.setView(view);
+        inputImageDescDialog = builder.show();
     }
 
     /**
@@ -258,7 +329,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         builder.setAdapter(validTimeAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                goodsVO.setCategory(categories.get(which));
+                goodsVO.setValidTime(validTime.get(which));
                 tvSelectValidTime.setText(goodsVO.getValidTime().getName());
             }
         });
@@ -269,7 +340,37 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
      * 输入价格
      */
     private void inputPrice() {
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("输入市场价/兑换价");
+        View inputView = getLayoutInflater().inflate(R.layout.layout_input_price, null);
+        final EditText editMarketPrice = (EditText) inputView.findViewById(R.id.edit_market_price);
+        final EditText editExchangePrice = (EditText) inputView.findViewById(R.id.edit_exchange_price);
+        if (goodsVO.getMarketPrice() > 0) {
+            editMarketPrice.setText(String.valueOf(goodsVO.getMarketPrice()));
+        }
+        if (goodsVO.getExchangePrice() > 0) {
+            editExchangePrice.setText(String.valueOf(goodsVO.getExchangePrice()));
+        }
+        builder.setView(inputView);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String market = editMarketPrice.getText().toString();
+                String exchange = editExchangePrice.getText().toString();
+                if (Utils.isEmpty(market)) {
+                    editMarketPrice.requestFocus();
+                    return;
+                }
+                if (Utils.isEmpty(exchange)) {
+                    editExchangePrice.requestFocus();
+                    return;
+                }
+                goodsVO.setMarketPrice(Double.parseDouble(market));
+                goodsVO.setExchangePrice(Double.parseDouble(exchange));
+                tvInputPrice.setText(market + "/" + exchange);
+                dialog.dismiss();
+            }
+        }).setNegativeButton("取消", null).show();
     }
 
     /**
@@ -344,5 +445,36 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        LogUtils.i("onSaveInstanceState");
+        if (goodsVO != null) {
+            outState.putSerializable(IParam.GOODS, goodsVO);
+        }
+        if (imagePathList != null) {
+            outState.putSerializable(IParam.LIST, (Serializable) imagePathList);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        LogUtils.i("onRestoreInstanceState");
+        goodsVO = (GoodsVO) savedInstanceState.getSerializable(IParam.GOODS);
+        imagePathList = (List<String>) savedInstanceState.getSerializable(IParam.LIST);
+        if (goodsVO != null) {
+            if (goodsVO.getCategory() != null) {
+                tvSelectCategory.setText(goodsVO.getCategory().getName());
+            }
+            if (goodsVO.getValidTime() != null) {
+                tvSelectValidTime.setText(goodsVO.getValidTime().getName());
+            }
+            if (goodsVO.getMarketPrice() > 0 && goodsVO.getExchangePrice() > 0) {
+                tvInputPrice.setText(goodsVO.getMarketPrice() + "/" + goodsVO.getExchangePrice());
+            }
+        }
     }
 }

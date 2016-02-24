@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/head"
+        layout="@layout/title" />
+
+    <ListView
+        android:id="@+id/lv_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/head"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@null"
+        android:fadingEdge="none" />
+    <!-- 显示转轮 -->
+
+    <include
+        android:id="@+id/layout_loading"
+        layout="@layout/common_progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/head"
+        android:visibility="visible" />
+
+    <!-- 显示提示或异常信息 -->
+
+    <include
+        android:id="@+id/layout_error"
+        layout="@layout/common_result_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/head"
+        android:visibility="gone" />
+</RelativeLayout>

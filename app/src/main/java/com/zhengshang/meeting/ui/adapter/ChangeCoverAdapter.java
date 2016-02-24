@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout.LayoutParams;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.ImageOption;
@@ -78,9 +79,8 @@ public class ChangeCoverAdapter extends QuickFlingAdapter {
         viewHolder.layoutNomal.setVisibility(View.VISIBLE);
         viewHolder.ivSelectTip.setVisibility(View.GONE);
         String path = list.get(position);
-        viewHolder.ivImage.setTag(path);
         viewHolder.ivImage.setLayoutParams(params);
-        ImageLoader.getInstance().displayImage(path, viewHolder.ivImage,
+        ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.FILE.wrap(path), viewHolder.ivImage,
                 ImageOption.createNomalOption());
         return convertView;
     }

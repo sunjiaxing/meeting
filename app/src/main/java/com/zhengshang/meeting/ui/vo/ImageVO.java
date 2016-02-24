@@ -1,10 +1,12 @@
 package com.zhengshang.meeting.ui.vo;
 
+import java.io.Serializable;
+
 /**
  * 图片 vo
  * Created by sun on 2016/2/22.
  */
-public class ImageVO {
+public class ImageVO implements Serializable{
     private String filePath;
     private String url;
     private String desc;

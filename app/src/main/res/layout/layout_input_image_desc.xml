@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_blue"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:paddingTop="10dp"
+            android:text="取消"
+            android:textColor="@color/right_menu_color"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center"
+            android:text="输入图片描述"
+            android:textColor="@color/color_white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:paddingTop="10dp"
+            android:text="确定"
+            android:textColor="@color/right_menu_color"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edit_content"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@color/color_white"
+        android:gravity="left|top"
+        android:hint="说两句..."
+        android:maxLength="200"
+        android:padding="5dp"
+        android:textColor="@color/news_content_color"
+        android:textCursorDrawable="@null"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_last"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:gravity="right"
+        android:paddingRight="10dp"
+        android:text="200个字"
+        android:textColor="@color/news_content_color"
+        android:textSize="14sp" />
+</LinearLayout>

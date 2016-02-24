@@ -1,5 +1,6 @@
 package com.zhengshang.meeting.ui.vo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * 商品 vo
  * Created by sun on 2016/2/19.
  */
-public class GoodsVO {
+public class GoodsVO implements Serializable{
     private int id;
     private String name;
     private GoodsCategoryVO category;

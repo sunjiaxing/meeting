@@ -28,5 +28,6 @@ public interface TaskAction extends TaskKey {
     int ACTION_GET_SYSTEM_IMAGE = 18;
     int ACTION_GET_GOODS_CATEGORY = 19;
     int ACTION_GET_VALID_TIME = 20;
+    int ACTION_GET_GOODS_DETAIL = 21;
 
 }
