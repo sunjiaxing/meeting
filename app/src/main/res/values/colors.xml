@@ -28,4 +28,6 @@
     <color name="loading_dialog_bg">#20000000</color>
 
     <color name="input_goods_name_a4a6a4">#a4a6a4</color>
+
+    <color name="need_bg">#DEDCDC</color>
 </resources>

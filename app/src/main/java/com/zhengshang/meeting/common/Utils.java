@@ -13,8 +13,12 @@ import android.view.WindowManager;
 
 import org.json.JSONArray;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -22,6 +26,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 通用辅助类
@@ -314,5 +320,96 @@ public class Utils {
             return summary.substring(0, BonConstants.LENGTH_SHOW_SUMMARY);
         }
         return summary;
+    }
+
+    /**
+     * 验证手机号码
+     *
+     * @param phone
+     * @return
+     */
+    public static boolean checkPhoneValid(String phone) {
+        Pattern pattern = Pattern.compile(BonConstants.PhonePattern);
+        Matcher matcher = pattern.matcher(phone);
+        return matcher.matches();
+    }
+
+    /**
+     * 按 尺寸压缩后 再按质量压缩
+     *
+     * @param path
+     * @return
+     */
+    public static Bitmap comp(String path) {
+        Bitmap image = null;
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            image = BitmapFactory.decodeFile(path, options);
+            options.inJustDecodeBounds = false;
+            File file = new File(path);
+            if (file.length() / 1024 > 1024) {
+                options.inSampleSize = 4;
+            } else if (file.length() / 1024 > 500) {
+                options.inSampleSize = 2;
+            }
+            int w = options.outWidth;
+            // 现在主流手机比较多是800*480分辨率，所以高和宽我们设置为
+            int hh = 800;// 这里设置高度为800
+            int ww = 480;// 这里设置宽度为480
+
+            int newH = w * hh / ww;
+            options.outWidth = ww;
+            options.outHeight = newH;
+            image = BitmapFactory.decodeFile(path, options);
+            return compressImage(image);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
+    /**
+     * 只按质量压缩
+     *
+     * @param image
+     * @return
+     */
+    public static Bitmap compressImage(Bitmap image) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        int options = 100;
+        while (baos.toByteArray().length / 1024 > 500) { // 循环判断如果压缩后图片是否大于500kb,大于继续压缩
+            baos.reset();// 重置baos即清空baos
+            image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
+            options -= 5;// 每次都减少5%
+        }
+        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
+        return BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
+    }
+
+    /**
+     * 保存图片
+     *
+     * @param b
+     * @param strFileName
+     * @return
+     */
+    public static File savePic(Bitmap b, String strFileName) {
+        FileOutputStream fos;
+        try {
+            File dir = new File(BonConstants.PATH_TEMP);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            fos = new FileOutputStream(strFileName);
+            b.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+            fos.close();
+            return new File(strFileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

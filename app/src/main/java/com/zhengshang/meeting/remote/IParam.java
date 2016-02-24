@@ -28,7 +28,9 @@ public interface IParam {
     String COMMENT = "comment";
     String CONTENT_URL = "contentUrl";
     String CATEGORIES = "categories";
+    String CATEGORY = "category";
     String CHILD_ID = "childId";
+    String COVER_URL = "coverUrl";
 
     // D
     String DETAIL = "detail";
@@ -41,6 +43,7 @@ public interface IParam {
     String ERROR_CODE = "errorCode";
     String EMAIL = "email";
     String EQUALS_STRING = "=";
+    String EXCHANGE_PRICE = "exchangePrice";
 
     // F
     String FOCUS = "focus";
@@ -67,6 +70,7 @@ public interface IParam {
     String IS_SPECIAL = "isSpecial";
     String ICON_AD_URL = "iconAdUrl";
     String IMGS = "imgs";
+    String IMAGES = "images";
     String IS_OPEN_BLANK = "isOpenBlank";
 
     // J
@@ -84,6 +88,7 @@ public interface IParam {
     // M
     String MIN_TIME = "minTime";
     String MODEL_NAME = "modelName";
+    String MARKET_PRICE = "marketPrice";
 
     // N
     String NEED_PARAM = "needParam";
@@ -92,12 +97,14 @@ public interface IParam {
     String NEWS_FROM = "newsFrom";
     String NEWS_ID = "newsId";
     String NICK_NAME = "nickName";
+    String NEED_CATEGORY = "needCategory";
 
     // O
     // P
     String POSITION = "position";
     String PARENT_ID = "parentId";
     String PASSWORD = "password";
+    String PUBLISH_GOODS = "publishGoods";
 
     // Q
     // R
@@ -131,10 +138,12 @@ public interface IParam {
     String USER_ID = "userId";
     String USER = "user";
     String USER_NAME = "userName";
+    String USER_CONTACT = "userContact";
 
     // V
     String VERSION_CODE = "versionCode";
     String VALUE = "value";
+    String VALID_TIME = "validTime";
 
     // W
     String WENHAO = "?";

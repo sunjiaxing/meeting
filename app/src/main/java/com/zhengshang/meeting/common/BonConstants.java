@@ -5,6 +5,7 @@ package com.zhengshang.meeting.common;
  * Created by sun on 2015/12/10.
  */
 public class BonConstants {
+    public static final Boolean DEBUG = true;
     /**
      * 根路径
      */
@@ -19,6 +20,8 @@ public class BonConstants {
     public static final String PATH_INIT_IMAGE_CACHE = PATH_ROOT + "init/";
 
     public static final String PATH_TAKE_PHOTO = PATH_ROOT + "photo/";
+    /** 临时目录 */
+    public static final String PATH_TEMP = PATH_ROOT + "temp/";
 
 
     /**
@@ -70,11 +73,7 @@ public class BonConstants {
 
     public static final int AVATART_WHITH = 400;
 
-
-    /**
-     * 跳转到新闻详情
-     */
-    public static final int REQUEST_TO_DETAIL = 0x1008;
+    public static final String PhonePattern = "^1[3|4|5|7|8][0-9]\\d{8}$";
 
     //    public static final String SERVER_URL = "http://192.168.1.103:8080/";
     //    public static final String SERVER_URL = "http://192.168.1.28:8080/api/";

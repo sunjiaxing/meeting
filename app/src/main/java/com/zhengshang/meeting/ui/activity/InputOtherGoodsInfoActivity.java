@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -163,9 +164,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
                 adapter = new SortListAdapter(this) {
                     @Override
                     public void onClick(View v) {
-                        int postion = (int) v.getTag();
-                        LogUtils.e("pos:" + postion);
-                        inputImageDesc(postion);
+                        inputImageDesc((int) v.getTag());
                     }
                 };
                 adapter.setData(goodsVO.getImageList());
@@ -179,6 +178,9 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
             }
         } else if (requestCode == 1 && resultCode == RESULT_OK) {
             setCover(data.getStringExtra(IParam.CONTENT));
+        } else if (requestCode == 2 && resultCode == RESULT_OK) {
+            showToast("发布成功");
+            finish();
         }
     }
 
@@ -422,7 +424,27 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
      */
     @Click(R.id.btn_right_two)
     void next() {
-
+        // 数据验证
+        if (goodsVO.getCategory() == null) {
+            showToast("请选择分类");
+            return;
+        }
+        if (!(goodsVO.getMarketPrice() > 0 && goodsVO.getExchangePrice() > 0)) {
+            showToast("请输入市场价和兑换价");
+            return;
+        }
+        if (goodsVO.getValidTime() == null) {
+            showToast("请选择有效时间");
+            return;
+        }
+        if (Utils.isEmpty(goodsVO.getImageList())) {
+            showToast("请添加图片");
+            return;
+        }
+        InputGoodsNameActivity_.intent(this)
+                .extra(IParam.GOODS, goodsVO)
+                .extra(IParam.CATEGORIES, (Parcelable) categories)
+                .startForResult(2);
     }
 
     /**

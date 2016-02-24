@@ -12,6 +12,7 @@ public class GoodsVO implements Serializable{
     private int id;
     private String name;
     private GoodsCategoryVO category;
+    private GoodsCategoryVO needCategory;
     private double marketPrice;
     private double exchangePrice;
     private String coverUrl;
@@ -106,5 +107,13 @@ public class GoodsVO implements Serializable{
             this.imageList = new ArrayList<>();
         }
         this.imageList.addAll(imageList);
+    }
+
+    public GoodsCategoryVO getNeedCategory() {
+        return needCategory;
+    }
+
+    public void setNeedCategory(GoodsCategoryVO needCategory) {
+        this.needCategory = needCategory;
     }
 }

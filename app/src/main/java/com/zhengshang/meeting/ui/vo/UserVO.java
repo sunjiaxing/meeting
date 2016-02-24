@@ -12,6 +12,7 @@ public class UserVO implements Serializable {
     private String nickName;
     private String email;
     private String userAvatar;
+    private String mobile;
 
     public String getUserId() {
         return userId;
@@ -51,5 +52,13 @@ public class UserVO implements Serializable {
 
     public void setUserAvatar(String userAvatar) {
         this.userAvatar = userAvatar;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }

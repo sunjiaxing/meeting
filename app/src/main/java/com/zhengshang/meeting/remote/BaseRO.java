@@ -1,5 +1,6 @@
 package com.zhengshang.meeting.remote;
 
+import java.io.File;
 import java.util.HashMap;
 
 import java.util.Map;
@@ -14,6 +15,9 @@ import com.zhengshang.meeting.http.HttpUtilsApache;
 import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.exeception.AppException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 /**
  * 引擎类基类
@@ -21,7 +25,6 @@ import com.zhengshang.meeting.exeception.AppException;
 public class BaseRO {
     protected Context mContext;
     protected HashMap<String, String> headerParam;
-    private boolean debug = false;
 
     protected HashMap<String, String> getHeaderParam(String key, String value) {
         headerParam = new HashMap<>();
@@ -41,7 +44,7 @@ public class BaseRO {
     /**
      * get请求
      *
-     * @param serverUrl url
+     * @param serverUrl    url
      * @param headerParams 头信息
      * @return 响应信息
      */
@@ -51,7 +54,7 @@ public class BaseRO {
             throw new AppException(mContext.getString(R.string.netconnecterror));
         }
         String res = HttpUtilsApache.get(serverUrl, headerParams);
-        if (debug) {
+        if (BonConstants.DEBUG) {
             Log.e("===============", "url:" + serverUrl + " **res:" + res);
         }
         if (Utils.isEmpty(res)) {
@@ -63,9 +66,9 @@ public class BaseRO {
     /**
      * post请求
      *
-     * @param url url
-     * @param headerParams  请求头信息
-     * @param params 参数
+     * @param url          url
+     * @param headerParams 请求头信息
+     * @param params       参数
      * @return 响应信息
      */
     protected String httpPostRequest(String url,
@@ -74,7 +77,7 @@ public class BaseRO {
             throw new AppException(mContext.getString(R.string.netconnecterror));
         }
         String res = HttpUtilsApache.post(url, params, headerParams);
-        if (debug) {
+        if (BonConstants.DEBUG) {
             Log.e("===============", "url:" + url + " **res:" + res);
         }
         if (Utils.isEmpty(res)) {
@@ -91,6 +94,29 @@ public class BaseRO {
     protected String getServerUrl() {
 
         return BonConstants.SERVER_URL;
+    }
+
+    /**
+     * 上传图片 直接返回图片链接
+     * @param file
+     * @return
+     * @throws JSONException
+     */
+    public String uploadFile(File file) throws JSONException {
+        String url = getServerUrl() + "common/uploadFile";
+        String res = HttpUtilsApache.postFile(url, null, null, file);
+        if (BonConstants.DEBUG) {
+            Log.e("===============", "url:" + url + " **res:" + res);
+        }
+        if (Utils.isEmpty(res)) {
+            throw new AppException(mContext.getString(R.string.netconnecterror));
+        }
+        JSONObject json = new JSONObject(res);
+        if (json.getInt(IParam.STATUS) == 1) {
+            return json.getString(IParam.URL);
+        } else {
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
+        }
     }
 
 }

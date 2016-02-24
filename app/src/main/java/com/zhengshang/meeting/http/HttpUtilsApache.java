@@ -12,6 +12,7 @@ import javax.net.ssl.SSLContext;
 import android.util.Log;
 
 import com.zhengshang.meeting.R;
+import com.zhengshang.meeting.common.BonConstants;
 import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.exeception.AppException;
 
@@ -38,7 +39,6 @@ public class HttpUtilsApache {
 
     private static final int connectionTimeout = 5000;
     private static final int readTimeout = 15000;
-    private static final Boolean DEBUG = true;
     private static final String TAG = "HttpUtilsApache";
 
     /**
@@ -83,7 +83,7 @@ public class HttpUtilsApache {
             return execute(httpGet);
         } catch (Exception e) {
             // 仅供测试使用
-            if (DEBUG) {
+            if (BonConstants.DEBUG) {
                 Log.e(TAG, "get请求异常，url:" + url);
             }
             throw new AppException("网络连接异常, 请稍后再试！");
@@ -128,7 +128,7 @@ public class HttpUtilsApache {
             return execute(httpPost);
         } catch (Exception e) {
             // 仅供测试使用
-            if (DEBUG) {
+            if (BonConstants.DEBUG) {
                 Log.d(TAG, "post请求异常，url:" + url);
             }
             throw new AppException("网络连接异常, 请稍后再试！");
@@ -168,7 +168,7 @@ public class HttpUtilsApache {
             return execute(httpPost);
         } catch (Exception e) {
             // 仅供测试使用
-            if (DEBUG) {
+            if (BonConstants.DEBUG) {
                 Log.e(TAG, "post请求异常，url:" + url);
             }
             throw new AppException("网络连接异常, 请稍后再试！");
