@@ -10,13 +10,23 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.taskmanager.LogUtils;
+import com.taskmanager.Task;
+import com.taskmanager.TaskManager;
 import com.zhengshang.meeting.R;
+import com.zhengshang.meeting.common.BonConstants;
+import com.zhengshang.meeting.common.TaskAction;
 import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.remote.IParam;
+import com.zhengshang.meeting.service.GoodsService;
+import com.zhengshang.meeting.service.UserService;
 import com.zhengshang.meeting.ui.activity.BaseActivity;
 import com.zhengshang.meeting.ui.activity.InputGoodsNameActivity_;
 import com.zhengshang.meeting.ui.activity.InputOtherGoodsInfoActivity_;
+import com.zhengshang.meeting.ui.activity.LoginActivity_;
+import com.zhengshang.meeting.ui.adapter.GoodsListAdapter;
 import com.zhengshang.meeting.ui.component.DragListView;
+import com.zhengshang.meeting.ui.component.RefreshListView;
 import com.zhengshang.meeting.ui.vo.GoodsVO;
 
 import org.androidannotations.annotations.AfterViews;
@@ -25,14 +35,15 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 易物 列表
  * Created by sun on 2016/2/19.
  */
-@EFragment(R.layout.layout_news_subject)
-public class TabGoodsListFragment extends BaseFragment implements DragListView.OnRefreshLoadMoreListener {
+@EFragment(R.layout.layout_refresh_listview)
+public class TabGoodsListFragment extends BaseFragment implements RefreshListView.OnRefreshLoadMoreListener {
 
     @ViewById(R.id.iv_back)
     ImageView ivBack;
@@ -40,7 +51,7 @@ public class TabGoodsListFragment extends BaseFragment implements DragListView.O
     TextView tvTitle;
     @ViewById(R.id.btn_right)
     Button btnRight;
-    @ViewById(R.id.layout_loading)
+    @ViewById(R.id.layout_loading_refresh)
     View layoutLoading;
     @ViewById(R.id.layout_error)
     View layoutError;
@@ -49,25 +60,57 @@ public class TabGoodsListFragment extends BaseFragment implements DragListView.O
     @ViewById(R.id.btn_refresh)
     Button btnErrorRefresh;
     @ViewById(R.id.lv_drag)
-    DragListView listView;
+    RefreshListView listView;
     @ViewById(R.id.iv_loading_in)
     ImageView ivLoading;
 
     private AnimationDrawable anim;
-    private List<GoodsVO> goodsList;
+    private List<GoodsVO> goodsList = new ArrayList<>();
+    private GoodsService goodsService;
+    private UserService userService;
+    private int pageIndex;
+    private GoodsListAdapter adapter;
 
     @AfterViews
     void init() {
         anim = (AnimationDrawable) ivLoading.getBackground();
         ivBack.setVisibility(View.GONE);
         tvTitle.setText("商品列表");
-        listView.setPullType(DragListView.ListViewPullType.LV_ALL);
-        listView.setDividerHeight(0);
-        listView.setFastScrollEnabled(true);
         listView.setOnRefreshListener(this);
+        listView.setLastUpdateTimeRelateObject(this);
         btnRight.setVisibility(View.VISIBLE);
         btnRight.setBackgroundColor(Color.TRANSPARENT);
         btnRight.setText("发布物品");
+        goodsService = new GoodsService(getActivity());
+        userService = new UserService(getActivity());
+
+        startLoadingSelf();
+        getGoodsFromDB();
+    }
+
+    /**
+     * 从数据库缓存中获取数据
+     */
+    private void getGoodsFromDB() {
+        TaskManager.pushTask(new Task(TaskAction.ACTION_GET_GOODS_LIST_FROM_DB) {
+            @Override
+            protected void doBackground() throws Exception {
+                setReturnData(goodsService.getGoodsListFromDB());
+            }
+        }, getActivity());
+    }
+
+    /**
+     * 获取物品列表
+     */
+    private void getGoodsList() {
+        TaskManager.pushTask(new Task(TaskAction.ACTION_GET_GOODS_LIST) {
+            @Override
+            protected void doBackground() throws Exception {
+                pageIndex = 0;
+                setReturnData(goodsService.getGoodsList(pageIndex));
+            }
+        }, getActivity());
     }
 
     /**
@@ -112,7 +155,12 @@ public class TabGoodsListFragment extends BaseFragment implements DragListView.O
 
     @Click(R.id.btn_right)
     void clickToEdit() {
-        InputGoodsNameActivity_.intent(this).startForResult(0);
+        if (userService.checkLoginState()) {
+            InputGoodsNameActivity_.intent(this).startForResult(0);
+        } else {
+            // 跳转登录
+            LoginActivity_.intent(this).startForResult(1);
+        }
     }
 
     @Override
@@ -121,24 +169,95 @@ public class TabGoodsListFragment extends BaseFragment implements DragListView.O
         if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
             String goodsName = data.getStringExtra(IParam.CONTENT);
             InputOtherGoodsInfoActivity_.intent(this).extra(IParam.GOODS_NAME, goodsName).start();
+        } else if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            clickToEdit();
         }
     }
 
     public void onTaskSuccess(int action, Object data) {
+        switch (action) {
+            case TaskAction.ACTION_GET_GOODS_LIST:// 刷新 和 初始化
+                stopLoadingSelf();
+                listView.onRefreshComplete();
+                goodsList = (List<GoodsVO>) data;
+                if (!Utils.isEmpty(goodsList)) {
+                    if (goodsList.size() < BonConstants.LIMIT_GET_GOODS) {
+                        listView.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_REMOVE);
+                    } else {
+                        listView.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NORMAL);
+                    }
+                    refreshUI();
+                } else {
+                    showErrorMsg("暂无数据");
+                }
+                break;
+            case TaskAction.ACTION_GET_GOODS_LIST_LOAD_MORE:// 加载更多
+                List<GoodsVO> loadmoreData = (List<GoodsVO>) data;
+                if (!Utils.isEmpty(loadmoreData)) {
+                    if (loadmoreData.size() < BonConstants.LIMIT_GET_GOODS) {
+                        listView.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_OVER);
+                    } else {
+                        listView.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NORMAL);
+                    }
+                    goodsList.addAll(loadmoreData);
+                    refreshUI();
+                } else {
+                    listView.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_OVER);
+                }
+                break;
+            case TaskAction.ACTION_GET_GOODS_LIST_FROM_DB:// 获取缓存数据
+                goodsList = (List<GoodsVO>) data;
+                if (!Utils.isEmpty(goodsList)) {
+                    stopLoadingSelf();
+                    refreshUI();
+                } else {
+                    getGoodsList();
+                }
+                break;
+        }
+    }
 
+    /**
+     * 刷新界面
+     */
+    private void refreshUI() {
+        if (adapter == null) {
+            adapter = new GoodsListAdapter(getActivity());
+            adapter.setData(goodsList);
+            listView.setAdapter(adapter);
+        } else {
+            adapter.setData(goodsList);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     public void onTaskFail(int action, String errorMessage) {
-
+        stopLoadingSelf();
+        listView.onRefreshComplete();
+        listView.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NETWORK_DISABLE);
+        showErrorMsg(errorMessage);
+        LogUtils.e("action:" + action);
     }
 
     @Override
     public void onRefresh() {
-
+        getGoodsList();
     }
 
     @Override
     public void onLoadMore() {
+        pageIndex++;
+        TaskManager.pushTask(new Task(TaskAction.ACTION_GET_GOODS_LIST_LOAD_MORE) {
+            @Override
+            protected void doBackground() throws Exception {
+                setReturnData(goodsService.getGoodsList(pageIndex));
+            }
+        }, getActivity());
+    }
 
+    @Click(R.id.btn_refresh)
+    void clickRefresh() {
+        startLoadingSelf();
+        getGoodsList();
     }
 }

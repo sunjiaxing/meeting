@@ -47,6 +47,7 @@ public class UserService extends BaseService {
             user.setUserName(userDto.getUserName());
             user.setNickName(userDto.getNickName());
             user.setEmail(userDto.getEmail());
+            user.setMobile(userDto.getMobile());
             user.setRegisterTime(userDto.getRegisterTime());
             user.setLastLoginTime(userDto.getLastLoginTime());
             userDao.saveUser(user);
@@ -100,6 +101,7 @@ public class UserService extends BaseService {
             vo.setUserName(user.getUserName());
             vo.setNickName(user.getNickName());
             vo.setEmail(user.getEmail());
+            vo.setMobile(user.getMobile());
             vo.setUserAvatar(Utils.getUserAvatar(userId, BonConstants.UserAvatarType.TYPE_180x180));
             return vo;
         }

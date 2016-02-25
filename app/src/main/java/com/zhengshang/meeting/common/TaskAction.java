@@ -30,5 +30,8 @@ public interface TaskAction extends TaskKey {
     int ACTION_GET_VALID_TIME = 20;
     int ACTION_GET_GOODS_DETAIL = 21;
     int ACTION_PUBLISH_GOODS = 22;
+    int ACTION_GET_GOODS_LIST = 23;
+    int ACTION_GET_GOODS_LIST_LOAD_MORE = 24;
+    int ACTION_GET_GOODS_LIST_FROM_DB = 25;
 
 }

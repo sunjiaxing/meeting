@@ -55,6 +55,8 @@ public class BonConstants {
      * 获取新闻的长度
      */
     public static final int LIMIT_GET_NEWS = 20;
+
+    public static final int LIMIT_GET_GOODS = 20;
     /**
      * 默认显示的新闻栏目的数量
      */

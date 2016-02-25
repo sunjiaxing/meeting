@@ -89,6 +89,7 @@ public interface IParam {
     String MIN_TIME = "minTime";
     String MODEL_NAME = "modelName";
     String MARKET_PRICE = "marketPrice";
+    String MOBILE = "mobile";
 
     // N
     String NEED_PARAM = "needParam";

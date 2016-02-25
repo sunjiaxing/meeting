@@ -122,7 +122,7 @@ public class RefreshListView extends PtrClassicFrameLayout implements AbsListVie
         listView.setCacheColorHint(Color.TRANSPARENT);
         listView.setHorizontalFadingEdgeEnabled(false);
         listView.setVerticalFadingEdgeEnabled(false);
-        listView.setSelector(null);
+        listView.setFastScrollEnabled(true);
         listView.setOnScrollListener(this);
         addView(listView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 

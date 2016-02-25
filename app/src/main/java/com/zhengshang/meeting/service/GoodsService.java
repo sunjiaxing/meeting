@@ -101,6 +101,7 @@ public class GoodsService extends BaseService {
 
     /**
      * 发布物品
+     *
      * @param goodsVO
      * @param mobile
      * @throws JSONException
@@ -145,5 +146,14 @@ public class GoodsService extends BaseService {
             }
         }
         goodsRO.publishGoods(goodsVO, configDao.getUserId(), mobile, imageJson.toString());
+    }
+
+    public List<GoodsVO> getGoodsList(int pageIndex) {
+        return null;
+    }
+
+    public List<GoodsVO> getGoodsListFromDB() {
+
+        return null;
     }
 }

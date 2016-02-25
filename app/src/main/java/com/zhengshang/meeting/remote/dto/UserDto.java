@@ -14,6 +14,7 @@ public class UserDto {
     private String userName;
     private String nickName;
     private String email;
+    private String mobile;
     private long registerTime;
     private long lastLoginTime;
 
@@ -41,6 +42,10 @@ public class UserDto {
         return lastLoginTime;
     }
 
+    public String getMobile() {
+        return mobile;
+    }
+
     public void parseJson(JSONObject json) throws JSONException {
         if (json == null) {
             return;
@@ -56,6 +61,9 @@ public class UserDto {
         }
         if (json.has(IParam.EMAIL)) {
             this.email = json.getString(IParam.EMAIL);
+        }
+        if (json.has(IParam.MOBILE)) {
+            this.mobile = json.getString(IParam.MOBILE);
         }
         if (json.has(IParam.REGISTER_TIME)) {
             this.registerTime = json.getLong(IParam.REGISTER_TIME);

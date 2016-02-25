@@ -35,6 +35,9 @@ public class UserDao extends BaseDao {
         if (!Utils.isEmpty(user.getEmail())) {
             values.put(User.KEY_COLUMN_EMAIL, user.getEmail());
         }
+        if (!Utils.isEmpty(user.getMobile())) {
+            values.put(User.KEY_COLUMN_MOBILE, user.getMobile());
+        }
         if (user.getRegisterTime() > 0) {
             values.put(User.KEY_COLUMN_REGISTER_TIME, user.getRegisterTime());
         }
@@ -66,6 +69,7 @@ public class UserDao extends BaseDao {
                     user.setUserName(cursor.getString(cursor.getColumnIndex(User.KEY_COLUMN_USER_NAME)));
                     user.setNickName(cursor.getString(cursor.getColumnIndex(User.KEY_COLUMN_NICK_NAME)));
                     user.setEmail(cursor.getString(cursor.getColumnIndex(User.KEY_COLUMN_EMAIL)));
+                    user.setMobile(cursor.getString(cursor.getColumnIndex(User.KEY_COLUMN_MOBILE)));
                     user.setRegisterTime(cursor.getLong(cursor.getColumnIndex(User.KEY_COLUMN_REGISTER_TIME)));
                     user.setLastLoginTime(cursor.getLong(cursor.getColumnIndex(User.KEY_COLUMN_LAST_LOGIN_TIME)));
                     return user;

@@ -1,6 +1,7 @@
 package com.zhengshang.meeting.dao.entity;
 
 /**
+ * 用户 数据库存储实体
  * Created by sun on 2016/1/12.
  */
 public class User {
@@ -9,6 +10,7 @@ public class User {
     public static final String KEY_COLUMN_USER_NAME = "userName";
     public static final String KEY_COLUMN_NICK_NAME = "nickName";
     public static final String KEY_COLUMN_EMAIL = "email";
+    public static final String KEY_COLUMN_MOBILE = "mobile";
     public static final String KEY_COLUMN_REGISTER_TIME = "registerTime";
     public static final String KEY_COLUMN_LAST_LOGIN_TIME = "lastLoginTime";
     public static final String KEY_COLUMN_REMARK = "remark";
@@ -17,10 +19,14 @@ public class User {
 
     public static final String CREAT_TABLE = "CREATE TABLE " + KEY_TABLE_NAME
             + " (" + KEY_COLUMN_TABLE_ID + " INTEGER PRIMARY KEY,"
-            + KEY_COLUMN_USER_ID + " TEXT," + KEY_COLUMN_USER_NAME + " TEXT,"
-            + KEY_COLUMN_NICK_NAME + " TEXT," + KEY_COLUMN_EMAIL + " TEXT,"
-            + KEY_COLUMN_REGISTER_TIME + " LONG," + KEY_COLUMN_LAST_LOGIN_TIME
-            + " LONG ," + KEY_COLUMN_REMARK + " TEXT " + ")";
+            + KEY_COLUMN_USER_ID + " TEXT,"
+            + KEY_COLUMN_USER_NAME + " TEXT,"
+            + KEY_COLUMN_NICK_NAME + " TEXT,"
+            + KEY_COLUMN_EMAIL + " TEXT,"
+            + KEY_COLUMN_MOBILE + " TEXT,"
+            + KEY_COLUMN_REGISTER_TIME + " LONG,"
+            + KEY_COLUMN_LAST_LOGIN_TIME + " LONG ,"
+            + KEY_COLUMN_REMARK + " TEXT " + ")";
 
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS "
             + KEY_TABLE_NAME;
@@ -31,6 +37,7 @@ public class User {
     private String userName;
     private String nickName;
     private String email;
+    private String mobile;
     private long registerTime;
     private long lastLoginTime;
 
@@ -80,5 +87,13 @@ public class User {
 
     public void setLastLoginTime(long lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }

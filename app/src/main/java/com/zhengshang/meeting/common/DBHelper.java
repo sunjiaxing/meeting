@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.zhengshang.meeting.dao.entity.Goods;
 import com.zhengshang.meeting.dao.entity.News;
 import com.zhengshang.meeting.dao.entity.NewsChannel;
 import com.zhengshang.meeting.dao.entity.User;
@@ -49,6 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(News.CREAT_TABLE);
         db.execSQL(NewsChannel.CREAT_TABLE);
         db.execSQL(User.CREAT_TABLE);
+        db.execSQL(Goods.CREAT_TABLE);
     }
 
     @Override

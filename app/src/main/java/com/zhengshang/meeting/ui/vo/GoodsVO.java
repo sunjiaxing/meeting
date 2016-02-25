@@ -19,6 +19,8 @@ public class GoodsVO implements Serializable{
     private int scanNum;
     private int attentionNum;
     private ValidTimeVO validTime;
+    private String publishTime;
+    private boolean isAttention;
 
     private List<ImageVO> imageList;
 
@@ -115,5 +117,21 @@ public class GoodsVO implements Serializable{
 
     public void setNeedCategory(GoodsCategoryVO needCategory) {
         this.needCategory = needCategory;
+    }
+
+    public String getPublishTime() {
+        return publishTime;
+    }
+
+    public void setPublishTime(String publishTime) {
+        this.publishTime = publishTime;
+    }
+
+    public boolean isAttention() {
+        return isAttention;
+    }
+
+    public void setIsAttention(boolean isAttention) {
+        this.isAttention = isAttention;
     }
 }
