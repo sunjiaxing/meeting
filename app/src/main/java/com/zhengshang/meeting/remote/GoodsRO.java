@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.zhengshang.meeting.common.BonConstants;
 import com.zhengshang.meeting.exeception.AppException;
+import com.zhengshang.meeting.remote.dto.GoodsDto;
 import com.zhengshang.meeting.remote.dto.NameAndValueDto;
 import com.zhengshang.meeting.ui.vo.GoodsVO;
 
@@ -27,6 +28,7 @@ public class GoodsRO extends BaseRO {
     public GoodsRO(Context context) {
         super(context);
     }
+
 
     public enum RemoteGoodsURL implements IBaseURL {
         LIST(IParam.LIST), CATEGORIES(IParam.CATEGORIES),
@@ -98,6 +100,7 @@ public class GoodsRO extends BaseRO {
 
     /**
      * 发布物品
+     *
      * @param goodsVO
      * @param userId
      * @param mobile
@@ -122,6 +125,36 @@ public class GoodsRO extends BaseRO {
         JSONObject json = new JSONObject(result);
         if (json.getInt(IParam.STATUS) == 1) {
             return true;
+        } else {
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
+        }
+    }
+
+    /**
+     * 获取物品列表
+     * @param userId 用户id
+     * @param pageIndex 页码
+     * @param limit 每页数量
+     * @return
+     * @throws JSONException
+     */
+    public List<GoodsDto> getGoodsList(String userId, int pageIndex, int limit) throws JSONException {
+        String url = getServerUrl() + RemoteGoodsURL.LIST.getURL()
+                + IParam.WENHAO + IParam.USER_ID + IParam.EQUALS_STRING + userId
+                + IParam.AND + IParam.PAGE_INDEX + IParam.EQUALS_STRING + pageIndex
+                + IParam.AND + IParam.LIMIT + IParam.EQUALS_STRING + limit;
+        String result = httpGetRequest(url, null);
+        JSONObject json = new JSONObject(result);
+        if (json.getInt(IParam.STATUS) == 1) {
+            JSONArray array = json.getJSONArray(IParam.LIST);
+            List<GoodsDto> web = new ArrayList<>();
+            GoodsDto dto;
+            for (int i = 0; i < array.length(); i++) {
+                dto = new GoodsDto();
+                dto.parseJson(array.getJSONObject(i));
+                web.add(dto);
+            }
+            return web;
         } else {
             throw new AppException(json.getInt(IParam.ERROR_CODE));
         }

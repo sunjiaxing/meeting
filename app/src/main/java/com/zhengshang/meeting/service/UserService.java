@@ -62,7 +62,7 @@ public class UserService extends BaseService {
      */
     public boolean checkLoginState() {
         String userId = configDao.getUserId();
-        if (Utils.isEmpty(userId)) {
+        if (Utils.isEmpty(userId) || "0".equals(userId)) {
             return false;
         }
         User user = userDao.getUserById(userId);
@@ -80,7 +80,7 @@ public class UserService extends BaseService {
 
     public void logout() {
         // 清除用户id
-        configDao.saveUserId(null);
+        configDao.saveUserId("0");
         // TODO 根据以后具体需求 确定是否要清除用户信息
 
     }

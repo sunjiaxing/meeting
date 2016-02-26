@@ -16,6 +16,7 @@ public interface IParam {
     String ADD_REPLY = "addReply";
     String ADD_FAVORITE = "addFavorite";
     String ADD_TIME = "addTime";
+    String ATTENTION_NUM = "attentionNum";
 
     // B
     // C
@@ -106,6 +107,8 @@ public interface IParam {
     String PARENT_ID = "parentId";
     String PASSWORD = "password";
     String PUBLISH_GOODS = "publishGoods";
+    String PUBLISH_TIME = "publishTime";
+    String PAGE_INDEX = "pageIndex";
 
     // Q
     // R
@@ -123,6 +126,7 @@ public interface IParam {
     String SHORT_URL = "shortUrl";
     String SPECIAL_ID = "specialId";
     String SPECIAL = "special";
+    String SCAN_NUM = "scanNum";
 
     // T
     String TITLE = "title";

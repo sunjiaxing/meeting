@@ -6,8 +6,11 @@ import android.graphics.Bitmap;
 import com.zhengshang.meeting.common.BonConstants;
 import com.zhengshang.meeting.common.FileUtil;
 import com.zhengshang.meeting.common.Utils;
+import com.zhengshang.meeting.dao.GoodsDao;
+import com.zhengshang.meeting.dao.entity.Goods;
 import com.zhengshang.meeting.remote.GoodsRO;
 import com.zhengshang.meeting.remote.IParam;
+import com.zhengshang.meeting.remote.dto.GoodsDto;
 import com.zhengshang.meeting.remote.dto.NameAndValueDto;
 import com.zhengshang.meeting.ui.vo.GoodsCategoryVO;
 import com.zhengshang.meeting.ui.vo.GoodsVO;
@@ -29,10 +32,12 @@ import java.util.List;
 public class GoodsService extends BaseService {
 
     private GoodsRO goodsRO;
+    private GoodsDao goodsDao;
 
     public GoodsService(Context context) {
         super(context);
         goodsRO = new GoodsRO(context);
+        goodsDao = new GoodsDao(context);
     }
 
     /**
@@ -148,12 +153,68 @@ public class GoodsService extends BaseService {
         goodsRO.publishGoods(goodsVO, configDao.getUserId(), mobile, imageJson.toString());
     }
 
-    public List<GoodsVO> getGoodsList(int pageIndex) {
-        return null;
+    /**
+     * 获取 物品列表
+     *
+     * @param pageIndex 页码
+     * @return
+     * @throws JSONException
+     */
+    public List<GoodsVO> getGoodsList(int pageIndex) throws JSONException {
+        List<GoodsDto> webData = goodsRO.getGoodsList(configDao.getUserId(), pageIndex, BonConstants.LIMIT_GET_GOODS);
+        List<GoodsVO> showData = new ArrayList<>();
+        goodsDao.beginTransaction();
+        if (pageIndex == 0) {
+            // 刷新
+            goodsDao.deleteAll();
+        }
+        Goods goods;
+        GoodsVO vo;
+        for (GoodsDto dto : webData) {
+            goods = new Goods();
+            goods.setId(dto.getId());
+            goods.setGoodsName(dto.getGoodsName());
+            goods.setCoverUrl(dto.getCoverUrl());
+            goods.setScanNum(dto.getScanNum());
+            goods.setAttentionNum(dto.getAttentionNum());
+            goods.setPublishTime(dto.getPublishTime());
+            goodsDao.insertGoods(goods);
+
+            vo = new GoodsVO();
+            vo.setId(dto.getId());
+            vo.setName(dto.getGoodsName());
+            vo.setCoverUrl(dto.getCoverUrl());
+            vo.setScanNum(dto.getScanNum());
+            vo.setAttentionNum(dto.getAttentionNum());
+            vo.setPublishTime(Utils.formateTime(dto.getPublishTime(), true));
+            showData.add(vo);
+        }
+        goodsDao.setTransactionSuccessful();
+        goodsDao.endTransaction();
+        return showData;
     }
 
+    /**
+     * 从缓存中获取数据
+     * @return
+     */
     public List<GoodsVO> getGoodsListFromDB() {
-
+        List<Goods> dbData = goodsDao.getGoodsList();
+        if (!Utils.isEmpty(dbData)) {
+            List<GoodsVO> showData = new ArrayList<>();
+            GoodsVO vo;
+            for (Goods goods : dbData) {
+                vo = new GoodsVO();
+                vo.setId(goods.getId());
+                vo.setName(goods.getGoodsName());
+                vo.setCoverUrl(goods.getCoverUrl());
+                vo.setScanNum(goods.getScanNum());
+                vo.setAttentionNum(goods.getAttentionNum());
+                vo.setPublishTime(Utils.formateTime(goods.getPublishTime(), true));
+                showData.add(vo);
+            }
+            return showData;
+        }
         return null;
     }
 }
