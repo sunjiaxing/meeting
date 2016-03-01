@@ -10,6 +10,7 @@ import com.zhengshang.meeting.dao.GoodsDao;
 import com.zhengshang.meeting.dao.entity.Goods;
 import com.zhengshang.meeting.remote.GoodsRO;
 import com.zhengshang.meeting.remote.IParam;
+import com.zhengshang.meeting.remote.dto.GoodsDetailDto;
 import com.zhengshang.meeting.remote.dto.GoodsDto;
 import com.zhengshang.meeting.remote.dto.NameAndValueDto;
 import com.zhengshang.meeting.ui.vo.GoodsCategoryVO;
@@ -215,6 +216,14 @@ public class GoodsService extends BaseService {
                 showData.add(vo);
             }
             return showData;
+        }
+        return null;
+    }
+
+    public GoodsVO getGoodsDetail(int goodsId) throws JSONException {
+        GoodsDetailDto dto = goodsRO.getGoodsDetail(goodsId, configDao.getUserId());
+        if (dto != null) {
+
         }
         return null;
     }

@@ -3,7 +3,9 @@ package com.zhengshang.meeting.remote;
 import android.content.Context;
 
 import com.zhengshang.meeting.common.BonConstants;
+import com.zhengshang.meeting.dao.entity.User;
 import com.zhengshang.meeting.exeception.AppException;
+import com.zhengshang.meeting.remote.dto.GoodsDetailDto;
 import com.zhengshang.meeting.remote.dto.GoodsDto;
 import com.zhengshang.meeting.remote.dto.NameAndValueDto;
 import com.zhengshang.meeting.ui.vo.GoodsVO;
@@ -32,7 +34,8 @@ public class GoodsRO extends BaseRO {
 
     public enum RemoteGoodsURL implements IBaseURL {
         LIST(IParam.LIST), CATEGORIES(IParam.CATEGORIES),
-        GET_VALID_TIME(IParam.GET_VALID_TIME), PUBLISH(IParam.PUBLISH_GOODS);
+        GET_VALID_TIME(IParam.GET_VALID_TIME), PUBLISH(IParam.PUBLISH_GOODS),
+        DETAIL(IParam.DETAIL);
 
         private static final String NAMESPACE = IParam.GOODS;
         private String url;
@@ -158,6 +161,28 @@ public class GoodsRO extends BaseRO {
                 web.add(dto);
             }
             return web;
+        } else {
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
+        }
+    }
+
+    /**
+     * 获取 物品详情
+     * @param goodsId 物品id
+     * @param userId 用户id
+     * @return
+     * @throws JSONException
+     */
+    public GoodsDetailDto getGoodsDetail(int goodsId, String userId) throws JSONException {
+        String url = getServerUrl() + RemoteGoodsURL.DETAIL.getURL()
+                + IParam.WENHAO + IParam.GOODS_ID + IParam.EQUALS_STRING + goodsId
+                + IParam.AND + IParam.USER_ID + IParam.EQUALS_STRING + userId;
+        String result = httpGetRequest(url, null);
+        JSONObject json = new JSONObject(result);
+        if (json.getInt(IParam.STATUS) == 1){
+            GoodsDetailDto dto = new GoodsDetailDto();
+            dto.parseJson(json.getJSONObject(IParam.DETAIL));
+            return dto;
         } else {
             throw new AppException(json.getInt(IParam.ERROR_CODE));
         }

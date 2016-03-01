@@ -1,26 +1,39 @@
 package com.zhengshang.meeting.ui.activity;
 
 import android.graphics.drawable.AnimationDrawable;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.taskmanager.Task;
 import com.taskmanager.TaskManager;
 import com.zhengshang.meeting.R;
+import com.zhengshang.meeting.common.ImageOption;
 import com.zhengshang.meeting.common.TaskAction;
 import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.service.GoodsService;
 import com.zhengshang.meeting.service.UserService;
+import com.zhengshang.meeting.ui.adapter.GoodsImageAdapter;
+import com.zhengshang.meeting.ui.vo.GoodsImageVO;
 import com.zhengshang.meeting.ui.vo.GoodsVO;
+import com.zhengshang.meeting.ui.vo.ImageVO;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 物品 详情和预览公用页面
@@ -57,32 +70,121 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
     private GoodsVO goodsVO;
     private GoodsService goodsService;
     private UserService userService;
+    private TextView tvGoodsName;
+    private ImageView ivCover;
+    private TextView tvScanNum;
+    private TextView tvAttentionNum;
+    private TextView tvImageNum;
+    private TextView tvPublishTime;
+    private GoodsImageAdapter adapter;
 
     public enum Type {
         DETAIL, PREVIEW
     }
 
     @AfterViews
-    void init(){
+    void init() {
         ivBack.setVisibility(View.VISIBLE);
         anim = (AnimationDrawable) ivLoading.getBackground();
         goodsVO = (GoodsVO) getIntent().getSerializableExtra(IParam.GOODS);
         goodsService = new GoodsService(this);
         userService = new UserService(this);
+        initHeader();
         if (viewType == Type.DETAIL) {
             tvTitle.setText("详情");
-            startLoading();
+            startLoadingSelf();
             getGoodsDetail();
-        } else if (viewType == Type.PREVIEW){
+        } else if (viewType == Type.PREVIEW) {
             tvTitle.setText("预览");
             refreshUI();
         }
     }
 
-
-
+    /**
+     * 刷新 界面
+     */
     private void refreshUI() {
+        if (goodsVO != null) {
+            switch (viewType) {
+                case DETAIL:
+                    ImageLoader.getInstance().displayImage(goodsVO.getCoverUrl(), ivCover, ImageOption.createNomalOption());
+                    tvPublishTime.setText(goodsVO.getPublishTime());
+                    break;
+                case PREVIEW:
+                    ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.FILE.wrap(goodsVO.getCoverUrl()), ivCover, ImageOption.createNomalOption());
+                    tvPublishTime.setText(Utils.formateTime(System.currentTimeMillis(), "yyyy-MM-dd"));
+                    break;
+            }
+            tvGoodsName.setText(goodsVO.getName());
+            tvScanNum.setText("浏览：" + goodsVO.getScanNum());
+            tvAttentionNum.setText("关注：" + goodsVO.getAttentionNum());
+            tvImageNum.setText("图片：" + (!Utils.isEmpty(goodsVO.getImageList()) ? goodsVO.getImageList().size() : 0));
+            List<GoodsImageVO> goodsImageVOList = formateImage(goodsVO.getImageList());
+            if (!Utils.isEmpty(goodsImageVOList)) {
+                if (adapter == null) {
+                    adapter = new GoodsImageAdapter(this);
+                    adapter.setData(goodsImageVOList, viewType);
+                    listView.setAdapter(adapter);
+                } else {
+                    adapter.setData(goodsImageVOList, viewType);
+                    adapter.notifyDataSetChanged();
+                }
+            } else {
+                listView.setAdapter(null);
+            }
+        }
+    }
 
+    /**
+     * 转换数据格式
+     *
+     * @param data
+     * @return
+     */
+    private List<GoodsImageVO> formateImage(List<ImageVO> data) {
+        List<GoodsImageVO> list = new ArrayList<>();
+        if (!Utils.isEmpty(data)) {
+            GoodsImageVO goodsImgVO = new GoodsImageVO();
+            ImageVO vo = data.get(0);
+            goodsImgVO.setUrl1(viewType == Type.PREVIEW ? vo.getFilePath() : vo.getUrl());
+            goodsImgVO.setDesc(vo.getDesc());
+            list.add(goodsImgVO);
+            for (int i = 1; i < data.size(); i++) {
+                vo = data.get(i);
+                if (Utils.isEmpty(list.get(list.size() - 1).getDesc())
+                        && Utils.isEmpty(vo.getDesc())
+                        && Utils.isEmpty(list.get(list.size() - 1).getUrl2())) {
+                    // 上一组数据 无 描述信息  && 当前本身 无 描述信息 && 上一组数据 只有一个url
+                    // 添加到上一项
+                    list.get(list.size() - 1).setUrl2(viewType == Type.PREVIEW ? vo.getFilePath() : vo.getUrl());
+                } else {
+                    // 直接添加 新一项
+                    goodsImgVO = new GoodsImageVO();
+                    goodsImgVO.setUrl1(viewType == Type.PREVIEW ? vo.getFilePath() : vo.getUrl());
+                    goodsImgVO.setDesc(vo.getDesc());
+                    list.add(goodsImgVO);
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 初始化header
+     */
+    private void initHeader() {
+        View header = LayoutInflater.from(this).inflate(R.layout.layout_header_goods_detail, null);
+        header.setClickable(false);
+        ivCover = (ImageView) header.findViewById(R.id.iv_cover);
+        // 设置封面图 高度
+        int coverHeight = Utils.getScreenHeight(this) / 3;
+        ivCover.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, coverHeight));
+        tvGoodsName = (TextView) header.findViewById(R.id.tv_goods_name);
+        tvScanNum = (TextView) header.findViewById(R.id.tv_scan_num);
+        tvAttentionNum = (TextView) header.findViewById(R.id.tv_attention_num);
+        tvImageNum = (TextView) header.findViewById(R.id.tv_image_num);
+        tvPublishTime = (TextView) header.findViewById(R.id.tv_publish_time);
+        listView.addHeaderView(header);
     }
 
 
@@ -91,14 +193,19 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onTaskFail(int action, String errorMessage) {
+        stopLoadingSelf();
+        super.onTaskFail(action, errorMessage);
+    }
+
     private void getGoodsDetail() {
-        String userId = userService.getLoginUserId();
         TaskManager.pushTask(new Task(TaskAction.ACTION_GET_GOODS_DETAIL) {
             @Override
             protected void doBackground() throws Exception {
-
+                GoodsVO goodsVO = goodsService.getGoodsDetail(goodsId);
             }
-        },this);
+        }, this);
     }
 
     /**
@@ -139,5 +246,25 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
             btnErrorRefresh.setText("刷新");
             tvErrorMsg.setText(msg);
         }
+    }
+
+    @Click(R.id.iv_back)
+    void back() {
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImageLoader.getInstance().clearMemoryCache();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            back();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -285,6 +285,18 @@ public class Utils {
     }
 
     /**
+     * 格式化 时间
+     * @param time 时间
+     * @param pattern 格式
+     * @return
+     */
+    public static String formateTime(long time, String pattern) {
+        Date formateDate = new Date(time);
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        return sdf.format(formateDate);
+    }
+
+    /**
      * 获取用户头像链接
      *
      * @param userId 用户id

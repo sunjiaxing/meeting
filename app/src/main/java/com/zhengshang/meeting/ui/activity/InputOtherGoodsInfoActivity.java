@@ -475,7 +475,10 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
      */
     @Click(R.id.btn_right)
     void preview() {
-
+        GoodsDetailAndPreviewActivity_.intent(this)
+                .extra(IParam.TYPE, GoodsDetailAndPreviewActivity.Type.PREVIEW)
+                .extra(IParam.GOODS, goodsVO)
+                .start();
     }
 
     @Click(R.id.iv_back)
