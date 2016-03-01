@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -82,6 +81,11 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
     private List<ValidTimeVO> validTime;
     private AlertDialog inputImageDescDialog;
 
+    private static final int REQUEST_CODE_SELECT_IMAGE = 0;
+    private static final int REQUEST_CODE_CHANGE_COVER = 1;
+    private static final int REQUEST_CODE_CHANGE_GOODS_NAME = 2;
+    private static final int REQUEST_CODE_SEND_RESULT = 3;
+
     @AfterViews
     void init() {
         goodsService = new GoodsService(this);
@@ -103,8 +107,12 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         goodsVO = new GoodsVO();
         goodsVO.setName(goodsName);
 
-        getGoodsCategory();
-        getValidTime();
+        if (Utils.isEmpty(categories)) {
+            getGoodsCategory();
+        }
+        if (Utils.isEmpty(validTime)) {
+            getValidTime();
+        }
     }
 
     /**
@@ -144,7 +152,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         footerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChooseImageActivity_.intent(InputOtherGoodsInfoActivity.this).extra(IParam.LAST_NUM, 20 - imagePathList.size()).startForResult(0);
+                ChooseImageActivity_.intent(InputOtherGoodsInfoActivity.this).extra(IParam.LAST_NUM, 20 - imagePathList.size()).startForResult(REQUEST_CODE_SELECT_IMAGE);
             }
         });
         sortListView.addFooterView(footerView);
@@ -154,7 +162,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         LogUtils.i("onActivityResult");
-        if (requestCode == 0 && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_SELECT_IMAGE && resultCode == RESULT_OK) {
             List<String> imageList = (List<String>) data.getSerializableExtra(IParam.CONTENT);
             imagePathList.addAll(imageList);
             // 构建 vo
@@ -176,10 +184,15 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
             if (Utils.isEmpty(goodsVO.getCoverUrl())) {
                 setCover(imagePathList.get(0));
             }
-        } else if (requestCode == 1 && resultCode == RESULT_OK) {
+        } else if (requestCode == REQUEST_CODE_CHANGE_COVER && resultCode == RESULT_OK) {
             setCover(data.getStringExtra(IParam.CONTENT));
-        } else if (requestCode == 2 && resultCode == RESULT_OK) {
+        } else if (requestCode == REQUEST_CODE_CHANGE_GOODS_NAME && resultCode == RESULT_OK) {
+            goodsName = data.getStringExtra(IParam.CONTENT);
+            tvGoodsName.setText(goodsName);
+            goodsVO.setName(goodsName);
+        } else if (requestCode == REQUEST_CODE_SEND_RESULT && resultCode == RESULT_OK) {
             showToast("发布成功");
+            setResult(RESULT_OK);
             finish();
         }
     }
@@ -298,12 +311,12 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_goods_name:// 编辑物品名称
-                InputGoodsNameActivity_.intent(this).extra(IParam.GOODS_NAME, goodsVO.getName()).startForResult(2);
+                InputGoodsNameActivity_.intent(this).extra(IParam.GOODS_NAME, goodsVO.getName()).startForResult(REQUEST_CODE_CHANGE_GOODS_NAME);
                 break;
             case R.id.iv_cover:// 设置封面
                 if (goodsVO != null && !Utils.isEmpty(goodsVO.getCoverUrl())) {
                     // 切换封面
-                    ChangeCoverActivity_.intent(this).extra(IParam.CONTENT, (Serializable) imagePathList).startForResult(1);
+                    ChangeCoverActivity_.intent(this).extra(IParam.CONTENT, (Serializable) imagePathList).startForResult(REQUEST_CODE_CHANGE_COVER);
                 } else {
                     showToast("请先选择图片");
                 }
@@ -324,18 +337,22 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
      * 选择有效时间
      */
     private void selectValidTime() {
-        ValidTimeAdapter validTimeAdapter = new ValidTimeAdapter(this);
-        validTimeAdapter.setData(validTime);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("选择有效时间");
-        builder.setAdapter(validTimeAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                goodsVO.setValidTime(validTime.get(which));
-                tvSelectValidTime.setText(goodsVO.getValidTime().getName());
-            }
-        });
-        builder.show();
+        if (!Utils.isEmpty(validTime)) {
+            ValidTimeAdapter validTimeAdapter = new ValidTimeAdapter(this);
+            validTimeAdapter.setData(validTime);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("选择有效时间");
+            builder.setAdapter(validTimeAdapter, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    goodsVO.setValidTime(validTime.get(which));
+                    tvSelectValidTime.setText(goodsVO.getValidTime().getName());
+                }
+            });
+            builder.show();
+        } else {
+            getValidTime();
+        }
     }
 
     /**
@@ -349,9 +366,11 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         final EditText editExchangePrice = (EditText) inputView.findViewById(R.id.edit_exchange_price);
         if (goodsVO.getMarketPrice() > 0) {
             editMarketPrice.setText(String.valueOf(goodsVO.getMarketPrice()));
+            editMarketPrice.setSelection(String.valueOf(goodsVO.getMarketPrice()).length());
         }
         if (goodsVO.getExchangePrice() > 0) {
             editExchangePrice.setText(String.valueOf(goodsVO.getExchangePrice()));
+            editExchangePrice.setSelection(String.valueOf(goodsVO.getExchangePrice()).length());
         }
         builder.setView(inputView);
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -360,11 +379,11 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
                 String market = editMarketPrice.getText().toString();
                 String exchange = editExchangePrice.getText().toString();
                 if (Utils.isEmpty(market)) {
-                    editMarketPrice.requestFocus();
+                    showToast("请输入市场价");
                     return;
                 }
                 if (Utils.isEmpty(exchange)) {
-                    editExchangePrice.requestFocus();
+                    showToast("请输入兑换价");
                     return;
                 }
                 goodsVO.setMarketPrice(Double.parseDouble(market));
@@ -379,18 +398,22 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
      * 选择品类
      */
     private void selectCategory() {
-        GoodsCategoryAdapter categoryAdapter = new GoodsCategoryAdapter(this);
-        categoryAdapter.setData(categories);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("选择品类");
-        builder.setAdapter(categoryAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                goodsVO.setCategory(categories.get(which));
-                tvSelectCategory.setText(goodsVO.getCategory().getName());
-            }
-        });
-        builder.show();
+        if (!Utils.isEmpty(categories)) {
+            GoodsCategoryAdapter categoryAdapter = new GoodsCategoryAdapter(this);
+            categoryAdapter.setData(categories);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("选择品类");
+            builder.setAdapter(categoryAdapter, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    goodsVO.setCategory(categories.get(which));
+                    tvSelectCategory.setText(goodsVO.getCategory().getName());
+                }
+            });
+            builder.show();
+        } else {
+            getGoodsCategory();
+        }
     }
 
     /**
@@ -441,10 +464,10 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
             showToast("请添加图片");
             return;
         }
-        InputGoodsNameActivity_.intent(this)
+        InputNeedAndContactActivity_.intent(this)
                 .extra(IParam.GOODS, goodsVO)
-                .extra(IParam.CATEGORIES, (Parcelable) categories)
-                .startForResult(2);
+                .extra(IParam.CATEGORIES, (Serializable) categories)
+                .startForResult(REQUEST_CODE_SEND_RESULT);
     }
 
     /**

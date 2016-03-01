@@ -20,8 +20,14 @@ public class BonConstants {
     public static final String PATH_INIT_IMAGE_CACHE = PATH_ROOT + "init/";
 
     public static final String PATH_TAKE_PHOTO = PATH_ROOT + "photo/";
-    /** 临时目录 */
+    /**
+     * 临时目录
+     */
     public static final String PATH_TEMP = PATH_ROOT + "temp/";
+    /**
+     * 图片压缩之后的目录
+     */
+    public static final String PATH_COMPRESSED = PATH_ROOT + "compressed/";
 
 
     /**
@@ -77,8 +83,8 @@ public class BonConstants {
 
     public static final String PhonePattern = "^1[3|4|5|7|8][0-9]\\d{8}$";
 
-    //    public static final String SERVER_URL = "http://192.168.1.103:8080/";
-    //    public static final String SERVER_URL = "http://192.168.1.28:8080/api/";
+    // public static final String SERVER_URL = "http://192.168.1.111:8080/";
+//    public static final String SERVER_URL = "http://192.168.1.111:8080/api/";
     public static final String SERVER_URL = "http://192.168.1.27:8888/api/";
     public static String SLASH = "/";
     public static final String WEB_RESOURCE_URL = "http://192.168.1.27/";

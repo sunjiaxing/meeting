@@ -122,7 +122,7 @@ public class HttpUtilsApache {
                 }
             }
             if (file != null) {
-                builder.addBinaryBody("file", file, ContentType.APPLICATION_OCTET_STREAM, file.getName());
+                builder.addBinaryBody("file", file, ContentType.APPLICATION_OCTET_STREAM, file.getAbsolutePath());
             }
             httpPost.setEntity(builder.build());
             return execute(httpPost);

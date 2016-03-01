@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zhengshang.meeting.R;
+import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.remote.IParam;
 
 import org.androidannotations.annotations.AfterViews;
@@ -46,8 +47,10 @@ public class InputGoodsNameActivity extends BaseActivity {
         btnRight.setBackgroundColor(Color.TRANSPARENT);
         btnRight.setText("下一步");
         btnRight.setEnabled(false);
-
-        editGoodsName.setText(goodsName);
+        if (!Utils.isEmpty(goodsName)) {
+            editGoodsName.setText(goodsName);
+            editGoodsName.setSelection(goodsName.length());
+        }
         editGoodsName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

@@ -113,14 +113,16 @@ public class GoodsRO extends BaseRO {
         Map<String, Object> params = new HashMap<>();
         params.put(IParam.USER_ID, userId);
         params.put(IParam.USER_CONTACT, mobile);
-        params.put(IParam.NAME, goodsVO.getName());
+        params.put(IParam.GOODS_NAME, goodsVO.getName());
         params.put(IParam.COVER_URL, goodsVO.getCoverUrl());
         params.put(IParam.CATEGORY, goodsVO.getCategory().getId());
         params.put(IParam.MARKET_PRICE, goodsVO.getMarketPrice());
         params.put(IParam.EXCHANGE_PRICE, goodsVO.getExchangePrice());
         params.put(IParam.VALID_TIME, goodsVO.getValidTime().getId());
         params.put(IParam.IMAGES, imgJson);
-        params.put(IParam.NEED_CATEGORY, goodsVO.getNeedCategory().getId());
+        if (goodsVO.getNeedCategory() != null) {
+            params.put(IParam.NEED_CATEGORY, goodsVO.getNeedCategory().getId());
+        }
         String result = httpPostRequest(url, null, params);
         JSONObject json = new JSONObject(result);
         if (json.getInt(IParam.STATUS) == 1) {
@@ -132,9 +134,10 @@ public class GoodsRO extends BaseRO {
 
     /**
      * 获取物品列表
-     * @param userId 用户id
+     *
+     * @param userId    用户id
      * @param pageIndex 页码
-     * @param limit 每页数量
+     * @param limit     每页数量
      * @return
      * @throws JSONException
      */

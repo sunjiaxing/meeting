@@ -71,6 +71,10 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
     private int pageIndex;
     private GoodsListAdapter adapter;
 
+    private static final int REQUEST_CODE_INPUT_GOODS_NAME = 0;
+    private static final int REQUEST_CODE_LOGIN = 1;
+    private static final int REQUEST_CODE_PUBLISH = 2;
+
     @AfterViews
     void init() {
         anim = (AnimationDrawable) ivLoading.getBackground();
@@ -84,8 +88,17 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
         goodsService = new GoodsService(getActivity());
         userService = new UserService(getActivity());
 
-        startLoadingSelf();
-        getGoodsFromDB();
+
+    }
+
+    /**
+     * 刷新 view
+     */
+    public void refreshView() {
+        if (Utils.isEmpty(goodsList)) {
+            startLoadingSelf();
+            getGoodsFromDB();
+        }
     }
 
     /**
@@ -154,23 +167,24 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
     }
 
     @Click(R.id.btn_right)
-    void clickToEdit() {
+    void clickToInputGoodsName() {
         if (userService.checkLoginState()) {
-            InputGoodsNameActivity_.intent(this).startForResult(0);
+            InputGoodsNameActivity_.intent(this).startForResult(REQUEST_CODE_INPUT_GOODS_NAME);
         } else {
             // 跳转登录
-            LoginActivity_.intent(this).startForResult(1);
+            LoginActivity_.intent(this).startForResult(REQUEST_CODE_LOGIN);
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_CODE_INPUT_GOODS_NAME && resultCode == Activity.RESULT_OK) {
             String goodsName = data.getStringExtra(IParam.CONTENT);
-            InputOtherGoodsInfoActivity_.intent(this).extra(IParam.GOODS_NAME, goodsName).start();
-        } else if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            clickToEdit();
+            InputOtherGoodsInfoActivity_.intent(this).extra(IParam.GOODS_NAME, goodsName).startForResult(REQUEST_CODE_PUBLISH);
+        } else if (requestCode == REQUEST_CODE_LOGIN && resultCode == Activity.RESULT_OK) {
+            clickToInputGoodsName();
+        } else if (requestCode == REQUEST_CODE_PUBLISH && resultCode == Activity.RESULT_OK) {
+            listView.autoRefresh();
         }
     }
 
@@ -209,6 +223,11 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
                 goodsList = (List<GoodsVO>) data;
                 if (!Utils.isEmpty(goodsList)) {
                     stopLoadingSelf();
+                    if (goodsList.size() < BonConstants.LIMIT_GET_GOODS) {
+                        listView.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_REMOVE);
+                    } else {
+                        listView.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NORMAL);
+                    }
                     refreshUI();
                 } else {
                     getGoodsList();

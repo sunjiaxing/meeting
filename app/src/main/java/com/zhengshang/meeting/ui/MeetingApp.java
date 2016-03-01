@@ -16,6 +16,7 @@ import com.zhengshang.meeting.common.BonConstants;
 import com.zhengshang.meeting.common.MD5;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -66,6 +67,19 @@ public class MeetingApp extends Application implements Thread.UncaughtExceptionH
 
         // Initialize ImageLoader with configuration.
         ImageLoader.getInstance().init(config);
+        try {
+            // 处理 缓存目录 添加 .nomedia 文件  禁止MediaScanner扫描
+            File dir = new File(BonConstants.PATH_COMPRESSED);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            File file = new File(dir, ".nomedia");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

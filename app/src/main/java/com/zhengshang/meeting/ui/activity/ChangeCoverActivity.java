@@ -38,7 +38,7 @@ public class ChangeCoverActivity extends BaseActivity {
     @AfterViews
     void init() {
         ivBack.setVisibility(View.VISIBLE);
-        tvTitle.setText("最近图片");
+        tvTitle.setText("切换封面");
         allImgs = (List<String>) getIntent().getSerializableExtra(IParam.CONTENT);
         refreshUI();
     }

@@ -64,13 +64,11 @@ public class TabNewsFragment extends BaseFragment implements
     private List<NewsChannelVO> newsTypes = new ArrayList<>();
     private NewsService newsService;
     private List<BaseFragment> fragmentList;
-    private Bundle saveInstance;
     private UserService userService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.saveInstance = savedInstanceState;
         newsService = new NewsService(getActivity());
         userService = new UserService(getActivity());
     }
@@ -98,11 +96,16 @@ public class TabNewsFragment extends BaseFragment implements
         tvTitle.setText(getString(R.string.news));
 
         mPager.addOnPageChangeListener(this);
+
+    }
+
+    /**
+     * 刷新view
+     */
+    public void refreshView() {
         if (Utils.isEmpty(newsTypes)) {
             getNewsType();
             updateNewsChannel();
-        } else {
-            refreshUI(saveInstance);
         }
     }
 
@@ -149,10 +152,8 @@ public class TabNewsFragment extends BaseFragment implements
 
     /**
      * 刷新界面
-     *
-     * @param savedInstanceState save
      */
-    private void refreshUI(Bundle savedInstanceState) {
+    private void refreshUI() {
         // 加载栏目
         updateGallery(newsTypes);
         // 判断栏目更新
@@ -160,8 +161,7 @@ public class TabNewsFragment extends BaseFragment implements
         // 加载新闻
         ListViewPagerAdapter listViewPagerAdapter = new ListViewPagerAdapter(
                 getChildFragmentManager());
-        listViewPagerAdapter.setData(createFragment2Show(newsTypes.size(),
-                savedInstanceState));
+        listViewPagerAdapter.setData(createFragment2Show(newsTypes.size()));
         mPager.setAdapter(listViewPagerAdapter);
         mPager.setOffscreenPageLimit(newsTypes.size());
         if (mPager.getCurrentItem() != 0) {
@@ -175,21 +175,17 @@ public class TabNewsFragment extends BaseFragment implements
      * 构建要显示的 空 fragment
      *
      * @param count fragment数量
-     * @param savedInstanceState save
      * @return fragmentList
      */
-    private List<BaseFragment> createFragment2Show(int count,
-                                                   Bundle savedInstanceState) {
+    private List<BaseFragment> createFragment2Show(int count) {
         fragmentList = new ArrayList<>();
-        if (savedInstanceState == null) {
-            for (int i = 0; i < count; i++) {
-                fragmentList.add(new NewsPagerItemFragment_());
-            }
-        } else {
-            for (int i = 0; i < count; i++) {
-                NewsPagerItemFragment itemFragment = (NewsPagerItemFragment) getChildFragmentManager()
-                        .findFragmentByTag(getFragmentTag(i));
+        for (int i = 0; i < count; i++) {
+            NewsPagerItemFragment itemFragment = (NewsPagerItemFragment) getChildFragmentManager()
+                    .findFragmentByTag(getFragmentTag(i));
+            if (itemFragment != null) {
                 fragmentList.add(itemFragment);
+            } else {
+                fragmentList.add(new NewsPagerItemFragment_());
             }
         }
         return fragmentList;
@@ -262,6 +258,7 @@ public class TabNewsFragment extends BaseFragment implements
             itemFragment.refreshCurrentView(newsTypes.get(position), position);
         }
     }
+
     /**
      * 分类展开 按钮
      */
@@ -283,12 +280,11 @@ public class TabNewsFragment extends BaseFragment implements
         }
         ft.commit();
         // 刷新界面
-        refreshUI(null);
+        refreshUI();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
             // 操作栏目
             newsTypes = (List<NewsChannelVO>) data.getSerializableExtra(IParam.LIST);
@@ -305,7 +301,7 @@ public class TabNewsFragment extends BaseFragment implements
             case TaskAction.ACTION_GET_NEWS_TYPE:// 获取新闻分类成功
                 if (data != null) {
                     newsTypes = (List<NewsChannelVO>) data;
-                    refreshUI(saveInstance);
+                    refreshUI();
                 }
                 break;
             case TaskAction.ACTION_GET_NEWS_FROM_DB:// 获取缓存数据

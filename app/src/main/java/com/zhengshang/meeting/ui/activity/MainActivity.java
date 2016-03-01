@@ -1,11 +1,15 @@
 package com.zhengshang.meeting.ui.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.taskmanager.LogUtils;
 import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.BonConstants;
 import com.zhengshang.meeting.remote.IParam;
@@ -41,11 +45,25 @@ public class MainActivity extends BaseActivity {
 
     private TabNewsFragment tabNewsFragment;
     private TabGoodsListFragment tabGoodsListFragment;
-    private BonConstants.BottomMenuSelected menuSelected;
+    private BonConstants.BottomMenuSelected menuSelected = BonConstants.BottomMenuSelected.NEWS;
+    private Handler handler;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            menuSelected = BonConstants.BottomMenuSelected.values()[savedInstanceState.getInt(IParam.TYPE)];
+        }
+        handler = new Handler();
+    }
 
     @AfterViews
     void init() {
-        toNewsPage();
+        if (menuSelected == BonConstants.BottomMenuSelected.NEWS) {
+            toNewsPage();
+        } else if (menuSelected == BonConstants.BottomMenuSelected.GOODS) {
+            toGoodsPage();
+        }
     }
 
     /**
@@ -82,6 +100,13 @@ public class MainActivity extends BaseActivity {
         ft.commit();
         menuSelected = BonConstants.BottomMenuSelected.NEWS;
         resetMenuStyle();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tabNewsFragment.refreshView();
+            }
+        }, 50);
+
     }
 
     /**
@@ -100,6 +125,13 @@ public class MainActivity extends BaseActivity {
         ft.commit();
         menuSelected = BonConstants.BottomMenuSelected.GOODS;
         resetMenuStyle();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tabGoodsListFragment.refreshView();
+            }
+        }, 50);
+
     }
 
     /**
@@ -142,6 +174,28 @@ public class MainActivity extends BaseActivity {
             case GOODS:
                 tabGoodsListFragment.onTaskFail(action, errorMessage);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        LogUtils.i("main activity onActivityResult");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        LogUtils.i("main activity onSaveInstanceState");
+        outState.putInt(IParam.TYPE, menuSelected.ordinal());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        LogUtils.i("main activity onRestoreInstanceState");
+        if (savedInstanceState != null) {
+            menuSelected = BonConstants.BottomMenuSelected.values()[savedInstanceState.getInt(IParam.TYPE)];
         }
     }
 }

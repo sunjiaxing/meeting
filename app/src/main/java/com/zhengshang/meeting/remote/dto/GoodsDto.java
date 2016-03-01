@@ -50,8 +50,8 @@ public class GoodsDto {
         if (json == null) {
             return;
         }
-        if (json.has(IParam.ID)) {
-            this.id = json.getInt(IParam.ID);
+        if (json.has(IParam.GOODS_ID)) {
+            this.id = json.getInt(IParam.GOODS_ID);
         }
         if (json.has(IParam.GOODS_NAME)) {
             this.goodsName = json.getString(IParam.GOODS_NAME);

@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,25 +49,25 @@ public class GoodsService extends BaseService {
      */
     public List<GoodsCategoryVO> getGoodsCategories() throws JSONException {
         List<GoodsCategoryVO> showData = new ArrayList<>();
-//        List<NameAndValueDto> webData = goodsRO.getGoodsCategories();
-//        if (!Utils.isEmpty(webData)) {
-//            GoodsCategoryVO vo;
-//            for (NameAndValueDto dto : webData) {
-//                vo = new GoodsCategoryVO();
-//                vo.setName(dto.getName());
-//                vo.setId(dto.getValue());
-//                showData.add(vo);
-//            }
-//        }
-        // 构建临时数据
-        GoodsCategoryVO vo = new GoodsCategoryVO();
-        vo.setName("酒水");
-        vo.setId(1);
-        showData.add(vo);
-        vo = new GoodsCategoryVO();
-        vo.setName("办公用品");
-        vo.setId(2);
-        showData.add(vo);
+        List<NameAndValueDto> webData = goodsRO.getGoodsCategories();
+        if (!Utils.isEmpty(webData)) {
+            GoodsCategoryVO vo;
+            for (NameAndValueDto dto : webData) {
+                vo = new GoodsCategoryVO();
+                vo.setName(dto.getName());
+                vo.setId(dto.getValue());
+                showData.add(vo);
+            }
+        }
+//        // 构建临时数据
+//        GoodsCategoryVO vo = new GoodsCategoryVO();
+//        vo.setName("酒水");
+//        vo.setId(1);
+//        showData.add(vo);
+//        vo = new GoodsCategoryVO();
+//        vo.setName("办公用品");
+//        vo.setId(2);
+//        showData.add(vo);
         return showData;
     }
 
@@ -78,29 +79,29 @@ public class GoodsService extends BaseService {
      */
     public List<ValidTimeVO> getValidTime() throws JSONException {
         List<ValidTimeVO> showData = new ArrayList<>();
-//        List<NameAndValueDto> webData = goodsRO.getValidTime();
-//        if (!Utils.isEmpty(webData)) {
-//            ValidTimeVO vo;
-//            for (NameAndValueDto dto : webData) {
-//                vo = new ValidTimeVO();
-//                vo.setId(dto.getValue());
-//                vo.setName(dto.getName());
-//                showData.add(vo);
-//            }
-//        }
-        // 构建临时数据
-        ValidTimeVO vo = new ValidTimeVO();
-        vo.setName("一周内有效");
-        vo.setId(1);
-        showData.add(vo);
-        vo = new ValidTimeVO();
-        vo.setName("两周内有效");
-        vo.setId(2);
-        showData.add(vo);
-        vo = new ValidTimeVO();
-        vo.setName("一月内有效");
-        vo.setId(3);
-        showData.add(vo);
+        List<NameAndValueDto> webData = goodsRO.getValidTime();
+        if (!Utils.isEmpty(webData)) {
+            ValidTimeVO vo;
+            for (NameAndValueDto dto : webData) {
+                vo = new ValidTimeVO();
+                vo.setId(dto.getValue());
+                vo.setName(dto.getName());
+                showData.add(vo);
+            }
+        }
+//        // 构建临时数据
+//        ValidTimeVO vo = new ValidTimeVO();
+//        vo.setName("一周内有效");
+//        vo.setId(1);
+//        showData.add(vo);
+//        vo = new ValidTimeVO();
+//        vo.setName("两周内有效");
+//        vo.setId(2);
+//        showData.add(vo);
+//        vo = new ValidTimeVO();
+//        vo.setName("一月内有效");
+//        vo.setId(3);
+//        showData.add(vo);
         return showData;
     }
 
@@ -111,7 +112,7 @@ public class GoodsService extends BaseService {
      * @param mobile
      * @throws JSONException
      */
-    public void publishGoods(GoodsVO goodsVO, String mobile) throws JSONException {
+    public void publishGoods(GoodsVO goodsVO, String mobile) throws JSONException, IOException {
         JSONArray imageJson = new JSONArray();
         // 上传图片
         if (!Utils.isEmpty(goodsVO.getImageList())) {
@@ -120,9 +121,8 @@ public class GoodsService extends BaseService {
             for (ImageVO imgVO : goodsVO.getImageList()) {
                 file = new File(imgVO.getFilePath());
                 if (file.exists()) {
-                    fileName = file.getName().substring(0,
-                            file.getName().lastIndexOf("."));
-                    file = new File(BonConstants.PATH_IMAGE_CACHE, fileName);
+                    fileName = file.getName();
+                    file = new File(BonConstants.PATH_COMPRESSED, fileName);
                     if (!file.exists()) {
                         // 执行原图压缩
                         // 压缩图片
@@ -132,7 +132,7 @@ public class GoodsService extends BaseService {
                         if (degree != 0) {
                             bm = FileUtil.rotateBitmapByDegree(bm, degree);
                         }
-                        file = Utils.savePic(bm, BonConstants.PATH_IMAGE_CACHE
+                        file = Utils.savePic(bm, BonConstants.PATH_COMPRESSED
                                 + fileName);
                         if (bm != null && !bm.isRecycled()) {
                             bm.recycle();
@@ -196,6 +196,7 @@ public class GoodsService extends BaseService {
 
     /**
      * 从缓存中获取数据
+     *
      * @return
      */
     public List<GoodsVO> getGoodsListFromDB() {
