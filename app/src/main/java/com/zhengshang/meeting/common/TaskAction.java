@@ -33,5 +33,6 @@ public interface TaskAction extends TaskKey {
     int ACTION_GET_GOODS_LIST = 23;
     int ACTION_GET_GOODS_LIST_LOAD_MORE = 24;
     int ACTION_GET_GOODS_LIST_FROM_DB = 25;
+    int ACTION_GOODS_ATTENTION = 26;
 
 }

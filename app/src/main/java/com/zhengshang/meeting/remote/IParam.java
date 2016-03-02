@@ -16,7 +16,9 @@ public interface IParam {
     String ADD_REPLY = "addReply";
     String ADD_FAVORITE = "addFavorite";
     String ADD_TIME = "addTime";
+    String ATTENTION = "attention";
     String ATTENTION_NUM = "attentionNum";
+    String ATTENTION_STATUS = "attentionStatus";
 
     // B
     // C
@@ -73,6 +75,7 @@ public interface IParam {
     String IMGS = "imgs";
     String IMAGES = "images";
     String IS_OPEN_BLANK = "isOpenBlank";
+    String INDEX = "index";
 
     // J
     // K
@@ -102,6 +105,8 @@ public interface IParam {
     String NEED_CATEGORY = "needCategory";
 
     // O
+    String OPTION = "option";
+
     // P
     String POSITION = "position";
     String PARENT_ID = "parentId";

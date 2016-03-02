@@ -97,7 +97,7 @@ public class ChildViewPager extends ViewPager {
 	 * 
 	 */
 	public interface OnSingleTouchListener {
-		public void onSingleTouch();
+		void onSingleTouch();
 	}
 
 	public void setOnSingleTouchListener(

@@ -5,21 +5,13 @@
     android:background="@color/color_black">
 
     <ImageView
-        android:id="@+id/iv_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/btn_back" />
-
-    <ImageView
         android:id="@+id/iv_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:scaleType="fitXY"
-        android:visibility="gone"
-        android:src="@mipmap/default_item_pic" />
+        android:adjustViewBounds="true"
+        android:src="@mipmap/default_item_pic"
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/progressBar"

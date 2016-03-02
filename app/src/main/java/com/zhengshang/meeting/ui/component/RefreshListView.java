@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -119,6 +120,7 @@ public class RefreshListView extends PtrClassicFrameLayout implements AbsListVie
         configDao = ConfigDao.getInstance(getContext());
         listView = new ListView(getContext());
         listView.setDivider(null);
+        listView.setDividerHeight(0);
         listView.setCacheColorHint(Color.TRANSPARENT);
         listView.setHorizontalFadingEdgeEnabled(false);
         listView.setVerticalFadingEdgeEnabled(false);
@@ -278,6 +280,18 @@ public class RefreshListView extends PtrClassicFrameLayout implements AbsListVie
                 updateLoadMoreViewState(LoadMoreState.LV_LOADING);
                 onRefreshLoadMoreListener.onLoadMore();
             }
+        }
+
+    }
+
+    /**
+     * 设置 item点击事件
+     *
+     * @param listener 监听
+     */
+    public void setOnItemClickListener(AdapterView.OnItemClickListener listener) {
+        if (listView != null) {
+            listView.setOnItemClickListener(listener);
         }
     }
 }

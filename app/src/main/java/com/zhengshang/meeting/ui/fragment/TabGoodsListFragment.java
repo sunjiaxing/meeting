@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,19 +19,19 @@ import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.service.GoodsService;
 import com.zhengshang.meeting.service.UserService;
-import com.zhengshang.meeting.ui.activity.BaseActivity;
+import com.zhengshang.meeting.ui.activity.GoodsDetailAndPreviewActivity;
+import com.zhengshang.meeting.ui.activity.GoodsDetailAndPreviewActivity_;
 import com.zhengshang.meeting.ui.activity.InputGoodsNameActivity_;
 import com.zhengshang.meeting.ui.activity.InputOtherGoodsInfoActivity_;
 import com.zhengshang.meeting.ui.activity.LoginActivity_;
 import com.zhengshang.meeting.ui.adapter.GoodsListAdapter;
-import com.zhengshang.meeting.ui.component.DragListView;
 import com.zhengshang.meeting.ui.component.RefreshListView;
 import com.zhengshang.meeting.ui.vo.GoodsVO;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
@@ -278,5 +277,14 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
     void clickRefresh() {
         startLoadingSelf();
         getGoodsList();
+    }
+
+    @ItemClick(R.id.lv_drag)
+    void onItemClick(int position) {
+        GoodsVO vo = goodsList.get(position);
+        GoodsDetailAndPreviewActivity_.intent(this)
+                .extra(IParam.GOODS_ID, vo.getId())
+                .extra(IParam.TYPE, GoodsDetailAndPreviewActivity.Type.DETAIL)
+                .start();
     }
 }

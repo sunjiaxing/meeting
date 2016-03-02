@@ -16,6 +16,9 @@ public class GoodsDto {
     private int scanNum;
     private int attentionNum;
     private long publishTime;
+    private double marketPrice;
+    private double exchangePrice;
+    private int isAttention;
 
     public int getId() {
         return id;
@@ -41,8 +44,21 @@ public class GoodsDto {
         return publishTime;
     }
 
+    public double getMarketPrice() {
+        return marketPrice;
+    }
+
+    public double getExchangePrice() {
+        return exchangePrice;
+    }
+
+    public int getIsAttention() {
+        return isAttention;
+    }
+
     /**
      * 解析 json
+     *
      * @param json
      * @throws JSONException
      */
@@ -67,6 +83,15 @@ public class GoodsDto {
         }
         if (json.has(IParam.PUBLISH_TIME)) {
             this.publishTime = json.getLong(IParam.PUBLISH_TIME);
+        }
+        if (json.has(IParam.MARKET_PRICE)) {
+            this.marketPrice = json.getDouble(IParam.MARKET_PRICE);
+        }
+        if (json.has(IParam.EXCHANGE_PRICE)) {
+            this.exchangePrice = json.getDouble(IParam.EXCHANGE_PRICE);
+        }
+        if (json.has(IParam.ATTENTION_STATUS)) {
+            this.isAttention = json.getInt(IParam.ATTENTION_STATUS);
         }
     }
 }

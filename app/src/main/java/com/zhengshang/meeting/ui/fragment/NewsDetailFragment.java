@@ -8,10 +8,15 @@ import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.ui.activity.ImageActivity_;
 import com.zhengshang.meeting.ui.activity.NewsDetailActivity;
 import com.zhengshang.meeting.ui.component.CustomerWebview;
+import com.zhengshang.meeting.ui.vo.ImageVO;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 新闻详情 fragment
@@ -30,7 +35,11 @@ public class NewsDetailFragment extends BaseFragment {
         webview.addJavascriptInterface(new Object() {
             @JavascriptInterface
             public void onClick(String url) {
-                ImageActivity_.intent(getActivity()).extra(IParam.URL, url).start();
+                List<ImageVO> list = new ArrayList<>();
+                ImageVO vo = new ImageVO();
+                vo.setUrl(url);
+                list.add(vo);
+                ImageActivity_.intent(getActivity()).extra(IParam.IMAGES, (Serializable) list).start();
             }
         }, "image");
 

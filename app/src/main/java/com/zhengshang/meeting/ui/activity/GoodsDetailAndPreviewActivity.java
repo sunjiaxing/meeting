@@ -1,5 +1,6 @@
 package com.zhengshang.meeting.ui.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +62,8 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
     ListView listView;
     @ViewById(R.id.iv_loading_in)
     ImageView ivLoading;
+    @ViewById(R.id.tv_attention)
+    TextView tvAttention;
 
     @Extra(IParam.GOODS_ID)
     int goodsId;
@@ -87,6 +91,7 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
         ivBack.setVisibility(View.VISIBLE);
         anim = (AnimationDrawable) ivLoading.getBackground();
         goodsVO = (GoodsVO) getIntent().getSerializableExtra(IParam.GOODS);
+        listView.setClickable(false);
         goodsService = new GoodsService(this);
         userService = new UserService(this);
         initHeader();
@@ -109,6 +114,12 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
                 case DETAIL:
                     ImageLoader.getInstance().displayImage(goodsVO.getCoverUrl(), ivCover, ImageOption.createNomalOption());
                     tvPublishTime.setText(goodsVO.getPublishTime());
+                    tvAttention.setVisibility(View.VISIBLE);
+                    if (goodsVO.isAttention()) {
+                        tvAttention.setText("取消关注");
+                    } else {
+                        tvAttention.setText("关注");
+                    }
                     break;
                 case PREVIEW:
                     ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.FILE.wrap(goodsVO.getCoverUrl()), ivCover, ImageOption.createNomalOption());
@@ -122,7 +133,24 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
             List<GoodsImageVO> goodsImageVOList = formateImage(goodsVO.getImageList());
             if (!Utils.isEmpty(goodsImageVOList)) {
                 if (adapter == null) {
-                    adapter = new GoodsImageAdapter(this);
+                    adapter = new GoodsImageAdapter(this) {
+                        @Override
+                        public void onClick(View v) {
+                            String url = (String) v.getTag();
+                            int index = 0;
+                            // 计算索引
+                            for (int i = 0; i < goodsVO.getImageList().size(); i++) {
+                                if (url.equals(goodsVO.getImageList().get(i).getUrl())) {
+                                    index = i;
+                                    break;
+                                }
+                            }
+                            ImageActivity_.intent(GoodsDetailAndPreviewActivity.this)
+                                    .extra(IParam.IMAGES, (Serializable) goodsVO.getImageList())
+                                    .extra(IParam.INDEX, index)
+                                    .start();
+                        }
+                    };
                     adapter.setData(goodsImageVOList, viewType);
                     listView.setAdapter(adapter);
                 } else {
@@ -190,20 +218,40 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
 
     @Override
     protected void onTaskSuccess(int action, Object data) {
-
+        switch (action) {
+            case TaskAction.ACTION_GET_GOODS_DETAIL:
+                stopLoadingSelf();
+                if (data != null) {
+                    goodsVO = (GoodsVO) data;
+                    refreshUI();
+                }
+                break;
+            case TaskAction.ACTION_GOODS_ATTENTION:
+                showToast("操作成功");
+                goodsVO.setIsAttention(!goodsVO.isAttention());
+                if (goodsVO.isAttention()) {
+                    tvAttention.setText("取消关注");
+                } else {
+                    tvAttention.setText("关注");
+                }
+                break;
+        }
     }
 
     @Override
     protected void onTaskFail(int action, String errorMessage) {
         stopLoadingSelf();
-        super.onTaskFail(action, errorMessage);
+        showErrorMsg(errorMessage);
     }
 
+    /**
+     * 获取物品详情
+     */
     private void getGoodsDetail() {
         TaskManager.pushTask(new Task(TaskAction.ACTION_GET_GOODS_DETAIL) {
             @Override
             protected void doBackground() throws Exception {
-                GoodsVO goodsVO = goodsService.getGoodsDetail(goodsId);
+                setReturnData(goodsService.getGoodsDetail(goodsId));
             }
         }, this);
     }
@@ -266,5 +314,34 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 关注 /  取消关注
+     */
+    @Click(R.id.tv_attention)
+    void attention() {
+        if (userService.checkLoginState()) {
+            TaskManager.pushTask(new Task(TaskAction.ACTION_GOODS_ATTENTION) {
+                @Override
+                protected void doBackground() throws Exception {
+                    if (goodsVO.isAttention()) {
+                        goodsService.cancelAttention(goodsId);
+                    } else {
+                        goodsService.attention(goodsId);
+                    }
+                }
+            }, this);
+        } else {
+            LoginActivity_.intent(this).startForResult(0);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            attention();
+        }
     }
 }

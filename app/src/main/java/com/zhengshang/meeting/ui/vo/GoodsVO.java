@@ -21,8 +21,10 @@ public class GoodsVO implements Serializable{
     private ValidTimeVO validTime;
     private String publishTime;
     private boolean isAttention;
-
     private List<ImageVO> imageList;
+
+    private String validTimeStr;
+    private String needCategoryStr;
 
     public int getId() {
         return id;
@@ -133,5 +135,21 @@ public class GoodsVO implements Serializable{
 
     public void setIsAttention(boolean isAttention) {
         this.isAttention = isAttention;
+    }
+
+    public String getValidTimeStr() {
+        return validTimeStr;
+    }
+
+    public void setValidTimeStr(String validTimeStr) {
+        this.validTimeStr = validTimeStr;
+    }
+
+    public String getNeedCategoryStr() {
+        return needCategoryStr;
+    }
+
+    public void setNeedCategoryStr(String needCategoryStr) {
+        this.needCategoryStr = needCategoryStr;
     }
 }

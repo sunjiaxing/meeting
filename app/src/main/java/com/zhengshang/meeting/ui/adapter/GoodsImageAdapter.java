@@ -11,9 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.ImageOption;
 import com.zhengshang.meeting.common.Utils;
@@ -26,7 +26,7 @@ import java.util.List;
  * 物品 详情/预览  图片列表
  * Created by sun on 2016/3/1.
  */
-public class GoodsImageAdapter extends BaseAdapter {
+public abstract class GoodsImageAdapter extends BaseAdapter implements View.OnClickListener {
 
     private final LayoutInflater layoutInflater;
     private List<GoodsImageVO> list;
@@ -95,6 +95,10 @@ public class GoodsImageAdapter extends BaseAdapter {
             } else {
                 ImageLoader.getInstance().displayImage(vo.getUrl1(), viewHolder.ivImage1, ImageOption.createNomalOption());
                 ImageLoader.getInstance().displayImage(vo.getUrl2(), viewHolder.ivImage2, ImageOption.createNomalOption());
+                viewHolder.ivImage1.setTag(vo.getUrl1());
+                viewHolder.ivImage2.setTag(vo.getUrl2());
+                viewHolder.ivImage1.setOnClickListener(this);
+                viewHolder.ivImage2.setOnClickListener(this);
             }
         } else {
             // 单张
@@ -105,6 +109,8 @@ public class GoodsImageAdapter extends BaseAdapter {
                 ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.FILE.wrap(vo.getUrl1()), viewHolder.ivImage, ImageOption.createNomalOption(), loadingListener);
             } else {
                 ImageLoader.getInstance().displayImage(vo.getUrl1(), viewHolder.ivImage, ImageOption.createNomalOption(), loadingListener);
+                viewHolder.ivImage.setTag(vo.getUrl1());
+                viewHolder.ivImage.setOnClickListener(this);
             }
         }
         return convertView;
@@ -118,18 +124,7 @@ public class GoodsImageAdapter extends BaseAdapter {
         ImageView ivImage1;
         ImageView ivImage2;
     }
-
-    ImageLoadingListener loadingListener = new ImageLoadingListener() {
-        @Override
-        public void onLoadingStarted(String imageUri, View view) {
-
-        }
-
-        @Override
-        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-        }
-
+    ImageLoadingListener loadingListener = new SimpleImageLoadingListener() {
         @Override
         public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
             //  screenW   imgW
@@ -142,10 +137,6 @@ public class GoodsImageAdapter extends BaseAdapter {
                 iv.setImageBitmap(loadedImage);
             }
         }
-
-        @Override
-        public void onLoadingCancelled(String imageUri, View view) {
-
-        }
     };
+
 }

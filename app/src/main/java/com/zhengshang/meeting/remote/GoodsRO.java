@@ -35,7 +35,7 @@ public class GoodsRO extends BaseRO {
     public enum RemoteGoodsURL implements IBaseURL {
         LIST(IParam.LIST), CATEGORIES(IParam.CATEGORIES),
         GET_VALID_TIME(IParam.GET_VALID_TIME), PUBLISH(IParam.PUBLISH_GOODS),
-        DETAIL(IParam.DETAIL);
+        DETAIL(IParam.DETAIL), ATTENTION(IParam.ATTENTION);
 
         private static final String NAMESPACE = IParam.GOODS;
         private String url;
@@ -168,8 +168,9 @@ public class GoodsRO extends BaseRO {
 
     /**
      * 获取 物品详情
+     *
      * @param goodsId 物品id
-     * @param userId 用户id
+     * @param userId  用户id
      * @return
      * @throws JSONException
      */
@@ -179,10 +180,32 @@ public class GoodsRO extends BaseRO {
                 + IParam.AND + IParam.USER_ID + IParam.EQUALS_STRING + userId;
         String result = httpGetRequest(url, null);
         JSONObject json = new JSONObject(result);
-        if (json.getInt(IParam.STATUS) == 1){
+        if (json.getInt(IParam.STATUS) == 1) {
             GoodsDetailDto dto = new GoodsDetailDto();
             dto.parseJson(json.getJSONObject(IParam.DETAIL));
             return dto;
+        } else {
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
+        }
+    }
+
+    /**
+     * 关注
+     *
+     * @param goodsId 物品id
+     * @param userId  用户id
+     * @param option  0关注   1取消关注
+     * @return
+     */
+    public boolean attention(int goodsId, String userId, int option) throws JSONException {
+        String url = getServerUrl() + RemoteGoodsURL.ATTENTION.getURL()
+                + IParam.WENHAO + IParam.GOODS_ID + IParam.EQUALS_STRING + goodsId
+                + IParam.AND + IParam.USER_ID + IParam.EQUALS_STRING + userId
+                + IParam.AND + IParam.OPTION + IParam.EQUALS_STRING + option;
+        String result = httpGetRequest(url, null);
+        JSONObject json = new JSONObject(result);
+        if (json.getInt(IParam.STATUS) == 1) {
+            return true;
         } else {
             throw new AppException(json.getInt(IParam.ERROR_CODE));
         }
