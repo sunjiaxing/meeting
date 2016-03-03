@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mobeta.android.dslv.DragSortListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.taskmanager.LogUtils;
@@ -32,7 +33,6 @@ import com.zhengshang.meeting.service.GoodsService;
 import com.zhengshang.meeting.ui.adapter.GoodsCategoryAdapter;
 import com.zhengshang.meeting.ui.adapter.SortListAdapter;
 import com.zhengshang.meeting.ui.adapter.ValidTimeAdapter;
-import com.zhengshang.meeting.ui.component.SortListView;
 import com.zhengshang.meeting.ui.vo.GoodsCategoryVO;
 import com.zhengshang.meeting.ui.vo.GoodsVO;
 import com.zhengshang.meeting.ui.vo.ImageVO;
@@ -64,7 +64,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
     @ViewById(R.id.btn_right_two)
     Button btnRightTwo;
     @ViewById(R.id.lv_sort)
-    SortListView sortListView;
+    DragSortListView sortListView;
     @Extra(IParam.GOODS_NAME)
     String goodsName;
 
@@ -103,6 +103,19 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         initFooter();
 
         sortListView.setAdapter(null);
+        sortListView.setDropListener(new DragSortListView.DropListener() {
+            @Override
+            public void drop(int from, int to) {//from to 分别表示 被拖动控件原位置 和目标位置
+                if (from != to) {
+                    List<ImageVO> tmp = goodsVO.getImageList();
+                    ImageVO item = tmp.get(from);
+                    tmp.remove(from); //删除”原位置“的数据。
+                    tmp.add(to,item); //在目标位置中插入被拖动的数据。
+                    adapter.setData(tmp);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
 
         goodsVO = new GoodsVO();
         goodsVO.setName(goodsName);

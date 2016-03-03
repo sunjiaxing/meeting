@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,7 +13,6 @@ import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.zhengshang.meeting.R;
 import com.zhengshang.meeting.common.ImageOption;
 import com.zhengshang.meeting.common.Utils;
-import com.zhengshang.meeting.ui.component.SortListView;
 import com.zhengshang.meeting.ui.vo.ImageVO;
 
 import java.util.ArrayList;
@@ -24,10 +22,9 @@ import java.util.List;
  * 输入 物品  用于排序的listview
  * Created by sun on 2016/2/22.
  */
-public abstract class SortListAdapter extends BaseAdapter implements SortListView.DragListViewAdapter, View.OnClickListener {
+public abstract class SortListAdapter extends BaseAdapter implements View.OnClickListener {
     private List<ImageVO> goodsVOList;
     private LayoutInflater layoutInflater;
-    private int hidePosition = AdapterView.INVALID_POSITION;
 
     public SortListAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
@@ -73,12 +70,6 @@ public abstract class SortListAdapter extends BaseAdapter implements SortListVie
         }
         viewHolder.tvInputDesc.setTag(position);
         viewHolder.tvInputDesc.setOnClickListener(this);
-        //hide时隐藏Text
-        if (position != hidePosition) {
-            convertView.setVisibility(View.VISIBLE);
-        } else {
-            convertView.setVisibility(View.INVISIBLE);
-        }
         return convertView;
     }
 
@@ -87,31 +78,4 @@ public abstract class SortListAdapter extends BaseAdapter implements SortListVie
         TextView tvInputDesc;
     }
 
-    @Override
-    public void hideView(int pos) {
-        this.hidePosition = pos;
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void showHideView() {
-        hidePosition = AdapterView.INVALID_POSITION;
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void swapView(int draggedPos, int destPos) {
-        //从前向后拖动，其他item依次前移
-        if (draggedPos < destPos) {
-            goodsVOList.add(destPos + 1, getItem(draggedPos));
-            goodsVOList.remove(draggedPos);
-        }
-        //从后向前拖动，其他item依次后移
-        else if (draggedPos > destPos) {
-            goodsVOList.add(destPos, getItem(draggedPos));
-            goodsVOList.remove(draggedPos + 1);
-        }
-        hidePosition = destPos;
-        notifyDataSetChanged();
-    }
 }
