@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.WindowManager;
 
@@ -286,7 +287,8 @@ public class Utils {
 
     /**
      * 格式化 时间
-     * @param time 时间
+     *
+     * @param time    时间
      * @param pattern 格式
      * @return
      */
@@ -420,6 +422,26 @@ public class Utils {
             fos.close();
             return new File(strFileName);
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 获取手机号
+     *
+     * @param c
+     */
+    public static String getPhoneNumber(Context c) {
+        try {
+            TelephonyManager tm = (TelephonyManager) c
+                    .getSystemService(Context.TELEPHONY_SERVICE);
+            String phone = tm.getLine1Number();
+            if (phone.startsWith("+86")) {
+                phone = phone.replace("+86", "");
+            }
+            return phone;
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

@@ -1,5 +1,6 @@
 package com.zhengshang.meeting.ui.activity;
 
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -129,6 +130,20 @@ public class LoginActivity extends BaseActivity {
                 userService.login(userName, password);
             }
         }, this);
+    }
+
+    @Click(R.id.tv_register)
+    void toRegister() {
+        RegisterActivity_.intent(this).startForResult(0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            setResult(RESULT_OK);
+            finish();
+        }
     }
 
     @Override

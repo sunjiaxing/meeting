@@ -40,6 +40,9 @@
             android:name=".ui.activity.LoginActivity_"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activity.RegisterActivity_"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activity.UserCenterActivity_"
             android:screenOrientation="portrait" />
         <activity

@@ -34,6 +34,7 @@ public interface IParam {
     String CATEGORY = "category";
     String CHILD_ID = "childId";
     String COVER_URL = "coverUrl";
+    String CODE = "code";
 
     // D
     String DETAIL = "detail";
@@ -121,6 +122,7 @@ public interface IParam {
     String REPLY_TO_USER_NAME = "replyToUserName";
     String REPLIES = "replies";
     String RELATIONS = "relations";
+    String REGISTER = "register";
     String REGISTER_TIME = "registerTime";
 
     // S

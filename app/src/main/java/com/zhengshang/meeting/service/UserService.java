@@ -168,4 +168,12 @@ public class UserService extends BaseService {
     public void deleteFavoriteById(String id) throws JSONException {
         userRO.deleteFavoriteById(configDao.getUserId(), id);
     }
+
+    public void getRegisterCode(String phone) {
+
+    }
+
+    public void register(String phone, String code, String password) throws JSONException {
+        userRO.register(phone, code, password);
+    }
 }

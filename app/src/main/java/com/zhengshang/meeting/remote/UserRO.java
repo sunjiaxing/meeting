@@ -29,7 +29,7 @@ public class UserRO extends BaseRO {
     public enum RemoteUserURL implements IBaseURL {
         LOGIN(IParam.LOGIN), ADD_FAVORITE(IParam.ADD_FAVORITE),
         FAVORITE_LIST(IParam.FAVORITE), DELETE_FAVORITE(IParam.DELETE_FAVORITE),
-        DELETE_ALL_FAVORITE(IParam.DELETE_ALL_FAVORITE);
+        DELETE_ALL_FAVORITE(IParam.DELETE_ALL_FAVORITE), REGISTER(IParam.REGISTER);
         private static final String NAMESPACE = IParam.USER;
         private String url;
 
@@ -139,8 +139,9 @@ public class UserRO extends BaseRO {
 
     /**
      * 删除指定 收藏
+     *
      * @param userId 用户id
-     * @param id 收藏id
+     * @param id     收藏id
      * @return
      * @throws JSONException
      */
@@ -149,6 +150,29 @@ public class UserRO extends BaseRO {
                 + IParam.WENHAO + IParam.USER_ID + IParam.EQUALS_STRING + userId
                 + IParam.AND + IParam.FAVORITE_ID + IParam.EQUALS_STRING + id;
         String result = httpGetRequest(url, null);
+        JSONObject json = new JSONObject(result);
+        if (json.getInt(IParam.STATUS) == 1) {
+            return true;
+        } else {
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
+        }
+    }
+
+    /**
+     * 注册
+     * @param phone 手机号
+     * @param code 验证码
+     * @param password 密码
+     * @return
+     * @throws JSONException
+     */
+    public boolean register(String phone, String code, String password) throws JSONException {
+        String url = getServerUrl() + RemoteUserURL.REGISTER.getURL();
+        Map<String, Object> params = new HashMap<>();
+        params.put(IParam.MOBILE, phone);
+        params.put(IParam.CODE, code);
+        params.put(IParam.PASSWORD, password);
+        String result = httpPostRequest(url, null, params);
         JSONObject json = new JSONObject(result);
         if (json.getInt(IParam.STATUS) == 1) {
             return true;
