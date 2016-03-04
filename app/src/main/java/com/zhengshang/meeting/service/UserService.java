@@ -62,17 +62,14 @@ public class UserService extends BaseService {
      */
     public boolean checkLoginState() {
         String userId = configDao.getUserId();
-        if (Utils.isEmpty(userId) || "0".equals(userId)) {
+        if (Utils.isEmpty(userId) || "-1".equals(userId)) {
             return false;
         }
         User user = userDao.getUserById(userId);
         if (user == null) {
             return false;
         }
-        if (user.getLastLoginTime() == 0) {
-            return false;
-        }
-        if (System.currentTimeMillis() - user.getLastLoginTime() > BonConstants.TIME_TO_SAVE_LOGIN_STATE) {
+        if (user.getLastLoginTime() != 0 && System.currentTimeMillis() - user.getLastLoginTime() > BonConstants.TIME_TO_SAVE_LOGIN_STATE) {
             return false;
         }
         return true;
@@ -80,7 +77,7 @@ public class UserService extends BaseService {
 
     public void logout() {
         // 清除用户id
-        configDao.saveUserId("0");
+        configDao.saveUserId("-1");
         // TODO 根据以后具体需求 确定是否要清除用户信息
 
     }
@@ -169,11 +166,28 @@ public class UserService extends BaseService {
         userRO.deleteFavoriteById(configDao.getUserId(), id);
     }
 
-    public void getRegisterCode(String phone) {
-
+    /**
+     * 注册时获取验证码
+     *
+     * @param phone 手机号码
+     * @throws JSONException
+     */
+    public void getRegisterCode(String phone) throws JSONException {
+        userRO.getCode(phone, 1);
     }
 
+    /**
+     * 用户注册
+     *
+     * @param phone    手机号
+     * @param code     验证码
+     * @param password 密码
+     * @throws JSONException
+     */
     public void register(String phone, String code, String password) throws JSONException {
+        // 注册
         userRO.register(phone, code, password);
+        // 注册成功之后自动登录
+        login(phone, password);
     }
 }

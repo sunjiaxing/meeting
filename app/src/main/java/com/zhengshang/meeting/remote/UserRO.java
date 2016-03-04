@@ -29,7 +29,8 @@ public class UserRO extends BaseRO {
     public enum RemoteUserURL implements IBaseURL {
         LOGIN(IParam.LOGIN), ADD_FAVORITE(IParam.ADD_FAVORITE),
         FAVORITE_LIST(IParam.FAVORITE), DELETE_FAVORITE(IParam.DELETE_FAVORITE),
-        DELETE_ALL_FAVORITE(IParam.DELETE_ALL_FAVORITE), REGISTER(IParam.REGISTER);
+        DELETE_ALL_FAVORITE(IParam.DELETE_ALL_FAVORITE), REGISTER(IParam.REGISTER),
+        GET_CODE(IParam.CODE);
         private static final String NAMESPACE = IParam.USER;
         private String url;
 
@@ -160,8 +161,9 @@ public class UserRO extends BaseRO {
 
     /**
      * 注册
-     * @param phone 手机号
-     * @param code 验证码
+     *
+     * @param phone    手机号
+     * @param code     验证码
      * @param password 密码
      * @return
      * @throws JSONException
@@ -173,6 +175,27 @@ public class UserRO extends BaseRO {
         params.put(IParam.CODE, code);
         params.put(IParam.PASSWORD, password);
         String result = httpPostRequest(url, null, params);
+        JSONObject json = new JSONObject(result);
+        if (json.getInt(IParam.STATUS) == 1) {
+            return true;
+        } else {
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
+        }
+    }
+
+    /**
+     * 获取验证码
+     *
+     * @param phone  手机号
+     * @param option 操作符
+     * @return
+     * @throws JSONException
+     */
+    public boolean getCode(String phone, int option) throws JSONException {
+        String url = getServerUrl() + "common/message"
+                + IParam.WENHAO + IParam.MOBILE + IParam.EQUALS_STRING + phone
+                + IParam.AND + IParam.OPTION + IParam.EQUALS_STRING + option;
+        String result = httpGetRequest(url, null);
         JSONObject json = new JSONObject(result);
         if (json.getInt(IParam.STATUS) == 1) {
             return true;

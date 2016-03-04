@@ -37,6 +37,15 @@ public class ErrorCode {
             case 1008:
                 str = "已经收藏过了";
                 break;
+            case 1009:
+                str = "手机号码已注册，可直接登录";
+                break;
+            case 10010:
+                str = "验证码不正确";
+                break;
+            case 10011:
+                str = "验证码超时，请重新获取";
+                break;
             default:
                 str = "系统异常,请稍后重试！";
                 break;

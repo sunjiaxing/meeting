@@ -86,8 +86,6 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
         btnRight.setText("发布物品");
         goodsService = new GoodsService(getActivity());
         userService = new UserService(getActivity());
-
-
     }
 
     /**
@@ -228,6 +226,7 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
                         listView.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NORMAL);
                     }
                     refreshUI();
+                    listView.autoRefresh();
                 } else {
                     getGoodsList();
                 }
