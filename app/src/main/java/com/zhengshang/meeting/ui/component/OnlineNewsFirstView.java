@@ -28,8 +28,6 @@ import com.zhengshang.meeting.ui.vo.NewsVO;
 /**
  * 新闻顶部viewpager
  * 
- * @author sun
- * 
  */
 public class OnlineNewsFirstView extends FrameLayout implements
 		OnPageChangeListener {
@@ -40,9 +38,6 @@ public class OnlineNewsFirstView extends FrameLayout implements
 	private Context context;
 	private int currentViewID;
 
-	private TextView tvNewsTitle = null;
-	private ImageView ivNewsImage = null;
-	private TextView tvSubjectLogo = null;
 	private LinearLayout dianLayout;
 	private RelativeLayout adLayout;
 	private List<NewsVO> topList;
@@ -152,11 +147,11 @@ public class OnlineNewsFirstView extends FrameLayout implements
 		for (int j = 0; j < views.length; j++) {
 			view = inflate(context, R.layout.item_head_news_viewpager, null);
 			// 获取显示图片的组件
-			ivNewsImage = (ImageView) view.findViewById(R.id.iv_news_image);
+			ImageView ivNewsImage = (ImageView) view.findViewById(R.id.iv_news_image);
 			// 获取显示文字的组件
-			tvNewsTitle = (TextView) view.findViewById(R.id.tv_news_title);
+			TextView tvNewsTitle = (TextView) view.findViewById(R.id.tv_news_title);
 			// 获取专题图标组件
-			tvSubjectLogo = (TextView) view.findViewById(R.id.tv_subject_logo);
+			TextView tvSubjectLogo = (TextView) view.findViewById(R.id.tv_subject_logo);
 			// 设置显示文字
 			tvNewsTitle.setText(topList.get(j).getTitle());
 			// 设置显示图片

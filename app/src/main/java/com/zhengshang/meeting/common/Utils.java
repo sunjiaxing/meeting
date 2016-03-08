@@ -368,9 +368,9 @@ public class Utils {
                 options.inSampleSize = 2;
             }
             int w = options.outWidth;
-            // 现在主流手机比较多是800*480分辨率，所以高和宽我们设置为
-            int hh = 800;// 这里设置高度为800
-            int ww = 480;// 这里设置宽度为480
+            // 现在主流手机比较多是 16:9 分辨率，所以高和宽我们设置为
+            int hh = 16;
+            int ww = 9;
 
             int newH = w * hh / ww;
             options.outWidth = ww;

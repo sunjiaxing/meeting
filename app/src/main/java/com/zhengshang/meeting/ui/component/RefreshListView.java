@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -39,6 +40,7 @@ public class RefreshListView extends PtrClassicFrameLayout implements AbsListVie
     private TextView tvLoadMore;
     private ConfigDao configDao;
     private BaseAdapter adapter;
+    private boolean disallowInterceptTouchEvent = false;
 
     @Override
     public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
@@ -50,7 +52,26 @@ public class RefreshListView extends PtrClassicFrameLayout implements AbsListVie
         if (onRefreshLoadMoreListener != null) {
             onRefreshLoadMoreListener.onRefresh();
         }
+
     }
+
+    /**
+     * 添加 headerview
+     *
+     * @param v
+     * @param data
+     * @param isSelectable
+     */
+    public void addHeaderView(View v, Object data, boolean isSelectable) {
+        if (listView != null) {
+            listView.addHeaderView(v, data, isSelectable);
+        }
+    }
+
+    public void addHeaderView(View v) {
+        addHeaderView(v, null, true);
+    }
+
 
     /**
      * 点击加载更多枚举所有状态
@@ -294,4 +315,24 @@ public class RefreshListView extends PtrClassicFrameLayout implements AbsListVie
             listView.setOnItemClickListener(listener);
         }
     }
+
+    public void setOnItemLongClickListener(AdapterView.OnItemLongClickListener listener) {
+        if (listView != null) {
+            listView.setOnItemLongClickListener(listener);
+        }
+    }
+
+    /*@Override
+    public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        disallowInterceptTouchEvent = disallowIntercept;
+        super.requestDisallowInterceptTouchEvent(disallowIntercept);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent e) {
+        if (disallowInterceptTouchEvent) {
+            return dispatchTouchEventSupper(e);
+        }
+        return super.dispatchTouchEvent(e);
+    }*/
 }

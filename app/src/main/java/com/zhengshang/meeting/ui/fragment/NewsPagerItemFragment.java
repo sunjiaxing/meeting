@@ -22,8 +22,8 @@ import com.zhengshang.meeting.ui.activity.NewsDetailActivity_;
 import com.zhengshang.meeting.ui.activity.NewsSubjectActivity_;
 import com.zhengshang.meeting.ui.activity.ShowUrlActivity;
 import com.zhengshang.meeting.ui.adapter.OnlineNewsAdapter;
-import com.zhengshang.meeting.ui.component.DragListView;
 import com.zhengshang.meeting.ui.component.OnlineNewsFirstView;
+import com.zhengshang.meeting.ui.component.RefreshListView;
 import com.zhengshang.meeting.ui.vo.NewsChannelVO;
 import com.zhengshang.meeting.ui.vo.NewsVO;
 
@@ -39,10 +39,10 @@ import org.androidannotations.annotations.ViewById;
 @EFragment(R.layout.listview_in_viewpager)
 public class NewsPagerItemFragment extends BaseFragment implements
         OnlineNewsFirstView.OnClickFirstView,
-        DragListView.OnRefreshLoadMoreListener {
+        RefreshListView.OnRefreshLoadMoreListener {
 
     @ViewById(R.id.lv_drag)
-    DragListView listview;
+    RefreshListView listview;
     @ViewById(R.id.layout_loading)
     View layoutLoading;
     @ViewById(R.id.layout_error)
@@ -72,16 +72,14 @@ public class NewsPagerItemFragment extends BaseFragment implements
 
     @AfterViews
     void init() {
+        anim = (AnimationDrawable) ivLoading.getBackground();
         listview.setVisibility(View.GONE);
-        listview.setPullType(DragListView.ListViewPullType.LV_ALL);
-        listview.setDividerHeight(0);
-        listview.setFastScrollEnabled(true);
         listview.setOnRefreshListener(this);
         // 创建firstview
         firstView = new OnlineNewsFirstView(getActivity(),
                 R.layout.online_news_item_first, this);
         listview.addHeaderView(firstView, null, true);
-        anim = (AnimationDrawable) ivLoading.getBackground();
+        listview.disableWhenHorizontalMove(true);
     }
 
     /**
@@ -93,14 +91,14 @@ public class NewsPagerItemFragment extends BaseFragment implements
     public void refreshCurrentView(NewsChannelVO type, int pos) {
         this.newsType = type;
         this.position = pos;
+        listview.setLastUpdateTimeKey("channel" + type.getTypeId());
         if (Utils.isEmpty(news)) {
-            updateRefreshTimeTip();
             startLoadingSelf();
             // 获取数据
             getDataFromDB();
-        } else if (newsService.needRefresh(type.getTypeId())
+        } else if (newsService.needRefresh(type.getChildId())
                 && listview != null) {
-            listview.isRefreshing();
+            listview.autoRefresh();
         }
     }
 
@@ -212,9 +210,9 @@ public class NewsPagerItemFragment extends BaseFragment implements
                     // 设置加载更多状态
                     setLoadMoreState();
                     // 判断是否刷新
-                    if (newsService.needRefresh(newsType.getTypeId())
+                    if (newsService.needRefresh(newsType.getChildId())
                             && listview != null) {
-                        listview.isRefreshing();
+                        listview.autoRefresh();
                     }
                 } else {
                     // 获取数据
@@ -226,8 +224,6 @@ public class NewsPagerItemFragment extends BaseFragment implements
                 stopLoadingSelf();
                 listview.onRefreshComplete();
                 news = (List<NewsVO>) data;
-                // 记录更新时间
-                updateRefreshTimeTip();
                 // 刷新界面
                 refreshUI();
                 // 设置加载更多状态
@@ -244,9 +240,9 @@ public class NewsPagerItemFragment extends BaseFragment implements
                 if (Utils.isEmpty(loadMoreData)
                         || loadMoreData.size()
                         % BonConstants.LIMIT_GET_NEWS != 0) {
-                    listview.onLoadMoreComplete(DragListView.LoadMoreState.LV_OVER);
+                    listview.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_OVER);
                 } else {
-                    listview.onLoadMoreComplete(DragListView.LoadMoreState.LV_NORMAL);
+                    listview.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NORMAL);
                 }
                 break;
         }
@@ -254,7 +250,7 @@ public class NewsPagerItemFragment extends BaseFragment implements
 
     public void onTaskFail(int action, String message) {
         listview.onRefreshComplete();
-        listview.onLoadMoreComplete(DragListView.LoadMoreState.LV_NETWORK_DISABLE);
+        listview.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NETWORK_DISABLE);
         switch (action) {
             case TaskAction.ACTION_GET_NEWS_FROM_DB:
                 stopLoadingSelf();
@@ -300,9 +296,9 @@ public class NewsPagerItemFragment extends BaseFragment implements
                 totalNewsCount = news.size();
             }
             if (totalNewsCount % BonConstants.LIMIT_GET_NEWS != 0) {
-                listview.onLoadMoreComplete(DragListView.LoadMoreState.LV_OVER);
+                listview.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_OVER);
             } else {
-                listview.onLoadMoreComplete(DragListView.LoadMoreState.LV_NORMAL);
+                listview.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NORMAL);
             }
         }
     }
@@ -320,18 +316,6 @@ public class NewsPagerItemFragment extends BaseFragment implements
                 });
             }
         }, getActivity());
-    }
-
-    /**
-     * 只更新上次刷新时间显示
-     */
-    private void updateRefreshTimeTip() {
-        if (listview != null && newsType != null) {
-            // 设置listview上的更新时间
-            listview.setLastRefreshTime(Utils.formateTime(
-                    newsService.getCatClickTime(newsType.getTypeId()),
-                    false));
-        }
     }
 
     /**
@@ -383,7 +367,7 @@ public class NewsPagerItemFragment extends BaseFragment implements
     @ItemClick(R.id.lv_drag)
     void onItemClick(int position) {
         // 获取选中的news
-        final NewsVO model = news.get(hasTop ? position - 1 : position - 2);
+        final NewsVO model = news.get(hasTop ? position : position - 1);
         if (model == null) {
             return;
         }

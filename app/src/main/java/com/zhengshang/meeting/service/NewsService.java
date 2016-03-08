@@ -542,7 +542,7 @@ public class NewsService extends BaseService {
      * @return
      */
     public boolean needRefresh(String catId) {
-        long lastClickTime = configDao.getCatClickTime(catId, 0);
+        long lastClickTime = configDao.getCatClickTime(catId, System.currentTimeMillis());
         if (System.currentTimeMillis() - lastClickTime > BonConstants.TIME_TO_REFESH_DATA) {
             return true;
         }

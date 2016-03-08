@@ -17,7 +17,7 @@ import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.service.UserService;
 import com.zhengshang.meeting.ui.adapter.FavoriteAdapter;
-import com.zhengshang.meeting.ui.component.DragListView;
+import com.zhengshang.meeting.ui.component.RefreshListView;
 import com.zhengshang.meeting.ui.vo.FavoriteVO;
 
 import org.androidannotations.annotations.AfterViews;
@@ -34,7 +34,7 @@ import java.util.List;
  * Created by sun on 2016/1/21.
  */
 @EActivity(R.layout.layout_news_subject)
-public class FavoriteActivity extends BaseActivity implements DragListView.OnRefreshLoadMoreListener {
+public class FavoriteActivity extends BaseActivity implements RefreshListView.OnRefreshLoadMoreListener {
 
     @ViewById(R.id.iv_back)
     ImageView ivBack;
@@ -49,7 +49,7 @@ public class FavoriteActivity extends BaseActivity implements DragListView.OnRef
     @ViewById(R.id.btn_refresh)
     Button btnErrorRefresh;
     @ViewById(R.id.lv_drag)
-    DragListView listView;
+    RefreshListView listView;
 
     private AnimationDrawable anim;
     private List<FavoriteVO> favoriteList;
@@ -62,10 +62,8 @@ public class FavoriteActivity extends BaseActivity implements DragListView.OnRef
         tvTitle.setText("我的收藏");
         anim = (AnimationDrawable) findViewById(R.id.iv_loading_in)
                 .getBackground();
-        listView.setPullType(DragListView.ListViewPullType.LV_ONLY_REFRESH);
-        listView.setDividerHeight(0);
-        listView.setFastScrollEnabled(true);
         listView.setOnRefreshListener(this);
+        listView.setLastUpdateTimeRelateObject(this);
         userService = new UserService(this);
         startLoadingSelf();
         getFavoriteList();
@@ -131,8 +129,10 @@ public class FavoriteActivity extends BaseActivity implements DragListView.OnRef
                 listView.onRefreshComplete();
                 if (data != null) {
                     favoriteList = (List<FavoriteVO>) data;
+                    refreshUI();
+                } else {
+                    showErrorMsg("暂无收藏信息");
                 }
-                refreshUI();
                 break;
             case TaskAction.ACTION_DELETE_ALL_FAVORITE:
             case TaskAction.ACTION_DELETE_FAVORITE:
@@ -156,7 +156,7 @@ public class FavoriteActivity extends BaseActivity implements DragListView.OnRef
             adapter.setData(favoriteList);
             adapter.notifyDataSetChanged();
         }
-        listView.setLastRefreshTime(Utils.formateTime(System.currentTimeMillis(), false));
+        listView.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_REMOVE);
     }
 
     @Click(R.id.btn_refresh)
@@ -209,7 +209,7 @@ public class FavoriteActivity extends BaseActivity implements DragListView.OnRef
 
     @ItemClick(R.id.lv_drag)
     void onItemClick(int position) {
-        FavoriteVO favoriteVO = favoriteList.get(position - 1);
+        FavoriteVO favoriteVO = favoriteList.get(position);
         if (favoriteVO.getFavoriteType() == 1) {
             NewsDetailActivity_.intent(this)
                     .extra(IParam.NEWS_ID, favoriteVO.getNewsId())
@@ -220,7 +220,7 @@ public class FavoriteActivity extends BaseActivity implements DragListView.OnRef
 
     @ItemLongClick(R.id.lv_drag)
     void onItemLongClick(int position) {
-        final FavoriteVO favoriteVO = favoriteList.get(position - 1);
+        final FavoriteVO favoriteVO = favoriteList.get(position);
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setItems(new String[]{"删除选中数据", "删除全部数据"}, new DialogInterface.OnClickListener() {
             @Override

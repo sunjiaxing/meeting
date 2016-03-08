@@ -19,6 +19,7 @@ import com.zhengshang.meeting.remote.IParam;
 import com.zhengshang.meeting.service.NewsService;
 import com.zhengshang.meeting.ui.adapter.OnlineNewsAdapter;
 import com.zhengshang.meeting.ui.component.DragListView;
+import com.zhengshang.meeting.ui.component.RefreshListView;
 import com.zhengshang.meeting.ui.vo.NewsSubjectVO;
 import com.zhengshang.meeting.ui.vo.NewsVO;
 
@@ -33,7 +34,7 @@ import org.androidannotations.annotations.ViewById;
  * Created by sun on 2016/1/20.
  */
 @EActivity(R.layout.layout_news_subject)
-public class NewsSubjectActivity extends BaseActivity implements DragListView.OnRefreshLoadMoreListener {
+public class NewsSubjectActivity extends BaseActivity implements RefreshListView.OnRefreshLoadMoreListener {
 
     @ViewById(R.id.iv_back)
     ImageView ivBack;
@@ -48,7 +49,7 @@ public class NewsSubjectActivity extends BaseActivity implements DragListView.On
     @ViewById(R.id.btn_refresh)
     Button btnErrorRefresh;
     @ViewById(R.id.lv_drag)
-    DragListView listView;
+    RefreshListView listView;
 
     private AnimationDrawable anim;
     private int specialId;
@@ -67,10 +68,9 @@ public class NewsSubjectActivity extends BaseActivity implements DragListView.On
                 .getBackground();
         ivBack.setVisibility(View.VISIBLE);
         tvTitle.setText(title);
-        listView.setPullType(DragListView.ListViewPullType.LV_ONLY_REFRESH);
-        listView.setDividerHeight(0);
-        listView.setFastScrollEnabled(true);
         listView.setOnRefreshListener(this);
+        listView.setLastUpdateTimeRelateObject(this);
+        listView.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_REMOVE);
         initHeader();
         newsService = new NewsService(this);
         startLoadingSelf();
@@ -157,7 +157,6 @@ public class NewsSubjectActivity extends BaseActivity implements DragListView.On
      * 刷新界面
      */
     private void refreshUI() {
-        listView.setLastRefreshTime(Utils.formateTime(System.currentTimeMillis(), false));
         ImageLoader.getInstance().displayImage(subjectVO.getBanner(), ivBanner, ImageOption.createNomalOption());
         tvDesc.setText(subjectVO.getDescription());
         if (adapter == null) {
@@ -193,7 +192,7 @@ public class NewsSubjectActivity extends BaseActivity implements DragListView.On
     @ItemClick(R.id.lv_drag)
     void onItemClick(int position) {
         // 获取选中的news
-        NewsVO model = subjectVO.getNewsVOList().get(position - 2);
+        NewsVO model = subjectVO.getNewsVOList().get(position - 1);
         if (model != null && !model.isSubject()) {
             // 不是专题--按以前的逻辑
             // 设置阅读状态
