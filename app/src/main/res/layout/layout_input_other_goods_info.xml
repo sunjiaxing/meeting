@@ -7,14 +7,6 @@
 
     <include layout="@layout/title" />
 
-    <!--<com.zhengshang.meeting.ui.component.SortListView
-        android:id="@+id/lv_sort"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:cacheColorHint="@android:color/transparent"
-        android:divider="@null"
-        android:fadingEdge="none" />-->
-
     <com.mobeta.android.dslv.DragSortListView
         android:id="@+id/lv_sort"
         android:layout_width="match_parent"
@@ -23,6 +15,8 @@
         android:divider="@null"
         android:fadingEdge="none"
         dslv:drag_start_mode="onLongPress"
+        dslv:float_alpha="0.7"
         dslv:float_background_color="@color/color_white"
-        dslv:remove_enabled="false" />
+        dslv:remove_enabled="false"
+        dslv:track_drag_sort="false" />
 </LinearLayout>

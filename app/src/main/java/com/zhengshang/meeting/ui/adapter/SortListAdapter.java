@@ -56,6 +56,7 @@ public abstract class SortListAdapter extends BaseAdapter implements View.OnClic
             viewHolder = new ViewHolder();
             convertView = layoutInflater.inflate(R.layout.layout_item_input_goods, null);
             viewHolder.ivImage = (ImageView) convertView.findViewById(R.id.iv_image);
+            viewHolder.ivDelete = (ImageView) convertView.findViewById(R.id.iv_remove);
             viewHolder.tvInputDesc = (TextView) convertView.findViewById(R.id.tv_input_desc);
             convertView.setTag(viewHolder);
         } else {
@@ -68,13 +69,16 @@ public abstract class SortListAdapter extends BaseAdapter implements View.OnClic
         } else {
             viewHolder.tvInputDesc.setText(R.string.input_image_desc_tip);
         }
-        viewHolder.tvInputDesc.setTag(position);
-        viewHolder.tvInputDesc.setOnClickListener(this);
+//        viewHolder.tvInputDesc.setTag(position);
+//        viewHolder.tvInputDesc.setOnClickListener(this);
+        viewHolder.ivDelete.setTag(position);
+        viewHolder.ivDelete.setOnClickListener(this);
         return convertView;
     }
 
     class ViewHolder {
         ImageView ivImage;
+        ImageView ivDelete;
         TextView tvInputDesc;
     }
 

@@ -33,6 +33,7 @@ import com.zhengshang.meeting.service.GoodsService;
 import com.zhengshang.meeting.ui.adapter.GoodsCategoryAdapter;
 import com.zhengshang.meeting.ui.adapter.SortListAdapter;
 import com.zhengshang.meeting.ui.adapter.ValidTimeAdapter;
+import com.zhengshang.meeting.ui.component.TlcyDialog;
 import com.zhengshang.meeting.ui.vo.GoodsCategoryVO;
 import com.zhengshang.meeting.ui.vo.GoodsVO;
 import com.zhengshang.meeting.ui.vo.ImageVO;
@@ -42,6 +43,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
 
 import java.io.Serializable;
@@ -110,13 +112,12 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
                     List<ImageVO> tmp = goodsVO.getImageList();
                     ImageVO item = tmp.get(from);
                     tmp.remove(from); //删除”原位置“的数据。
-                    tmp.add(to,item); //在目标位置中插入被拖动的数据。
+                    tmp.add(to, item); //在目标位置中插入被拖动的数据。
                     adapter.setData(tmp);
                     adapter.notifyDataSetChanged();
                 }
             }
         });
-
         goodsVO = new GoodsVO();
         goodsVO.setName(goodsName);
 
@@ -185,7 +186,11 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
                 adapter = new SortListAdapter(this) {
                     @Override
                     public void onClick(View v) {
-                        inputImageDesc((int) v.getTag());
+                        switch (v.getId()) {
+                            case R.id.iv_remove:
+                                removeSelectImage((int) v.getTag());
+                                break;
+                        }
                     }
                 };
                 adapter.setData(goodsVO.getImageList());
@@ -208,6 +213,27 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
             setResult(RESULT_OK);
             finish();
         }
+    }
+
+    /**
+     * 移除所选图片
+     *
+     * @param position
+     */
+    private void removeSelectImage(final int position) {
+        showAlert("确定要删除所选图片吗？", new TlcyDialog.TlcyDialogListener() {
+            @Override
+            public void onClick() {
+                if (!Utils.isEmpty(goodsVO.getCoverUrl()) && goodsVO.getCoverUrl().equals(imagePathList.get(position))) {
+                    goodsVO.setCoverUrl(null);
+                    ivCover.setImageResource(R.mipmap.ic_launcher);
+                }
+                goodsVO.getImageList().remove(position);
+                imagePathList.remove(position);
+                adapter.setData(goodsVO.getImageList());
+                adapter.notifyDataSetChanged();
+            }
+        }, null);
     }
 
     /**
@@ -506,6 +532,11 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @ItemClick(R.id.lv_sort)
+    void onItemClick(int pos) {
+        inputImageDesc(pos);
     }
 
     @Override
