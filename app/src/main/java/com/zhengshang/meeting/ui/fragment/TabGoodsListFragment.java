@@ -32,7 +32,6 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ItemClick;
-import org.androidannotations.annotations.ItemLongClick;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
@@ -74,17 +73,19 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
     private static final int REQUEST_CODE_INPUT_GOODS_NAME = 0;
     private static final int REQUEST_CODE_LOGIN = 1;
     private static final int REQUEST_CODE_PUBLISH = 2;
+    private static final int REQUEST_CODE_ATTENTION = 3;
 
     @AfterViews
     void init() {
         anim = (AnimationDrawable) ivLoading.getBackground();
         ivBack.setVisibility(View.GONE);
-        tvTitle.setText("商品列表");
+        tvTitle.setText("易物");
         listView.setOnRefreshListener(this);
         listView.setLastUpdateTimeRelateObject(this);
+//        listView.setPinContent(true);
         btnRight.setVisibility(View.VISIBLE);
         btnRight.setBackgroundColor(Color.TRANSPARENT);
-        btnRight.setText("发布物品");
+        btnRight.setText("发布");
         goodsService = new GoodsService(getActivity());
         userService = new UserService(getActivity());
     }
@@ -183,6 +184,8 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
             clickToInputGoodsName();
         } else if (requestCode == REQUEST_CODE_PUBLISH && resultCode == Activity.RESULT_OK) {
             listView.autoRefresh();
+        } else if (requestCode == REQUEST_CODE_ATTENTION && resultCode == Activity.RESULT_OK) {
+            listView.autoRefresh();
         }
     }
 
@@ -232,6 +235,10 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
                     getGoodsList();
                 }
                 break;
+            case TaskAction.ACTION_GOODS_ATTENTION:
+                stopLoading();
+                adapter.notifyDataSetChanged();
+                break;
         }
     }
 
@@ -240,7 +247,18 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
      */
     private void refreshUI() {
         if (adapter == null) {
-            adapter = new GoodsListAdapter(getActivity());
+            adapter = new GoodsListAdapter(getActivity()) {
+                @Override
+                public void onClick(View v) {
+                    switch (v.getId()) {
+                        case R.id.tv_attention:
+                            int pos = (int) v.getTag();
+                            startLoading();
+                            attention(pos);
+                            break;
+                    }
+                }
+            };
             adapter.setData(goodsList);
             listView.setAdapter(adapter);
         } else {
@@ -249,11 +267,44 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
         }
     }
 
+    /**
+     * 关注
+     *
+     * @param pos
+     */
+    private void attention(int pos) {
+        final GoodsVO goodsVO = goodsList.get(pos);
+        if (userService.checkLoginState()) {
+            TaskManager.pushTask(new Task(TaskAction.ACTION_GOODS_ATTENTION) {
+                @Override
+                protected void doBackground() throws Exception {
+                    setNeedCallBack(false);
+                    if (goodsVO.isAttention()) {
+                        goodsService.cancelAttention(goodsVO.getId());
+                    } else {
+                        goodsService.attention(goodsVO.getId());
+                    }
+                    goodsVO.setIsAttention(!goodsVO.isAttention());
+                }
+            }, getActivity());
+        } else {
+            LoginActivity_.intent(this).startForResult(REQUEST_CODE_ATTENTION);
+        }
+    }
+
     public void onTaskFail(int action, String errorMessage) {
-        stopLoadingSelf();
-        listView.onRefreshComplete();
-        listView.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NETWORK_DISABLE);
-        showErrorMsg(errorMessage);
+        switch (action) {
+            case TaskAction.ACTION_GOODS_ATTENTION:
+                stopLoading();
+                showToast(errorMessage);
+                break;
+            default:
+                stopLoadingSelf();
+                listView.onRefreshComplete();
+                listView.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NETWORK_DISABLE);
+                showErrorMsg(errorMessage);
+                break;
+        }
         LogUtils.e("action:" + action);
     }
 

@@ -11,6 +11,11 @@ public class Goods {
     public static final String KEY_COLUMN_COVER_URL = "cover_url";
     public static final String KEY_COLUMN_SCAN_NUM = "scan_num";
     public static final String KEY_COLUMN_ATTENTION_NUM = "attention_num";
+    public static final String KEY_COLUMN_ATTENTION_STATE = "attention_state";
+    public static final String KEY_COLUMN_EXCHANGE_PRICE = "exchange_price";
+    public static final String KEY_COLUMN_MARKET_PRICE = "market_price";
+    public static final String KEY_COLUMN_COUNT = "count";
+    public static final String KEY_COLUMN_VALID_TIME_STR = "valid_time_str";
     public static final String KEY_COLUMN_PUBLISH_TIME = "publish_time";
     public static final String KEY_COLUMN_REMARK = "remark";
 
@@ -24,7 +29,12 @@ public class Goods {
             + KEY_COLUMN_SCAN_NUM + " INTEGER,"
             + KEY_COLUMN_ATTENTION_NUM + " INTEGER,"
             + KEY_COLUMN_PUBLISH_TIME + " LONG,"
-            + KEY_COLUMN_REMARK + " TEXT "
+            + KEY_COLUMN_REMARK + " TEXT ,"
+            + KEY_COLUMN_ATTENTION_STATE + " INTEGER ,"
+            + KEY_COLUMN_EXCHANGE_PRICE + " DOUBLE ,"
+            + KEY_COLUMN_MARKET_PRICE + " DOUBLE ,"
+            + KEY_COLUMN_COUNT + " INTEGER ,"
+            + KEY_COLUMN_VALID_TIME_STR + " TEXT "
             + ")";
 
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS "
@@ -38,6 +48,11 @@ public class Goods {
     private int scanNum;
     private int attentionNum;
     private long publishTime;
+    private double exchangePrice;
+    private double marketPrice;
+    private int count;
+    private int attentionState;
+    private String validTimeStr;
 
     public int getId() {
         return id;
@@ -85,5 +100,45 @@ public class Goods {
 
     public void setPublishTime(long publishTime) {
         this.publishTime = publishTime;
+    }
+
+    public double getExchangePrice() {
+        return exchangePrice;
+    }
+
+    public void setExchangePrice(double exchangePrice) {
+        this.exchangePrice = exchangePrice;
+    }
+
+    public double getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(double marketPrice) {
+        this.marketPrice = marketPrice;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public int getAttentionState() {
+        return attentionState;
+    }
+
+    public void setAttentionState(int attentionState) {
+        this.attentionState = attentionState;
+    }
+
+    public String getValidTimeStr() {
+        return validTimeStr;
+    }
+
+    public void setValidTimeStr(String validTimeStr) {
+        this.validTimeStr = validTimeStr;
     }
 }

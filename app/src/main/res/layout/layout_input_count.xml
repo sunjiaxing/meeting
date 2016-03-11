@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <EditText
+        android:id="@+id/edit_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/default_input_bg_shape"
+        android:hint="库存"
+        android:inputType="number"
+        android:maxLength="10"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:textColor="@color/news_content_color"
+        android:textCursorDrawable="@null"
+        android:textSize="15sp" />
+</LinearLayout>

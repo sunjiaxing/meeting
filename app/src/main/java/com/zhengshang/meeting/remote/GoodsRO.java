@@ -3,7 +3,6 @@ package com.zhengshang.meeting.remote;
 import android.content.Context;
 
 import com.zhengshang.meeting.common.BonConstants;
-import com.zhengshang.meeting.dao.entity.User;
 import com.zhengshang.meeting.exeception.AppException;
 import com.zhengshang.meeting.remote.dto.GoodsDetailDto;
 import com.zhengshang.meeting.remote.dto.GoodsDto;
@@ -18,8 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import cz.msebera.android.httpclient.NameValuePair;
 
 /**
  * 易物 RO
@@ -104,10 +101,10 @@ public class GoodsRO extends BaseRO {
     /**
      * 发布物品
      *
-     * @param goodsVO
-     * @param userId
-     * @param mobile
-     * @param imgJson
+     * @param goodsVO 物品对象
+     * @param userId  用户id
+     * @param mobile  手机号
+     * @param imgJson 图片+描述 json
      * @return
      * @throws JSONException
      */
@@ -122,6 +119,7 @@ public class GoodsRO extends BaseRO {
         params.put(IParam.MARKET_PRICE, goodsVO.getMarketPrice());
         params.put(IParam.EXCHANGE_PRICE, goodsVO.getExchangePrice());
         params.put(IParam.VALID_TIME, goodsVO.getValidTime().getId());
+        params.put(IParam.COUNT, goodsVO.getCount());
         params.put(IParam.IMAGES, imgJson);
         if (goodsVO.getNeedCategory() != null) {
             params.put(IParam.NEED_CATEGORY, goodsVO.getNeedCategory().getId());

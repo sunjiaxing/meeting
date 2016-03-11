@@ -54,6 +54,40 @@
         android:background="@color/line_color" />
 
     <TextView
+        android:id="@+id/tv_published_goods"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/comment_item_white_bg"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:text="我的发布"
+        android:textColor="@color/news_content_color"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color" />
+
+    <TextView
+        android:id="@+id/tv_attention_goods"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/comment_item_white_bg"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:text="我的关注"
+        android:textColor="@color/news_content_color"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color" />
+
+    <TextView
         android:id="@+id/tv_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

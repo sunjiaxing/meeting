@@ -74,6 +74,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
     private ImageView ivCover;
     private TextView tvSelectCategory;
     private TextView tvInputPrice;
+    private TextView tvInputCount;
     private TextView tvSelectValidTime;
     private GoodsVO goodsVO;
     private SortListAdapter adapter;
@@ -146,6 +147,8 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         header.findViewById(R.id.layout_select_category).setOnClickListener(this);
         tvInputPrice = (TextView) header.findViewById(R.id.tv_input_price);
         header.findViewById(R.id.layout_input_price).setOnClickListener(this);
+        tvInputCount = (TextView) header.findViewById(R.id.tv_input_count);
+        header.findViewById(R.id.layout_input_count).setOnClickListener(this);
         tvSelectValidTime = (TextView) header.findViewById(R.id.tv_select_valid_time);
         header.findViewById(R.id.layout_select_valid_time).setOnClickListener(this);
         sortListView.addHeaderView(header);
@@ -366,6 +369,9 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
             case R.id.layout_input_price:// 输入市场价/兑换价
                 inputPrice();
                 break;
+            case R.id.layout_input_count:// 输入数量
+                inputCount();
+                break;
             case R.id.layout_select_valid_time:// 选择有效时间
                 selectValidTime();
                 break;
@@ -399,7 +405,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
      */
     private void inputPrice() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("输入市场价/兑换价");
+        builder.setTitle("输入市场价/兑换价（单位：元）");
         View inputView = getLayoutInflater().inflate(R.layout.layout_input_price, null);
         final EditText editMarketPrice = (EditText) inputView.findViewById(R.id.edit_market_price);
         final EditText editExchangePrice = (EditText) inputView.findViewById(R.id.edit_exchange_price);
@@ -428,6 +434,34 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
                 goodsVO.setMarketPrice(Double.parseDouble(market));
                 goodsVO.setExchangePrice(Double.parseDouble(exchange));
                 tvInputPrice.setText(market + "/" + exchange);
+                dialog.dismiss();
+            }
+        }).setNegativeButton("取消", null).show();
+    }
+
+    /**
+     * 输入库存数量
+     */
+    private void inputCount() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("输入库存数量");
+        View inputView = getLayoutInflater().inflate(R.layout.layout_input_count, null);
+        final EditText editCount = (EditText) inputView.findViewById(R.id.edit_count);
+        if (goodsVO.getCount() > 0) {
+            editCount.setText(String.valueOf(goodsVO.getCount()));
+            editCount.setSelection(String.valueOf(goodsVO.getCount()).length());
+        }
+        builder.setView(inputView);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String count = editCount.getText().toString();
+                if (Utils.isEmpty(count)) {
+                    showToast("请输入库存数量");
+                    return;
+                }
+                goodsVO.setCount(Integer.parseInt(count));
+                tvInputCount.setText(count);
                 dialog.dismiss();
             }
         }).setNegativeButton("取消", null).show();

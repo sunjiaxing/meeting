@@ -1,9 +1,13 @@
 package com.zhengshang.meeting.ui.fragment;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.widget.TextView;
 
+import com.zhengshang.meeting.R;
+import com.zhengshang.meeting.common.Utils;
 import com.zhengshang.meeting.ui.activity.BaseActivity;
 import com.zhengshang.meeting.ui.component.TlcyDialog;
 
@@ -72,5 +76,29 @@ public class BaseFragment extends Fragment {
     public Dialog showAlert(String text, TlcyDialog.TlcyDialogListener okListener,
                             TlcyDialog.TlcyDialogListener cancelListener) {
         return mActivity.showAlert(text, okListener, cancelListener);
+    }
+
+    public void startLoading(String message, boolean cancelable, DialogInterface.OnCancelListener listener) {
+        mActivity.startLoading(message, cancelable, listener);
+    }
+
+    public void startLoading(String message, boolean cancelable) {
+        startLoading(message, cancelable, null);
+    }
+
+    public void startLoading(String message) {
+        startLoading(message, false);
+    }
+
+    public void startLoading(boolean cancelable) {
+        startLoading(null, cancelable);
+    }
+
+    public void startLoading() {
+        startLoading(null);
+    }
+
+    public void stopLoading() {
+        mActivity.stopLoading();
     }
 }

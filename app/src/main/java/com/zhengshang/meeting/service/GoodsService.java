@@ -108,8 +108,8 @@ public class GoodsService extends BaseService {
     /**
      * 发布物品
      *
-     * @param goodsVO
-     * @param mobile
+     * @param goodsVO 物品对象
+     * @param mobile  手机号
      * @throws JSONException
      */
     public void publishGoods(GoodsVO goodsVO, String mobile) throws JSONException {
@@ -178,6 +178,11 @@ public class GoodsService extends BaseService {
             goods.setScanNum(dto.getScanNum());
             goods.setAttentionNum(dto.getAttentionNum());
             goods.setPublishTime(dto.getPublishTime());
+            goods.setMarketPrice(dto.getMarketPrice());
+            goods.setExchangePrice(dto.getExchangePrice());
+            goods.setValidTimeStr(dto.getValidTimeStr());
+            goods.setCount(dto.getCount());
+            goods.setAttentionState(dto.getIsAttention());
             goodsDao.insertGoods(goods);
 
             vo = new GoodsVO();
@@ -186,7 +191,12 @@ public class GoodsService extends BaseService {
             vo.setCoverUrl(dto.getCoverUrl());
             vo.setScanNum(dto.getScanNum());
             vo.setAttentionNum(dto.getAttentionNum());
-            vo.setPublishTime(Utils.formateTime(dto.getPublishTime(), true));
+            vo.setPublishTime(Utils.formateTime(dto.getPublishTime(), "yyyy/MM/dd"));
+            vo.setMarketPrice(dto.getMarketPrice());
+            vo.setExchangePrice(dto.getExchangePrice());
+            vo.setValidTimeStr(dto.getValidTimeStr());
+            vo.setCount(dto.getCount());
+            vo.setIsAttention(dto.getIsAttention() == 1);
             showData.add(vo);
         }
         goodsDao.setTransactionSuccessful();
@@ -211,7 +221,12 @@ public class GoodsService extends BaseService {
                 vo.setCoverUrl(goods.getCoverUrl());
                 vo.setScanNum(goods.getScanNum());
                 vo.setAttentionNum(goods.getAttentionNum());
-                vo.setPublishTime(Utils.formateTime(goods.getPublishTime(), true));
+                vo.setPublishTime(Utils.formateTime(goods.getPublishTime(), "yyyy/MM/dd"));
+                vo.setMarketPrice(goods.getMarketPrice());
+                vo.setExchangePrice(goods.getExchangePrice());
+                vo.setValidTimeStr(goods.getValidTimeStr());
+                vo.setCount(goods.getCount());
+                vo.setIsAttention(goods.getAttentionState() == 1);
                 showData.add(vo);
             }
             return showData;
@@ -234,7 +249,7 @@ public class GoodsService extends BaseService {
             detailVO.setName(dto.getGoodsName());
             detailVO.setCoverUrl(dto.getCoverUrl());
             detailVO.setNeedCategoryStr(dto.getNeedCategory());
-            detailVO.setValidTimeStr(dto.getValidTime());
+            detailVO.setValidTimeStr(dto.getValidTimeStr());
             detailVO.setAttentionNum(dto.getAttentionNum());
             detailVO.setScanNum(dto.getScanNum());
             detailVO.setMarketPrice(dto.getMarketPrice());

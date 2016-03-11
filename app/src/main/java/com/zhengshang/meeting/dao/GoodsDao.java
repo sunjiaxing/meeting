@@ -43,6 +43,11 @@ public class GoodsDao extends BaseDao {
         values.put(Goods.KEY_COLUMN_SCAN_NUM, goods.getScanNum());
         values.put(Goods.KEY_COLUMN_ATTENTION_NUM, goods.getAttentionNum());
         values.put(Goods.KEY_COLUMN_PUBLISH_TIME, goods.getPublishTime());
+        values.put(Goods.KEY_COLUMN_EXCHANGE_PRICE, goods.getExchangePrice());
+        values.put(Goods.KEY_COLUMN_MARKET_PRICE, goods.getMarketPrice());
+        values.put(Goods.KEY_COLUMN_COUNT, goods.getCount());
+        values.put(Goods.KEY_COLUMN_VALID_TIME_STR, goods.getValidTimeStr());
+        values.put(Goods.KEY_COLUMN_ATTENTION_STATE, goods.getAttentionState());
         if (isExist(goods.getId())) {
             db.update(Goods.KEY_TABLE_NAME, values, Goods.KEY_COLUMN_ID + " = ?", new String[]{String.valueOf(goods.getId())});
         } else {
@@ -73,6 +78,7 @@ public class GoodsDao extends BaseDao {
 
     /**
      * 获取物品 列表
+     *
      * @return
      */
     public List<Goods> getGoodsList() {
@@ -91,6 +97,11 @@ public class GoodsDao extends BaseDao {
                     goods.setScanNum(cursor.getInt(cursor.getColumnIndex(Goods.KEY_COLUMN_SCAN_NUM)));
                     goods.setAttentionNum(cursor.getInt(cursor.getColumnIndex(Goods.KEY_COLUMN_ATTENTION_NUM)));
                     goods.setPublishTime(cursor.getLong(cursor.getColumnIndex(Goods.KEY_COLUMN_PUBLISH_TIME)));
+                    goods.setExchangePrice(cursor.getDouble(cursor.getColumnIndex(Goods.KEY_COLUMN_EXCHANGE_PRICE)));
+                    goods.setMarketPrice(cursor.getDouble(cursor.getColumnIndex(Goods.KEY_COLUMN_MARKET_PRICE)));
+                    goods.setCount(cursor.getInt(cursor.getColumnIndex(Goods.KEY_COLUMN_COUNT)));
+                    goods.setValidTimeStr(cursor.getString(cursor.getColumnIndex(Goods.KEY_COLUMN_VALID_TIME_STR)));
+                    goods.setAttentionState(cursor.getInt(cursor.getColumnIndex(Goods.KEY_COLUMN_ATTENTION_STATE)));
                     list.add(goods);
                 }
             }

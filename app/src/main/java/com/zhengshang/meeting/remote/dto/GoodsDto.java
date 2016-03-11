@@ -19,6 +19,8 @@ public class GoodsDto {
     private double marketPrice;
     private double exchangePrice;
     private int isAttention;
+    private int count;
+    private String validTimeStr;
 
     public int getId() {
         return id;
@@ -54,6 +56,14 @@ public class GoodsDto {
 
     public int getIsAttention() {
         return isAttention;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public String getValidTimeStr() {
+        return validTimeStr;
     }
 
     /**
@@ -92,6 +102,12 @@ public class GoodsDto {
         }
         if (json.has(IParam.ATTENTION_STATUS)) {
             this.isAttention = json.getInt(IParam.ATTENTION_STATUS);
+        }
+        if (json.has(IParam.COUNT)) {
+            this.count = json.getInt(IParam.COUNT);
+        }
+        if (json.has(IParam.VALID_TIME)) {
+            this.validTimeStr = json.getString(IParam.VALID_TIME);
         }
     }
 }

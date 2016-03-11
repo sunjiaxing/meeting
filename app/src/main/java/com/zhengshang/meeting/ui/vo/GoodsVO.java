@@ -25,6 +25,7 @@ public class GoodsVO implements Serializable{
 
     private String validTimeStr;
     private String needCategoryStr;
+    private int count;
 
     public int getId() {
         return id;
@@ -151,5 +152,13 @@ public class GoodsVO implements Serializable{
 
     public void setNeedCategoryStr(String needCategoryStr) {
         this.needCategoryStr = needCategoryStr;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

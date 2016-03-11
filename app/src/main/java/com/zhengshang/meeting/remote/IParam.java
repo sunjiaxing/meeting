@@ -35,6 +35,7 @@ public interface IParam {
     String CHILD_ID = "childId";
     String COVER_URL = "coverUrl";
     String CODE = "code";
+    String COUNT = "count";
 
     // D
     String DETAIL = "detail";

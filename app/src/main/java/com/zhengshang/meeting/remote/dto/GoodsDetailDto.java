@@ -10,14 +10,8 @@ import org.json.JSONObject;
  * Created by sun on 2016/3/1.
  */
 public class GoodsDetailDto extends GoodsDto {
-    private String validTime;
     private String needCategory;
     private String imgJson;
-
-    public String getValidTime() {
-        return validTime;
-    }
-
     public String getNeedCategory() {
         return needCategory;
     }
@@ -31,9 +25,6 @@ public class GoodsDetailDto extends GoodsDto {
             return;
         }
         super.parseJson(json);
-        if (json.has(IParam.VALID_TIME)) {
-            this.validTime = json.getString(IParam.VALID_TIME);
-        }
         if (json.has(IParam.NEED_CATEGORY)) {
             this.needCategory = json.getString(IParam.NEED_CATEGORY);
         }
