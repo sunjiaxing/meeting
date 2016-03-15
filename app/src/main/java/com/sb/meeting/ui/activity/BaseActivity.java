@@ -15,6 +15,8 @@ import com.sb.meeting.R;
 import com.sb.meeting.common.Utils;
 import com.sb.meeting.ui.component.TlcyDialog;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * activity 基类 主要封装 toast 、 dialog 、 loading等内容
  * Created by sun on 2015/12/9.
@@ -143,12 +145,13 @@ public abstract class BaseActivity extends TaskActivity {
     protected void onPause() {
         super.onPause();
         isShowing = false;
-
+        JPushInterface.onPause(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        JPushInterface.onResume(this);
         isShowing = true;
         if (toDialog != null) {
             toDialog.show();

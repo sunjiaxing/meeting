@@ -24,6 +24,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.jpush.android.api.JPushInterface;
 import cn.sharesdk.framework.ShareSDK;
 
 /**
@@ -43,6 +44,8 @@ public class MeetingApp extends Application implements Thread.UncaughtExceptionH
         Thread.setDefaultUncaughtExceptionHandler(this);
         initImageLoader();
         ShareSDK.initSDK(this);
+        JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
+        JPushInterface.init(this);     		// 初始化 JPush
     }
 
     /**

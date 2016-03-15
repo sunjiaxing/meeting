@@ -29,6 +29,11 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    sourceSets{
+        main {
+            jniLibs.srcDirs = ['libs'] // <-- Set your folder here!
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -52,7 +57,6 @@ dependencies {
     compile project(':taskmanager')
     compile project(':sharesdk')
 }
-
 apt {
     arguments {
         androidManifestFile variant.outputs[0].processResources.manifestFile

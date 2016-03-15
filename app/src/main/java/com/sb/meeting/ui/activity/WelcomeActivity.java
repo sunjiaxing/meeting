@@ -1,6 +1,5 @@
 package com.sb.meeting.ui.activity;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.ImageView;
@@ -10,6 +9,7 @@ import com.sb.meeting.R;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+
 
 /**
  * 欢迎页面
