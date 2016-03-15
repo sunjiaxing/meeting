@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants" >
 
-    <com.zhengshang.meeting.ui.component.ChildViewPager
+    <com.sb.meeting.ui.component.ChildViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

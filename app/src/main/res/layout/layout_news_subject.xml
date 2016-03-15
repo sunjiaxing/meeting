@@ -8,7 +8,7 @@
         android:id="@+id/head"
         layout="@layout/title" />
 
-    <com.zhengshang.meeting.ui.component.RefreshListView
+    <com.sb.meeting.ui.component.RefreshListView
         android:id="@+id/lv_drag"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.zhengshang.meeting">
+    package="com.sb.meeting">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
-        android:name=".ui.MeetingApp"
+        android:name="com.sb.meeting.ui.MeetingApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.activity.WelcomeActivity_"
+            android:name="com.sb.meeting.ui.activity.WelcomeActivity_"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,69 +28,88 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.MainActivity_"
+            android:name="com.sb.meeting.ui.activity.MainActivity_"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.NewsActivity_"
+            android:name="com.sb.meeting.ui.activity.NewsActivity_"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.NewsDetailActivity_"
+            android:name="com.sb.meeting.ui.activity.NewsDetailActivity_"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.NewsChannelActivity_"
+            android:name="com.sb.meeting.ui.activity.NewsChannelActivity_"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.LoginActivity_"
+            android:name="com.sb.meeting.ui.activity.LoginActivity_"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.RegisterActivity_"
+            android:name="com.sb.meeting.ui.activity.RegisterActivity_"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.UserCenterActivity_"
+            android:name="com.sb.meeting.ui.activity.UserCenterActivity_"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.CommentInputActivity_"
+            android:name="com.sb.meeting.ui.activity.CommentInputActivity_"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/comment_tool_style"
             android:windowSoftInputMode="stateAlwaysVisible|adjustResize" />
         <activity
-            android:name=".ui.activity.NewsSubjectActivity_"
+            android:name="com.sb.meeting.ui.activity.NewsSubjectActivity_"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.FavoriteActivity_"
+            android:name="com.sb.meeting.ui.activity.FavoriteActivity_"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.ImageActivity_"
+            android:name="com.sb.meeting.ui.activity.ImageActivity_"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.GoodsListActivity_"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.InputGoodsNameActivity_"
+            android:name="com.sb.meeting.ui.activity.InputGoodsNameActivity_"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysVisible|adjustResize" />
         <activity
-            android:name=".ui.activity.InputOtherGoodsInfoActivity_"
+            android:name="com.sb.meeting.ui.activity.InputOtherGoodsInfoActivity_"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.ChooseImageActivity_"
+            android:name="com.sb.meeting.ui.activity.ChooseImageActivity_"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.ChangeCoverActivity_"
+            android:name="com.sb.meeting.ui.activity.ChangeCoverActivity_"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.GoodsDetailAndPreviewActivity_"
+            android:name="com.sb.meeting.ui.activity.GoodsDetailAndPreviewActivity_"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.InputNeedAndContactActivity_"
+            android:name="com.sb.meeting.ui.activity.InputNeedAndContactActivity_"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".ui.activity.TestActivity_"
+            android:name="com.sb.meeting.ui.activity.TestActivity_"
             android:screenOrientation="portrait" />
+        <!--shareSDK 注册的Activity-->
+        <activity
+            android:name="com.mob.tools.MobUIShell"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <data android:scheme="tencent1104646053" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!--微信分享回调-->
+        <activity
+            android:name="com.sb.meeting.ui.wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
         <service android:name="com.taskmanager.TaskService" />
     </application>

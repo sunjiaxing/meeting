@@ -36,7 +36,7 @@
 
     </RelativeLayout>
 
-    <com.zhengshang.meeting.ui.component.DragGridView
+    <com.sb.meeting.ui.component.DragGridView
         android:id="@+id/gv_my_channel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

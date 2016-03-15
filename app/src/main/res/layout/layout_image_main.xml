@@ -5,7 +5,7 @@
     android:background="@color/color_black">
 
 
-    <com.zhengshang.meeting.ui.component.ChildViewPager
+    <com.sb.meeting.ui.component.ChildViewPager
         android:id="@+id/vp_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.zhengshang.meeting.ui.component.CustomerWebview
+    <com.sb.meeting.ui.component.CustomerWebview
         android:id="@+id/webview_ad"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
