@@ -4,11 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/line_color" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -27,23 +22,9 @@
             android:layout_centerInParent="true"
             android:text="点击设置封面"
             android:textColor="@color/color_white"
-            android:textSize="18sp"
+            android:textSize="@dimen/ppi_px_30_sp"
             android:textStyle="bold" />
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/tv_goods_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableRight="@mipmap/right_tip"
-        android:padding="15dp"
-        android:text="@string/loading"
-        android:textSize="16sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/line_color" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,6 +36,7 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:orientation="vertical"
             android:paddingBottom="10dp"
             android:paddingLeft="6dp"
@@ -62,12 +44,13 @@
             android:paddingTop="10dp">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text="品类"
-                android:textColor="@color/color_blue"
-                android:textSize="16sp" />
+                android:textColor="@color/c_454545"
+                android:textSize="@dimen/ppi_px_30_sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_select_category"
@@ -75,21 +58,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:singleLine="true"
-                android:text="请选择"
-                android:textColor="@color/news_content_color"
-                android:textSize="13sp" />
+                android:text="选择>"
+                android:textColor="@color/c_7d8e9d"
+                android:textSize="@dimen/ppi_px_24_sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
             android:layout_width="1px"
             android:layout_height="match_parent"
-            android:background="@color/line_color" />
+            android:background="@color/line_color"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/layout_input_price"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:orientation="vertical"
             android:paddingBottom="10dp"
             android:paddingLeft="6dp"
@@ -97,12 +83,13 @@
             android:paddingTop="10dp">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="市场价/换购价"
-                android:textColor="@color/color_blue"
-                android:textSize="16sp" />
+                android:text="价格"
+                android:textColor="@color/c_454545"
+                android:textSize="@dimen/ppi_px_30_sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_input_price"
@@ -110,56 +97,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:singleLine="true"
-                android:text="请输入"
-                android:textColor="@color/news_content_color"
-                android:textSize="13sp" />
+                android:text="输入"
+                android:textColor="@color/c_7d8e9d"
+                android:textSize="@dimen/ppi_px_24_sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
             android:layout_width="1px"
             android:layout_height="match_parent"
-            android:background="@color/line_color" />
-
-        <LinearLayout
-            android:id="@+id/layout_input_count"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:paddingLeft="6dp"
-            android:paddingRight="6dp"
-            android:paddingTop="10dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="数量"
-                android:textColor="@color/color_blue"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_input_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:singleLine="true"
-                android:text="请输入"
-                android:textColor="@color/news_content_color"
-                android:textSize="13sp" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@color/line_color" />
+            android:background="@color/line_color"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/layout_select_valid_time"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:orientation="vertical"
             android:paddingBottom="10dp"
             android:paddingLeft="6dp"
@@ -167,12 +122,13 @@
             android:paddingTop="10dp">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="有效时间"
-                android:textColor="@color/color_blue"
-                android:textSize="16sp" />
+                android:text="有效期"
+                android:textColor="@color/c_454545"
+                android:textSize="@dimen/ppi_px_30_sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_select_valid_time"
@@ -180,9 +136,49 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:singleLine="true"
-                android:text="请选择"
-                android:textColor="@color/news_content_color"
-                android:textSize="13sp" />
+                android:text="选择>"
+                android:textColor="@color/c_7d8e9d"
+                android:textSize="@dimen/ppi_px_24_sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/line_color"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/layout_input_count"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="数量"
+                android:textColor="@color/c_454545"
+                android:textSize="@dimen/ppi_px_30_sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_input_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:singleLine="true"
+                android:text="添加"
+                android:textColor="@color/c_7d8e9d"
+                android:textSize="@dimen/ppi_px_24_sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 
@@ -190,4 +186,19 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/line_color" />
+
+    <TextView
+        android:id="@+id/tv_goods_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@mipmap/right_tip"
+        android:padding="15dp"
+        android:text="@string/loading"
+        android:textColor="@color/c_454545"
+        android:textSize="@dimen/ppi_px_30_sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/c_d8d8d8" />
 </LinearLayout>

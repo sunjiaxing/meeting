@@ -85,8 +85,8 @@ public class BonConstants {
 
     // public static final String SERVER_URL = "http://192.168.1.111:8080/";
 //    public static final String SERVER_URL = "http://192.168.1.111:8080/api/";
-//    public static final String SERVER_URL = "http://192.168.1.27:8888/sample-api/";
-    public static final String SERVER_URL = "http://192.168.1.27:8888/api/";
+    public static final String SERVER_URL = "http://192.168.1.27:8888/sample-api/";
+    //    public static final String SERVER_URL = "http://192.168.1.27:8888/api/";
     public static String SLASH = "/";
     public static final String WEB_RESOURCE_URL = "http://192.168.1.27/";
     public static final String ROOT_USER_AVATAR_URL = WEB_RESOURCE_URL + "phpsso_server/uploadfile/avatar/";
@@ -109,6 +109,6 @@ public class BonConstants {
     }
 
     public enum BottomMenuSelected {
-        NEWS, GOODS
+        NEWS, GOODS, USER
     }
 }

@@ -30,4 +30,14 @@
     <color name="input_goods_name_a4a6a4">#a4a6a4</color>
 
     <color name="need_bg">#DEDCDC</color>
+
+    <color name="c_666666">#666666</color>
+    <color name="c_ff946e">#ff946e</color>
+    <color name="c_d8d8d8">#d8d8d8</color>
+    <color name="c_e8e8e8">#e8e8e8</color>
+    <color name="c_e4e4e4">#e4e4e4</color>
+    <color name="c_454545">#454545</color>
+    <color name="c_c9ccd0">#c9ccd0</color>
+    <color name="c_7d8e9d">#7d8e9d</color>
+    <color name="c_ff6600">#ff6600</color>
 </resources>

@@ -43,9 +43,9 @@ public class NewsPagerItemFragment extends BaseFragment implements
 
     @ViewById(R.id.lv_drag)
     RefreshListView listview;
-    @ViewById(R.id.layout_loading)
+    @ViewById(R.id.layout_loading_news)
     View layoutLoading;
-    @ViewById(R.id.layout_error)
+    @ViewById(R.id.layout_error_news)
     View layoutError;
     @ViewById(R.id.tv_description)
     TextView tvErrorMsg;
@@ -409,11 +409,10 @@ public class NewsPagerItemFragment extends BaseFragment implements
      * @param model
      */
     private void toNewsDetail(NewsVO model) {
-        Intent intent = new Intent(getActivity(), NewsDetailActivity_.class);
-        intent.putExtra(IParam.NEWS_ID, model.getId());
-        intent.putExtra(IParam.CAT_ID, model.getCatId());
-        intent.putExtra(IParam.TITLE, model.getTitle());
-        startActivityForResult(intent, 0);
+        NewsDetailActivity_.intent(this)
+                .extra(IParam.NEWS_ID, model.getId())
+                .extra(IParam.TITLE, model.getTitle())
+                .startForResult(0);
     }
 
     @Override

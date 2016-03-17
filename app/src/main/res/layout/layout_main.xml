@@ -6,18 +6,24 @@
         android:id="@+id/layout_contain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/layout_bottom_menu"
+        android:layout_above="@+id/line"
         android:background="@color/color_white" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_above="@+id/layout_bottom_menu"
+        android:background="@color/c_d8d8d8" />
 
     <LinearLayout
         android:id="@+id/layout_bottom_menu"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/ppi_px_98_dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/input_goods_name_a4a6a4"
+        android:background="@color/color_white"
         android:orientation="horizontal"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp">
+        android:paddingTop="@dimen/ppi_px_14_dp">
 
         <LinearLayout
             android:id="@+id/layout_menu_news"
@@ -29,18 +35,19 @@
 
             <ImageView
                 android:id="@+id/iv_news"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@android:drawable/stat_notify_chat" />
+                android:layout_width="@dimen/ppi_px_48_dp"
+                android:layout_height="@dimen/ppi_px_48_dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_news_nomal" />
 
             <TextView
                 android:id="@+id/tv_news"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
+                android:layout_height="@dimen/ppi_px_36_dp"
+                android:gravity="center"
                 android:text="商学院"
-                android:textColor="@color/color_green"
-                android:textSize="15sp" />
+                android:textColor="@color/c_7d8e9d"
+                android:textSize="@dimen/ppi_px_24_sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -53,18 +60,44 @@
 
             <ImageView
                 android:id="@+id/iv_goods"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@android:drawable/stat_notify_more" />
+                android:layout_width="@dimen/ppi_px_48_dp"
+                android:layout_height="@dimen/ppi_px_48_dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_goods_nomal" />
 
             <TextView
                 android:id="@+id/tv_goods"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
+                android:layout_height="@dimen/ppi_px_36_dp"
+                android:gravity="center"
                 android:text="易物"
-                android:textColor="@color/news_content_color"
-                android:textSize="15sp" />
+                android:textColor="@color/c_7d8e9d"
+                android:textSize="@dimen/ppi_px_24_sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_menu_user"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_user"
+                android:layout_width="@dimen/ppi_px_48_dp"
+                android:layout_height="@dimen/ppi_px_48_dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_user_nomal" />
+
+            <TextView
+                android:id="@+id/tv_user"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/ppi_px_36_dp"
+                android:gravity="center"
+                android:text="我的"
+                android:textColor="@color/c_7d8e9d"
+                android:textSize="@dimen/ppi_px_24_sp" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

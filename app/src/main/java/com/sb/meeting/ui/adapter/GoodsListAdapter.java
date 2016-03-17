@@ -36,7 +36,7 @@ public abstract class GoodsListAdapter extends BaseAdapter implements View.OnCli
         int h = screenWidth * 240 / 600;
         layoutParams = new LinearLayout.LayoutParams(screenWidth, h);
         int dp_10 = Utils.dip2px(context, 10);
-        layoutParams.setMargins(dp_10, dp_10, dp_10, dp_10);
+        layoutParams.setMargins(dp_10, dp_10 / 2, dp_10, 0);
     }
 
     public void setData(List<GoodsVO> data) {
@@ -92,16 +92,16 @@ public abstract class GoodsListAdapter extends BaseAdapter implements View.OnCli
         viewHolder.tvAttention.setTag(position);
         viewHolder.tvAttention.setOnClickListener(this);
 
-        viewHolder.tvExchangePrice.setText(String.valueOf(vo.getExchangePrice()));
-        viewHolder.tvMarketPrice.setText(String.valueOf(vo.getMarketPrice()));
+        viewHolder.tvExchangePrice.setText("¥" + String.valueOf(vo.getExchangePrice()));
+        viewHolder.tvMarketPrice.setText("¥" + String.valueOf(vo.getMarketPrice()));
         viewHolder.tvPublishTime.setText(vo.getPublishTime());
 
         ImageLoader.getInstance().displayImage(vo.getCoverUrl(), viewHolder.ivImage, ImageOption.createNomalOption());
 
-        viewHolder.tvValidTime.setText(vo.getValidTimeStr());
-        viewHolder.tvScanNum.setText("浏览量：" + vo.getScanNum());
-        viewHolder.tvCount.setText("库存：" + vo.getCount());
-        viewHolder.tvAttentionNum.setText(vo.getAttentionNum() + "人关注");
+        viewHolder.tvValidTime.setText(vo.getValidTimeStr() + "内有效");
+        viewHolder.tvScanNum.setText("浏览 " + vo.getScanNum());
+        viewHolder.tvCount.setText("库存 " + vo.getCount());
+        viewHolder.tvAttentionNum.setText("关注 " + vo.getAttentionNum());
 
         return convertView;
     }

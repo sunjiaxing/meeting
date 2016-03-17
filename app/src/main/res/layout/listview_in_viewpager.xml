@@ -14,14 +14,14 @@
     <!-- 显示转轮 -->
 
     <include
-        android:id="@+id/layout_loading"
+        android:id="@+id/layout_loading_news"
         layout="@layout/common_progressbar"
         android:visibility="gone" />
 
     <!-- 显示提示或异常信息 -->
 
     <include
-        android:id="@+id/layout_error"
+        android:id="@+id/layout_error_news"
         layout="@layout/common_result_message"
         android:visibility="gone" />
 

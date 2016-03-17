@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.sb.meeting.service.UserService;
 import com.taskmanager.LogUtils;
 import com.sb.meeting.R;
 import com.sb.meeting.common.BonConstants;
@@ -47,6 +48,7 @@ public class MainActivity extends BaseActivity {
     private TabGoodsListFragment tabGoodsListFragment;
     private BonConstants.BottomMenuSelected menuSelected = BonConstants.BottomMenuSelected.NEWS;
     private Handler handler;
+    private UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class MainActivity extends BaseActivity {
             menuSelected = BonConstants.BottomMenuSelected.values()[savedInstanceState.getInt(IParam.TYPE)];
         }
         handler = new Handler();
+        userService = new UserService(this);
     }
 
     @AfterViews
@@ -131,7 +134,16 @@ public class MainActivity extends BaseActivity {
                 tabGoodsListFragment.refreshView();
             }
         }, 50);
+    }
 
+    @Click(R.id.layout_menu_user)
+    void toUserPage() {
+        if (userService.checkLoginState()) {
+            //hideOtherFragment();
+
+        } else {
+            LoginActivity_.intent(this).startForResult(10);
+        }
     }
 
     /**
@@ -139,16 +151,19 @@ public class MainActivity extends BaseActivity {
      */
     private void resetMenuStyle() {
         // 恢复默认文字和图标
-        tvNews.setTextColor(getResources().getColor(R.color.news_content_color));
-        tvGoods.setTextColor(getResources().getColor(R.color.news_content_color));
-
+        tvNews.setTextColor(getResources().getColor(R.color.c_7d8e9d));
+        tvGoods.setTextColor(getResources().getColor(R.color.c_7d8e9d));
+        ivNews.setImageResource(R.mipmap.icon_news_nomal);
+        ivGoods.setImageResource(R.mipmap.icon_goods_nomal);
 
         switch (menuSelected) {
             case NEWS:
-                tvNews.setTextColor(Color.GREEN);
+                tvNews.setTextColor(getResources().getColor(R.color.c_ff946e));
+                ivNews.setImageResource(R.mipmap.icon_news_selected);
                 break;
             case GOODS:
-                tvGoods.setTextColor(Color.GREEN);
+                tvGoods.setTextColor(getResources().getColor(R.color.c_ff946e));
+                ivGoods.setImageResource(R.mipmap.icon_goods_selected);
                 break;
         }
     }
@@ -180,7 +195,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        LogUtils.i("main activity onActivityResult");
+        if (requestCode == 10 && resultCode == RESULT_OK) {
+            toUserPage();
+        }
     }
 
     @Override

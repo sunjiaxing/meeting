@@ -9,7 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
         android:visibility="visible">
 
         <ImageView
@@ -23,11 +25,11 @@
             android:id="@+id/tv_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="2dp"
             android:lineSpacingExtra="3dp"
             android:text="@string/loading"
-            android:textColor="@color/news_content_color"
-            android:textSize="15sp" />
+            android:textColor="@color/c_454545"
+            android:textSize="@dimen/ppi_px_30_sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -35,14 +37,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
         android:visibility="gone">
 
         <ImageView
             android:id="@+id/iv_image1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="2dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:scaleType="centerCrop"
             android:src="@mipmap/ic_launcher" />
@@ -51,14 +55,9 @@
             android:id="@+id/iv_image2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:scaleType="centerCrop"
             android:src="@mipmap/ic_launcher" />
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/line_color" />
 </LinearLayout>

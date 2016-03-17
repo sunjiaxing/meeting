@@ -38,12 +38,12 @@ public abstract class GoodsImageAdapter extends BaseAdapter implements View.OnCl
     public GoodsImageAdapter(Context context) {
         layoutInflater = LayoutInflater.from(context);
         screenW = Utils.getScreenWidth(context);
-        int imgH = (screenW - Utils.dip2px(context, 26)) / 2;
-        int dp_3 = Utils.dip2px(context, 3);
+        int imgH = (screenW - Utils.dip2px(context, 30)) / 2;
+        int dp_5 = Utils.dip2px(context, 5);
         layoutParamsLeft = new LinearLayout.LayoutParams(imgH, imgH);
-        layoutParamsLeft.rightMargin = dp_3;
+        layoutParamsLeft.rightMargin = dp_5;
         layoutParamsRight = new LinearLayout.LayoutParams(imgH, imgH);
-        layoutParamsRight.leftMargin = dp_3;
+        layoutParamsRight.leftMargin = dp_5;
     }
 
     public void setData(List<GoodsImageVO> data, GoodsDetailAndPreviewActivity.Type type) {

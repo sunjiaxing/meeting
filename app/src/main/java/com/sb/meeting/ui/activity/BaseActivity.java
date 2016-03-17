@@ -2,11 +2,13 @@ package com.sb.meeting.ui.activity;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +30,16 @@ public abstract class BaseActivity extends TaskActivity {
     private boolean isShowing = true;// 当前activity是否显示中
     private Dialog loadingDialog;
 
-
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            //透明状态栏
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            //透明导航栏
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//        }
+//    }
 
     public void startLoading(String message, boolean cancelable, DialogInterface.OnCancelListener listener) {
         if (loadingDialog == null || !loadingDialog.isShowing()) {
@@ -54,8 +65,8 @@ public abstract class BaseActivity extends TaskActivity {
         startLoading(message, false);
     }
 
-    public void startLoading(boolean cancelable){
-        startLoading(null,cancelable);
+    public void startLoading(boolean cancelable) {
+        startLoading(null, cancelable);
     }
 
     public void startLoading() {

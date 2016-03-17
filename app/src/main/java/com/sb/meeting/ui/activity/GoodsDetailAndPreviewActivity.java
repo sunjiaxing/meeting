@@ -1,6 +1,7 @@
 package com.sb.meeting.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.graphics.drawable.AnimationDrawable;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -62,25 +63,29 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
     ListView listView;
     @ViewById(R.id.iv_loading_in)
     ImageView ivLoading;
-    @ViewById(R.id.tv_attention)
-    TextView tvAttention;
 
     @Extra(IParam.GOODS_ID)
     int goodsId;
+
     @Extra(IParam.TYPE)
     Type viewType;
-
     private AnimationDrawable anim;
+
     private GoodsVO goodsVO;
     private GoodsService goodsService;
     private UserService userService;
+    private TextView tvAttentionTip;
     private TextView tvGoodsName;
+    private TextView tvValidTime;
     private ImageView ivCover;
     private TextView tvScanNum;
+    private TextView tvCount;
     private TextView tvAttentionNum;
-    private TextView tvImageNum;
-    private TextView tvPublishTime;
+    private TextView tvExchangePrice;
+    private TextView tvMarketPrice;
+    private TextView tvGoodsCategory;
     private GoodsImageAdapter adapter;
+    private TextView tvPublishTime;
 
     public enum Type {
         DETAIL, PREVIEW
@@ -95,8 +100,9 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
         goodsService = new GoodsService(this);
         userService = new UserService(this);
         initHeader();
+        initFooter();
         if (viewType == Type.DETAIL) {
-            tvTitle.setText("详情");
+            tvTitle.setText("物品详情");
             startLoadingSelf();
             getGoodsDetail();
         } else if (viewType == Type.PREVIEW) {
@@ -113,23 +119,29 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
             switch (viewType) {
                 case DETAIL:
                     ImageLoader.getInstance().displayImage(goodsVO.getCoverUrl(), ivCover, ImageOption.createNomalOption());
-                    tvPublishTime.setText(goodsVO.getPublishTime());
-                    tvAttention.setVisibility(View.VISIBLE);
+                    tvValidTime.setText(goodsVO.getValidTimeStr());
+                    tvAttentionTip.setVisibility(View.VISIBLE);
                     if (goodsVO.isAttention()) {
-                        tvAttention.setText("取消关注");
+                        tvAttentionTip.setText("取消关注");
                     } else {
-                        tvAttention.setText("关注");
+                        tvAttentionTip.setText("关注");
                     }
+                    tvGoodsCategory.setText(goodsVO.getCategoryStr());
+                    tvPublishTime.setText(goodsVO.getPublishTime());
                     break;
                 case PREVIEW:
                     ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.FILE.wrap(goodsVO.getCoverUrl()), ivCover, ImageOption.createNomalOption());
-                    tvPublishTime.setText(Utils.formateTime(System.currentTimeMillis(), "yyyy-MM-dd"));
+                    tvValidTime.setText(goodsVO.getValidTime().getName());
+                    tvGoodsCategory.setText(goodsVO.getCategory().getName());
+                    tvPublishTime.setText(Utils.formateTime(System.currentTimeMillis(), "yyyy/MM/dd"));
                     break;
             }
             tvGoodsName.setText(goodsVO.getName());
-            tvScanNum.setText("浏览：" + goodsVO.getScanNum());
-            tvAttentionNum.setText("关注：" + goodsVO.getAttentionNum());
-            tvImageNum.setText("图片：" + (!Utils.isEmpty(goodsVO.getImageList()) ? goodsVO.getImageList().size() : 0));
+            tvScanNum.setText(String.valueOf(goodsVO.getScanNum()));
+            tvCount.setText(String.valueOf(goodsVO.getCount()));
+            tvAttentionNum.setText(String.valueOf(goodsVO.getAttentionNum()));
+            tvExchangePrice.setText(String.valueOf(goodsVO.getExchangePrice()));
+            tvMarketPrice.setText("¥" + String.valueOf(goodsVO.getMarketPrice()));
             List<GoodsImageVO> goodsImageVOList = formateImage(goodsVO.getImageList());
             if (!Utils.isEmpty(goodsImageVOList)) {
                 if (adapter == null) {
@@ -204,15 +216,41 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
         View header = LayoutInflater.from(this).inflate(R.layout.layout_header_goods_detail, null);
         header.setClickable(false);
         ivCover = (ImageView) header.findViewById(R.id.iv_cover);
-        // 设置封面图 高度
-        int coverHeight = Utils.getScreenHeight(this) / 3;
+        // 设置封面图 高度  640  *  280
+        int screenW = Utils.getScreenWidth(this);
+        int coverHeight = screenW * 280 / 640;
         ivCover.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, coverHeight));
         tvGoodsName = (TextView) header.findViewById(R.id.tv_goods_name);
+        tvValidTime = (TextView) header.findViewById(R.id.tv_valid_time);
         tvScanNum = (TextView) header.findViewById(R.id.tv_scan_num);
+        tvCount = (TextView) header.findViewById(R.id.tv_count);
         tvAttentionNum = (TextView) header.findViewById(R.id.tv_attention_num);
-        tvImageNum = (TextView) header.findViewById(R.id.tv_image_num);
-        tvPublishTime = (TextView) header.findViewById(R.id.tv_publish_time);
-        listView.addHeaderView(header);
+        tvExchangePrice = (TextView) header.findViewById(R.id.tv_exchange_price);
+        tvMarketPrice = (TextView) header.findViewById(R.id.tv_market_price);
+        tvMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); //删除线
+        tvGoodsCategory = (TextView) header.findViewById(R.id.tv_goods_category);
+        listView.addHeaderView(header, null, false);
+    }
+
+    /**
+     * 初始化footer
+     */
+    private void initFooter() {
+        View footer = LayoutInflater.from(this).inflate(R.layout.layout_goods_detail_footer, null);
+        tvPublishTime = (TextView) footer.findViewById(R.id.tv_publish_time);
+        View layoutAttention = footer.findViewById(R.id.layout_attention);
+        layoutAttention.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (viewType == Type.DETAIL) {
+                    attention();
+                } else {
+                    showToast("尚未发布，不能关注");
+                }
+            }
+        });
+        tvAttentionTip = (TextView) footer.findViewById(R.id.tv_attention_tip);
+        listView.addFooterView(footer, null, false);
     }
 
 
@@ -230,9 +268,9 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
                 showToast("操作成功");
                 goodsVO.setIsAttention(!goodsVO.isAttention());
                 if (goodsVO.isAttention()) {
-                    tvAttention.setText("取消关注");
+                    tvAttentionTip.setText("取消关注");
                 } else {
-                    tvAttention.setText("关注");
+                    tvAttentionTip.setText("关注");
                 }
                 break;
         }

@@ -162,6 +162,11 @@ public class RefreshListView extends PtrClassicFrameLayout implements AbsListVie
         setPtrHandler(this);
     }
 
+    public void setFastScrollEnabled(final boolean enabled) {
+        if (listView != null) {
+            listView.setFastScrollEnabled(enabled);
+        }
+    }
 
     public void setSelector(int resID) {
         if (listView != null) {

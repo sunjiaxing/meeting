@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dslv="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/title" />
+    <include
+        android:id="@+id/head"
+        layout="@layout/title" />
 
     <com.mobeta.android.dslv.DragSortListView
         android:id="@+id/lv_sort"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/tv_preview"
+        android:layout_below="@+id/head"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@null"
         android:fadingEdge="none"
@@ -19,4 +23,16 @@
         dslv:float_background_color="@color/color_white"
         dslv:remove_enabled="false"
         dslv:track_drag_sort="false" />
-</LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_preview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/c_ff946e"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="预览"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/ppi_px_30_sp" />
+</RelativeLayout>

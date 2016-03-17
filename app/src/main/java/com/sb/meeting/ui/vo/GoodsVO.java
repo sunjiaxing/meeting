@@ -24,6 +24,7 @@ public class GoodsVO implements Serializable{
     private List<ImageVO> imageList;
 
     private String validTimeStr;
+    private String categoryStr;
     private String needCategoryStr;
     private int count;
 
@@ -160,5 +161,13 @@ public class GoodsVO implements Serializable{
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public String getCategoryStr() {
+        return categoryStr;
+    }
+
+    public void setCategoryStr(String categoryStr) {
+        this.categoryStr = categoryStr;
     }
 }

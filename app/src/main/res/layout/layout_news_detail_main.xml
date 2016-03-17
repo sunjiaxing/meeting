@@ -5,9 +5,7 @@
 
     <include
         android:id="@+id/layout_header"
-        layout="@layout/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        layout="@layout/title" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_news_detail"
@@ -78,13 +76,13 @@
             android:layout_height="35dp"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
+            android:background="@drawable/news_category_edit_shape"
+            android:gravity="center"
             android:paddingLeft="0dp"
             android:paddingRight="0dp"
-            android:gravity="center"
-            android:textSize="14sp"
-            android:textColor="@color/news_content_color"
             android:text="收藏"
-            android:background="@drawable/news_category_edit_shape" />
+            android:textColor="@color/news_content_color"
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/btn_share"
@@ -92,12 +90,12 @@
             android:layout_height="35dp"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
+            android:background="@drawable/news_category_edit_shape"
+            android:gravity="center"
             android:paddingLeft="0dp"
             android:paddingRight="0dp"
-            android:gravity="center"
-            android:textSize="14sp"
-            android:textColor="@color/news_content_color"
             android:text="分享"
-            android:background="@drawable/news_category_edit_shape" />
+            android:textColor="@color/news_content_color"
+            android:textSize="14sp" />
     </LinearLayout>
 </RelativeLayout>

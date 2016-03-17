@@ -69,7 +69,7 @@ public class NewsRO extends BaseRO {
         String result = httpGetRequest(url, null);
         JSONObject json = new JSONObject(result);
         if (json.getInt(IParam.STATUS) == 1) {
-            JSONArray jsonArray = json.getJSONArray(IParam.TYPES);
+            JSONArray jsonArray = json.getJSONArray(IParam.LIST);
             if (jsonArray != null && jsonArray.length() > 0) {
                 // 设置新闻栏目更新状态
                 res.put(IParam.TIME, json.getLong(IParam.TIME));
@@ -134,8 +134,8 @@ public class NewsRO extends BaseRO {
     public NewsDetailDto getNewsDetail(String id)
             throws JSONException {
         String url = getServerUrl()
-                + RemoteNewsUrl.NEWS_DETAIL.getURL() + IParam.WENHAO
-                + IParam.NEWS_ID + IParam.EQUALS_STRING + id;
+                + RemoteNewsUrl.NEWS_DETAIL.getURL()
+                + IParam.WENHAO + IParam.NEWS_ID + IParam.EQUALS_STRING + id;
         String result = httpGetRequest(url, null);
         JSONObject json = new JSONObject(result);
         if (json.getInt(IParam.STATUS) == 1) {

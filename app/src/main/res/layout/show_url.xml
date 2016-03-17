@@ -6,9 +6,7 @@
 
     <include
         android:id="@+id/head"
-        layout="@layout/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        layout="@layout/title" />
 
     <com.sb.meeting.ui.component.CustomerWebview
         android:id="@+id/webview_ad"
@@ -78,8 +76,8 @@
                 android:layout_height="1px"
                 android:layout_marginLeft="7dp"
                 android:layout_marginRight="7dp"
-                android:visibility="gone"
-                android:background="@color/right_menu_line" />
+                android:background="@color/right_menu_line"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/btn_back_main"

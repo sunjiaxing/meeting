@@ -35,6 +35,7 @@ import com.sb.meeting.ui.vo.UserVO;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
 import java.io.InputStream;
@@ -72,8 +73,9 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     Button btnFavorite;
     @ViewById(R.id.btn_share)
     Button btnShare;
+    @Extra(IParam.NEWS_ID)
+    String newsId;
 
-    private String newsId;
     private AnimationDrawable anim;
     private NewsService newsService;
     private NewsDetailVO detailVO;
@@ -93,7 +95,6 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
 
     @AfterViews
     void init() {
-        newsId = getIntent().getStringExtra(IParam.NEWS_ID);
         String title = getIntent().getStringExtra(IParam.TITLE);
         anim = (AnimationDrawable) findViewById(R.id.iv_loading_in)
                 .getBackground();
@@ -217,7 +218,7 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
      */
     private void refreshUI() {
         // 展示新闻详情
-        if (!Utils.isEmpty(html) && Utils.isEmpty(detailVO.getContentUrl())) {
+        if (!Utils.isEmpty(html) && !Utils.isEmpty(detailVO.getContent())) {
             html = html
                     .replace("@title", detailVO.getTitle())
                     .replace(

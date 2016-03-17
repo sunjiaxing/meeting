@@ -11,10 +11,12 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -95,11 +97,11 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         ivBack.setVisibility(View.VISIBLE);
         btnRight.setVisibility(View.VISIBLE);
         btnRight.setBackgroundColor(Color.TRANSPARENT);
-        btnRight.setText("预览");
+        btnRight.setText("下一步");
 
-        btnRightTwo.setVisibility(View.VISIBLE);
-        btnRightTwo.setBackgroundColor(Color.TRANSPARENT);
-        btnRightTwo.setText("下一步");
+//        btnRightTwo.setVisibility(View.VISIBLE);
+//        btnRightTwo.setBackgroundColor(Color.TRANSPARENT);
+//        btnRightTwo.setText("下一步");
 
         initHeader();
         tvGoodsName.setText(goodsName);
@@ -138,9 +140,10 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         header.setClickable(false);
         ivCover = (ImageView) header.findViewById(R.id.iv_cover);
         ivCover.setOnClickListener(this);
-        // 设置封面图 高度
-        int coverHeight = Utils.getScreenHeight(this) / 3;
-        ivCover.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, coverHeight));
+        // 设置封面图 高度   640 * 280
+        int screenW = Utils.getScreenWidth(this);
+        int coverHeight = screenW * 280 / 640;
+        ivCover.setLayoutParams(new RelativeLayout.LayoutParams(screenW, coverHeight));
         tvGoodsName = (TextView) header.findViewById(R.id.tv_goods_name);
         tvGoodsName.setOnClickListener(this);
         tvSelectCategory = (TextView) header.findViewById(R.id.tv_select_category);
@@ -158,11 +161,29 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
      * 初始化 footer
      */
     private void initFooter() {
+//        LinearLayout linearLayout = new LinearLayout(this);
+//        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+//        linearLayout.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
+//        int dp_10 = Utils.dip2px(this, 10);
+//        linearLayout.setPadding(0, dp_10, 0, dp_10);
+//
+//        ImageView imageView = new ImageView(this);
+//        imageView.setImageResource(R.mipmap.ic_launcher);
+//        imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ChooseImageActivity_.intent(InputOtherGoodsInfoActivity.this).extra(IParam.LAST_NUM, 20 - imagePathList.size()).startForResult(REQUEST_CODE_SELECT_IMAGE);
+//            }
+//        });
+//        linearLayout.addView(imageView);
+//        sortListView.addFooterView(linearLayout);
+
         TextView footerView = new TextView(this);
         footerView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
         footerView.setTextColor(Color.GRAY);
-        footerView.setTextSize(16);
-        footerView.setGravity(Gravity.CENTER);
+        footerView.setTextSize(18);
+        footerView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
         int dp_10 = Utils.dip2px(this, 10);
         footerView.setPadding(0, dp_10, 0, dp_10);
         footerView.setText("点击选择图片");
@@ -242,13 +263,15 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
     /**
      * 输入图片描述
      *
-     * @param postion 图片位置
+     * @param pos 图片位置
      */
-    private void inputImageDesc(final int postion) {
+    private void inputImageDesc(final int pos) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.layout_input_image_desc, null);
         final EditText editContent = (EditText) view.findViewById(R.id.edit_content);
+        final int postion = pos - 1;
         editContent.setText(goodsVO.getImageList().get(postion).getDesc());
+        editContent.setSelection(editContent.getText().length());
         final TextView tvLast = (TextView) view.findViewById(R.id.tv_last);
         editContent.addTextChangedListener(new TextWatcher() {
             @Override
@@ -518,40 +541,53 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
     /**
      * 下一步
      */
-    @Click(R.id.btn_right_two)
+    @Click(R.id.btn_right)
     void next() {
+        if (checkDataValid()) {
+            InputNeedAndContactActivity_.intent(this)
+                    .extra(IParam.GOODS, goodsVO)
+                    .extra(IParam.CATEGORIES, (Serializable) categories)
+                    .startForResult(REQUEST_CODE_SEND_RESULT);
+        }
+    }
+
+    /**
+     * 数据验证
+     *
+     * @return
+     */
+    private boolean checkDataValid() {
         // 数据验证
         if (goodsVO.getCategory() == null) {
             showToast("请选择分类");
-            return;
+            return false;
         }
         if (!(goodsVO.getMarketPrice() > 0 && goodsVO.getExchangePrice() > 0)) {
             showToast("请输入市场价和兑换价");
-            return;
+            return false;
         }
         if (goodsVO.getValidTime() == null) {
             showToast("请选择有效时间");
-            return;
+            return false;
         }
         if (Utils.isEmpty(goodsVO.getImageList())) {
             showToast("请添加图片");
-            return;
+            return false;
         }
-        InputNeedAndContactActivity_.intent(this)
-                .extra(IParam.GOODS, goodsVO)
-                .extra(IParam.CATEGORIES, (Serializable) categories)
-                .startForResult(REQUEST_CODE_SEND_RESULT);
+        return true;
     }
 
     /**
      * 预览
      */
-    @Click(R.id.btn_right)
+    @Click(R.id.tv_preview)
     void preview() {
-        GoodsDetailAndPreviewActivity_.intent(this)
-                .extra(IParam.TYPE, GoodsDetailAndPreviewActivity.Type.PREVIEW)
-                .extra(IParam.GOODS, goodsVO)
-                .start();
+        if (checkDataValid()) {
+            GoodsDetailAndPreviewActivity_.intent(this)
+                    .extra(IParam.TYPE, GoodsDetailAndPreviewActivity.Type.PREVIEW)
+                    .extra(IParam.GOODS, goodsVO)
+                    .start();
+        }
     }
 
     @Click(R.id.iv_back)

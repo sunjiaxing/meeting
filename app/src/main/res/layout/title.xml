@@ -3,22 +3,22 @@
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="@dimen/head_height"
-    android:background="#333">
+    android:background="@color/color_white">
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/head_height"
         android:layout_centerInParent="true"
-        android:background="#333"
+        android:background="@color/color_white"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:gravity="center"
         android:maxLength="15"
         android:singleLine="true"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        android:textColor="@color/news_content_color"
+        android:textSize="@dimen/ppi_px_32_sp" />
 
     <ImageView
         android:id="@+id/iv_back"
@@ -63,6 +63,7 @@
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/btn_right"
         android:textColor="@color/right_menu_color"
+        android:textSize="@dimen/ppi_px_32_sp"
         android:visibility="gone" />
 
     <Button
@@ -72,6 +73,13 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:textColor="@color/right_menu_color"
+        android:textSize="@dimen/ppi_px_32_sp"
         android:visibility="gone" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/c_e8e8e8" />
 
 </RelativeLayout>

@@ -14,7 +14,9 @@
         android:layout_below="@+id/head"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@null"
-        android:fadingEdge="none" />
+        android:fadingEdge="none"
+        android:fastScrollEnabled="false"
+        android:scrollbars="none" />
     <!-- 显示转轮 -->
 
     <include
@@ -33,18 +35,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/head"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/tv_attention"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/comment_reply_item_bg"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="关注"
-        android:textColor="@color/news_content_color"
-        android:textSize="15sp"
         android:visibility="gone" />
 </RelativeLayout>
