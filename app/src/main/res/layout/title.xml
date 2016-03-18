@@ -2,14 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/head_height"
-    android:background="@color/color_white">
+    android:layout_height="@dimen/ppi_px_88_dp"
+    android:background="@color/color_white"
+    android:paddingLeft="@dimen/ppi_px_20_dp"
+    android:paddingRight="@dimen/ppi_px_20_dp"
+    android:paddingTop="@dimen/ppi_px_16_dp">
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/head_height"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
+        android:layout_marginBottom="@dimen/ppi_px_16_dp"
         android:background="@color/color_white"
         android:clickable="false"
         android:focusable="false"
@@ -17,41 +21,43 @@
         android:gravity="center"
         android:maxLength="15"
         android:singleLine="true"
-        android:textColor="@color/news_content_color"
+        android:textColor="@color/c_666666"
         android:textSize="@dimen/ppi_px_32_sp" />
 
     <ImageView
         android:id="@+id/iv_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/ppi_px_56_dp"
+        android:layout_height="@dimen/ppi_px_56_dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/btn_back"
-        android:text=""
+        android:background="@mipmap/icon_back"
+        android:scaleType="fitXY"
         android:visibility="gone" />
 
     <Button
         android:id="@+id/btn_left"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/ppi_px_56_dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:text=""
+        android:layout_margin="0dp"
+        android:gravity="center"
+        android:padding="0dp"
         android:textColor="@color/right_menu_color"
         android:visibility="gone" />
 
     <ImageView
         android:id="@+id/iv_right_two"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/ppi_px_56_dp"
+        android:layout_height="@dimen/ppi_px_56_dp"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/iv_right"
         android:visibility="gone" />
 
     <ImageView
         android:id="@+id/iv_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/ppi_px_56_dp"
+        android:layout_height="@dimen/ppi_px_56_dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:visibility="gone" />
@@ -59,9 +65,12 @@
     <Button
         android:id="@+id/btn_right_two"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/ppi_px_56_dp"
         android:layout_centerVertical="true"
+        android:layout_margin="0dp"
         android:layout_toLeftOf="@+id/btn_right"
+        android:gravity="center"
+        android:padding="0dp"
         android:textColor="@color/right_menu_color"
         android:textSize="@dimen/ppi_px_32_sp"
         android:visibility="gone" />
@@ -69,9 +78,13 @@
     <Button
         android:id="@+id/btn_right"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/ppi_px_56_dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_margin="0dp"
+        android:gravity="center"
+        android:padding="0dp"
+        android:text="下一步"
         android:textColor="@color/right_menu_color"
         android:textSize="@dimen/ppi_px_32_sp"
         android:visibility="gone" />
