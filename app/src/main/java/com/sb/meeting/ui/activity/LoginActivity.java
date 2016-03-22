@@ -22,6 +22,8 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * 登录 activity
  * Created by sun on 2016/1/11.

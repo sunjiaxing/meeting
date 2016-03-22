@@ -28,6 +28,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
+            android:visibility="gone"
             android:layout_margin="5dp"
             android:src="@drawable/btn_user_center" />
 

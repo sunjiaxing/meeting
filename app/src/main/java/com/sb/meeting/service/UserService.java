@@ -17,6 +17,8 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * 用户 service
  * Created by sun on 2016/1/11.
@@ -40,7 +42,7 @@ public class UserService extends BaseService {
      * @throws JSONException
      */
     public void login(String userName, String password) throws JSONException {
-        UserDto userDto = userRO.login(userName, password);
+        UserDto userDto = userRO.login(userName, password, JPushInterface.getRegistrationID(mContext));
         if (userDto != null) {
             User user = new User();
             user.setUserId(userDto.getUserId());
@@ -66,13 +68,7 @@ public class UserService extends BaseService {
             return false;
         }
         User user = userDao.getUserById(userId);
-        if (user == null) {
-            return false;
-        }
-        if (user.getLastLoginTime() != 0 && System.currentTimeMillis() - user.getLastLoginTime() > BonConstants.TIME_TO_SAVE_LOGIN_STATE) {
-            return false;
-        }
-        return true;
+        return user != null && !(user.getLastLoginTime() != 0 && System.currentTimeMillis() - user.getLastLoginTime() > BonConstants.TIME_TO_SAVE_LOGIN_STATE);
     }
 
     public void logout() {
@@ -85,7 +81,7 @@ public class UserService extends BaseService {
     /**
      * 获取登录用户信息
      *
-     * @return
+     * @return object
      */
     public UserVO getLoginUserInfo() {
         String userId = configDao.getUserId();
@@ -105,15 +101,6 @@ public class UserService extends BaseService {
     }
 
     /**
-     * 获取登录用户 id
-     *
-     * @return
-     */
-    public String getLoginUserId() {
-        return configDao.getUserId();
-    }
-
-    /**
      * 收藏 新闻
      *
      * @param newsId 新闻id
@@ -126,7 +113,7 @@ public class UserService extends BaseService {
     /**
      * 获取收藏列表
      *
-     * @return
+     * @return list
      * @throws JSONException
      */
     public List<FavoriteVO> getFavoriteList() throws JSONException {

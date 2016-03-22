@@ -47,16 +47,18 @@ public class UserRO extends BaseRO {
     /**
      * 登录
      *
-     * @param userName 用户名
-     * @param password 密码
+     * @param userName       用户名
+     * @param password       密码
+     * @param registrationID JPush单点推送 使用的id
      * @return
      * @throws JSONException
      */
-    public UserDto login(String userName, String password) throws JSONException {
+    public UserDto login(String userName, String password, String registrationID) throws JSONException {
         String url = getServerUrl() + RemoteUserURL.LOGIN.getURL();
         Map<String, Object> params = new HashMap<>();
         params.put(IParam.USER_NAME, userName);
         params.put(IParam.PASSWORD, password);
+        params.put(IParam.REGISTRATION_ID, registrationID);
         String result = httpPostRequest(url, null, params);
         JSONObject json = new JSONObject(result);
         if (json.getInt(IParam.STATUS) == 1) {

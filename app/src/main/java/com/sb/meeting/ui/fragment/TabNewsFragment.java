@@ -66,6 +66,8 @@ public class TabNewsFragment extends BaseFragment implements
     private List<BaseFragment> fragmentList;
     private UserService userService;
 
+    private static final int REQUEST_EDIT_NEWS_CHANNEL = 0x3221;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -264,7 +266,7 @@ public class TabNewsFragment extends BaseFragment implements
      */
     @Click(R.id.tv_handle_news_type_open)
     void clickTypeOpen() {
-        NewsChannelActivity_.intent(this).startForResult(0);
+        NewsChannelActivity_.intent(this).startForResult(REQUEST_EDIT_NEWS_CHANNEL);
 //        Intent intent = new Intent(this, TestActivity_.class);
 //        intent.putExtra(IParam.URL,"from news");
 //        startActivityForResult(intent, 0);
@@ -285,7 +287,7 @@ public class TabNewsFragment extends BaseFragment implements
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_EDIT_NEWS_CHANNEL && resultCode == Activity.RESULT_OK) {
             // 操作栏目
             newsTypes = (List<NewsChannelVO>) data.getSerializableExtra(IParam.LIST);
             afterSaveNewsChannel();

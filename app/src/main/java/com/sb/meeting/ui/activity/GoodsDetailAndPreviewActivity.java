@@ -391,4 +391,12 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
     void clickMore() {
         showToast("功能暂未开放");
     }
+
+    @Click(R.id.btn_refresh)
+    void clickRefresh() {
+        if (viewType == Type.DETAIL) {
+            startLoadingSelf();
+            getGoodsDetail();
+        }
+    }
 }

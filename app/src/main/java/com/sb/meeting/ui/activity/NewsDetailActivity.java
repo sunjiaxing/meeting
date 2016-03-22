@@ -57,9 +57,9 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
     TextView tvTitle;
     @ViewById(R.id.vp_news_detail)
     ViewPager vpMain;
-    @ViewById(R.id.layout_loading)
+    @ViewById(R.id.layout_loading_news)
     View layoutLoading;
-    @ViewById(R.id.layout_error)
+    @ViewById(R.id.layout_error_news)
     View layoutError;
     @ViewById(R.id.tv_description)
     TextView tvErrorMsg;

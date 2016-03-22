@@ -124,6 +124,7 @@ public interface IParam {
     String REPLIES = "replies";
     String RELATIONS = "relations";
     String REGISTER = "register";
+    String REGISTRATION_ID = "registrationId";
     String REGISTER_TIME = "registerTime";
 
     // S

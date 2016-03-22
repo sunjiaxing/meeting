@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sb.meeting.service.UserService;
+import com.sb.meeting.ui.fragment.TabUserFragment;
+import com.sb.meeting.ui.fragment.TabUserFragment_;
 import com.taskmanager.LogUtils;
 import com.sb.meeting.R;
 import com.sb.meeting.common.BonConstants;
@@ -43,9 +45,14 @@ public class MainActivity extends BaseActivity {
     ImageView ivGoods;
     @ViewById(R.id.tv_goods)
     TextView tvGoods;
+    @ViewById(R.id.iv_user)
+    ImageView ivUser;
+    @ViewById(R.id.tv_user)
+    TextView tvUser;
 
     private TabNewsFragment tabNewsFragment;
     private TabGoodsListFragment tabGoodsListFragment;
+    private TabUserFragment tabUserFragment;
     private BonConstants.BottomMenuSelected menuSelected = BonConstants.BottomMenuSelected.NEWS;
     private Handler handler;
     private UserService userService;
@@ -66,6 +73,8 @@ public class MainActivity extends BaseActivity {
             toNewsPage();
         } else if (menuSelected == BonConstants.BottomMenuSelected.GOODS) {
             toGoodsPage();
+        } else if (menuSelected == BonConstants.BottomMenuSelected.USER) {
+            toUserPage();
         }
     }
 
@@ -75,6 +84,7 @@ public class MainActivity extends BaseActivity {
     private void hideOtherFragment() {
         tabNewsFragment = (TabNewsFragment) getSupportFragmentManager().findFragmentByTag(IParam.NEWS);
         tabGoodsListFragment = (TabGoodsListFragment) getSupportFragmentManager().findFragmentByTag(IParam.GOODS);
+        tabUserFragment = (TabUserFragment) getSupportFragmentManager().findFragmentByTag(IParam.USER);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (tabNewsFragment != null) {
@@ -83,6 +93,10 @@ public class MainActivity extends BaseActivity {
 
         if (tabGoodsListFragment != null) {
             ft.hide(tabGoodsListFragment);
+        }
+
+        if (tabUserFragment != null) {
+            ft.hide(tabUserFragment);
         }
         ft.commit();
     }
@@ -136,14 +150,28 @@ public class MainActivity extends BaseActivity {
         }, 50);
     }
 
+    /**
+     * 跳转到 我的  页面
+     */
     @Click(R.id.layout_menu_user)
     void toUserPage() {
-        if (userService.checkLoginState()) {
-            //hideOtherFragment();
-
+        hideOtherFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        if (tabUserFragment == null) {
+            tabUserFragment = new TabUserFragment_();
+            ft.add(R.id.layout_contain, tabUserFragment, IParam.USER);
         } else {
-            LoginActivity_.intent(this).startForResult(10);
+            ft.show(tabUserFragment);
         }
+        ft.commit();
+        menuSelected = BonConstants.BottomMenuSelected.USER;
+        resetMenuStyle();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tabUserFragment.refreshView();
+            }
+        }, 50);
     }
 
     /**
@@ -153,8 +181,11 @@ public class MainActivity extends BaseActivity {
         // 恢复默认文字和图标
         tvNews.setTextColor(getResources().getColor(R.color.c_7d8e9d));
         tvGoods.setTextColor(getResources().getColor(R.color.c_7d8e9d));
+        tvUser.setTextColor(getResources().getColor(R.color.c_7d8e9d));
         ivNews.setImageResource(R.mipmap.icon_news_nomal);
         ivGoods.setImageResource(R.mipmap.icon_goods_nomal);
+        ivUser.setImageResource(R.mipmap.icon_user_nomal);
+
 
         switch (menuSelected) {
             case NEWS:
@@ -164,6 +195,10 @@ public class MainActivity extends BaseActivity {
             case GOODS:
                 tvGoods.setTextColor(getResources().getColor(R.color.c_ff946e));
                 ivGoods.setImageResource(R.mipmap.icon_goods_selected);
+                break;
+            case USER:
+                tvGoods.setTextColor(getResources().getColor(R.color.c_ff946e));
+                ivGoods.setImageResource(R.mipmap.icon_user_selected);
                 break;
         }
     }
@@ -195,9 +230,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 10 && resultCode == RESULT_OK) {
-            toUserPage();
-        }
     }
 
     @Override
