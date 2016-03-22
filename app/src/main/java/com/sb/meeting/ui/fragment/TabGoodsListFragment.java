@@ -255,6 +255,7 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
                 public void onClick(View v) {
                     switch (v.getId()) {
                         case R.id.tv_attention:
+                        case R.id.iv_attention_tip:
                             int pos = (int) v.getTag();
                             startLoading();
                             attention(pos);
@@ -281,12 +282,10 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
             TaskManager.pushTask(new Task(TaskAction.ACTION_GOODS_ATTENTION) {
                 @Override
                 protected void doBackground() throws Exception {
-                    if (goodsVO.isAttention()) {
-                        goodsService.cancelAttention(goodsVO.getId());
-                    } else {
+                    if (!goodsVO.isAttention()) {
                         goodsService.attention(goodsVO.getId());
+                        goodsVO.setIsAttention(!goodsVO.isAttention());
                     }
-                    goodsVO.setIsAttention(!goodsVO.isAttention());
                 }
             }, getActivity());
         } else {

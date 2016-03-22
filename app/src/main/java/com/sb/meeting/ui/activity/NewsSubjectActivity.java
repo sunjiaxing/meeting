@@ -39,9 +39,9 @@ public class NewsSubjectActivity extends BaseActivity implements RefreshListView
     ImageView ivBack;
     @ViewById(R.id.tv_title)
     TextView tvTitle;
-    @ViewById(R.id.layout_loading)
+    @ViewById(R.id.layout_loading_subject)
     View layoutLoading;
-    @ViewById(R.id.layout_error)
+    @ViewById(R.id.layout_error_subject)
     View layoutError;
     @ViewById(R.id.tv_description)
     TextView tvErrorMsg;

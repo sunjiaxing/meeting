@@ -51,6 +51,8 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
     TextView tvTitle;
     @ViewById(R.id.btn_right)
     Button btnRight;
+    @ViewById(R.id.iv_right)
+    ImageView ivRight;
     @ViewById(R.id.layout_loading)
     View layoutLoading;
     @ViewById(R.id.layout_error)
@@ -103,6 +105,8 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
         initFooter();
         if (viewType == Type.DETAIL) {
             tvTitle.setText("物品详情");
+            ivRight.setVisibility(View.VISIBLE);
+            ivRight.setImageResource(R.mipmap.icon_more);
             startLoadingSelf();
             getGoodsDetail();
         } else if (viewType == Type.PREVIEW) {
@@ -140,8 +144,8 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
             tvScanNum.setText(String.valueOf(goodsVO.getScanNum()));
             tvCount.setText(String.valueOf(goodsVO.getCount()));
             tvAttentionNum.setText(String.valueOf(goodsVO.getAttentionNum()));
-            tvExchangePrice.setText(String.valueOf(goodsVO.getExchangePrice()));
-            tvMarketPrice.setText("¥" + String.valueOf(goodsVO.getMarketPrice()));
+            tvExchangePrice.setText(Utils.parseDouble(goodsVO.getExchangePrice()));
+            tvMarketPrice.setText("¥" + Utils.parseDouble(goodsVO.getMarketPrice()));
             List<GoodsImageVO> goodsImageVOList = formateImage(goodsVO.getImageList());
             if (!Utils.isEmpty(goodsImageVOList)) {
                 if (adapter == null) {
@@ -245,7 +249,7 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
                 if (viewType == Type.DETAIL) {
                     attention();
                 } else {
-                    showToast("尚未发布，不能关注");
+                    back();
                 }
             }
         });
@@ -381,5 +385,10 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
         if (requestCode == 0 && resultCode == RESULT_OK) {
             attention();
         }
+    }
+
+    @Click(R.id.iv_right)
+    void clickMore() {
+        showToast("功能暂未开放");
     }
 }

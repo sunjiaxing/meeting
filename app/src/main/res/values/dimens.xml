@@ -7,25 +7,44 @@
     <dimen name="ppi_px_20_sp">10sp</dimen>
     <dimen name="ppi_px_24_sp">12sp</dimen>
     <dimen name="ppi_px_25_sp">12.5sp</dimen>
+    <dimen name="ppi_px_26_sp">13sp</dimen>
     <dimen name="ppi_px_30_sp">15sp</dimen>
     <dimen name="ppi_px_32_sp">16sp</dimen>
     <dimen name="ppi_px_36_sp">18sp</dimen>
 
 
+    <dimen name="ppi_px_5_dp">2.5dp</dimen>
     <dimen name="ppi_px_10_dp">5dp</dimen>
+    <dimen name="ppi_px_12_dp">6dp</dimen>
     <dimen name="ppi_px_13_dp">6.5dp</dimen>
     <dimen name="ppi_px_14_dp">7dp</dimen>
+    <dimen name="ppi_px_15_dp">7.5dp</dimen>
     <dimen name="ppi_px_16_dp">8dp</dimen>
     <dimen name="ppi_px_17_dp">8.5dp</dimen>
     <dimen name="ppi_px_20_dp">10dp</dimen>
+    <dimen name="ppi_px_22_dp">11dp</dimen>
+    <dimen name="ppi_px_24_dp">12dp</dimen>
+    <dimen name="ppi_px_28_dp">14dp</dimen>
+    <dimen name="ppi_px_30_dp">15dp</dimen>
+    <dimen name="ppi_px_32_dp">16dp</dimen>
     <dimen name="ppi_px_33_dp">16.5dp</dimen>
     <dimen name="ppi_px_36_dp">18dp</dimen>
     <dimen name="ppi_px_40_dp">20dp</dimen>
+    <dimen name="ppi_px_42_dp">21dp</dimen>
     <dimen name="ppi_px_46_dp">23dp</dimen>
     <dimen name="ppi_px_48_dp">24dp</dimen>
+    <dimen name="ppi_px_50_dp">25dp</dimen>
     <dimen name="ppi_px_56_dp">28dp</dimen>
+    <dimen name="ppi_px_60_dp">30dp</dimen>
+    <dimen name="ppi_px_70_dp">35dp</dimen>
     <dimen name="ppi_px_88_dp">44dp</dimen>
     <dimen name="ppi_px_98_dp">49dp</dimen>
+    <dimen name="ppi_px_100_dp">50dp</dimen>
+    <dimen name="ppi_px_120_dp">60dp</dimen>
+    <dimen name="ppi_px_140_dp">70dp</dimen>
+    <dimen name="ppi_px_160_dp">80dp</dimen>
+    <dimen name="ppi_px_180_dp">90dp</dimen>
+    <dimen name="ppi_px_200_dp">100dp</dimen>
 
 
 </resources>

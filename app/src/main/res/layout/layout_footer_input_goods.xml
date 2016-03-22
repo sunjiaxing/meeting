@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="@dimen/ppi_px_20_dp">
+
+    <RelativeLayout
+        android:id="@+id/layout_add_image"
+        android:layout_width="@dimen/ppi_px_160_dp"
+        android:layout_height="@dimen/ppi_px_160_dp"
+        android:background="@color/c_d8d8d8">
+
+        <ImageView
+            android:layout_width="@dimen/ppi_px_60_dp"
+            android:layout_height="@dimen/ppi_px_60_dp"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/icon_add_image" />
+    </RelativeLayout>
+</LinearLayout>

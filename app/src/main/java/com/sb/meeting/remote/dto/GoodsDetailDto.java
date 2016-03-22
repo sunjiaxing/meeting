@@ -11,6 +11,7 @@ import org.json.JSONObject;
  */
 public class GoodsDetailDto extends GoodsDto {
     private String needCategory;
+    private String category;
     private String imgJson;
     public String getNeedCategory() {
         return needCategory;
@@ -20,6 +21,10 @@ public class GoodsDetailDto extends GoodsDto {
         return imgJson;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
     public void parseJson(JSONObject json) throws JSONException {
         if (json == null) {
             return;
@@ -27,6 +32,9 @@ public class GoodsDetailDto extends GoodsDto {
         super.parseJson(json);
         if (json.has(IParam.NEED_CATEGORY)) {
             this.needCategory = json.getString(IParam.NEED_CATEGORY);
+        }
+        if (json.has(IParam.CATEGORY)) {
+            this.category = json.getString(IParam.CATEGORY);
         }
         if (json.has(IParam.IMAGES)) {
             this.imgJson = json.getString(IParam.IMAGES);

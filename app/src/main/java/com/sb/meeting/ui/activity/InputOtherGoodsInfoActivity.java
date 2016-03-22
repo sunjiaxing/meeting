@@ -74,6 +74,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
 
     private TextView tvGoodsName;
     private ImageView ivCover;
+    private ImageView ivCoverTip;
     private TextView tvSelectCategory;
     private TextView tvInputPrice;
     private TextView tvInputCount;
@@ -139,13 +140,15 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         View header = LayoutInflater.from(this).inflate(R.layout.layout_header_input_goods, null);
         header.setClickable(false);
         ivCover = (ImageView) header.findViewById(R.id.iv_cover);
+        ivCoverTip = (ImageView) header.findViewById(R.id.iv_cover_tip);
         ivCover.setOnClickListener(this);
         // 设置封面图 高度   640 * 280
         int screenW = Utils.getScreenWidth(this);
         int coverHeight = screenW * 280 / 640;
         ivCover.setLayoutParams(new RelativeLayout.LayoutParams(screenW, coverHeight));
+        View layoutGoodsName = header.findViewById(R.id.layout_goods_name);
+        layoutGoodsName.setOnClickListener(this);
         tvGoodsName = (TextView) header.findViewById(R.id.tv_goods_name);
-        tvGoodsName.setOnClickListener(this);
         tvSelectCategory = (TextView) header.findViewById(R.id.tv_select_category);
         header.findViewById(R.id.layout_select_category).setOnClickListener(this);
         tvInputPrice = (TextView) header.findViewById(R.id.tv_input_price);
@@ -161,39 +164,15 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
      * 初始化 footer
      */
     private void initFooter() {
-//        LinearLayout linearLayout = new LinearLayout(this);
-//        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-//        linearLayout.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
-//        int dp_10 = Utils.dip2px(this, 10);
-//        linearLayout.setPadding(0, dp_10, 0, dp_10);
-//
-//        ImageView imageView = new ImageView(this);
-//        imageView.setImageResource(R.mipmap.ic_launcher);
-//        imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-//        imageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ChooseImageActivity_.intent(InputOtherGoodsInfoActivity.this).extra(IParam.LAST_NUM, 20 - imagePathList.size()).startForResult(REQUEST_CODE_SELECT_IMAGE);
-//            }
-//        });
-//        linearLayout.addView(imageView);
-//        sortListView.addFooterView(linearLayout);
-
-        TextView footerView = new TextView(this);
-        footerView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
-        footerView.setTextColor(Color.GRAY);
-        footerView.setTextSize(18);
-        footerView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-        int dp_10 = Utils.dip2px(this, 10);
-        footerView.setPadding(0, dp_10, 0, dp_10);
-        footerView.setText("点击选择图片");
-        footerView.setOnClickListener(new View.OnClickListener() {
+        View footer = LayoutInflater.from(this).inflate(R.layout.layout_footer_input_goods, null);
+        View layoutAddImage = footer.findViewById(R.id.layout_add_image);
+        layoutAddImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ChooseImageActivity_.intent(InputOtherGoodsInfoActivity.this).extra(IParam.LAST_NUM, 20 - imagePathList.size()).startForResult(REQUEST_CODE_SELECT_IMAGE);
             }
         });
-        sortListView.addFooterView(footerView);
+        sortListView.addFooterView(footer);
     }
 
     @Override
@@ -250,7 +229,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
             public void onClick() {
                 if (!Utils.isEmpty(goodsVO.getCoverUrl()) && goodsVO.getCoverUrl().equals(imagePathList.get(position))) {
                     goodsVO.setCoverUrl(null);
-                    ivCover.setImageResource(R.mipmap.ic_launcher);
+                    ivCoverTip.setVisibility(View.VISIBLE);
                 }
                 goodsVO.getImageList().remove(position);
                 imagePathList.remove(position);
@@ -323,6 +302,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
      * @param path 封面图 path
      */
     private void setCover(String path) {
+        ivCoverTip.setVisibility(View.GONE);
         // 设置封面
         ImageLoader.getInstance().displayImage(
                 ImageDownloader.Scheme.FILE.wrap(path),
@@ -375,7 +355,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_goods_name:// 编辑物品名称
+            case R.id.layout_goods_name:// 编辑物品名称
                 InputGoodsNameActivity_.intent(this).extra(IParam.GOODS_NAME, goodsVO.getName()).startForResult(REQUEST_CODE_CHANGE_GOODS_NAME);
                 break;
             case R.id.iv_cover:// 设置封面

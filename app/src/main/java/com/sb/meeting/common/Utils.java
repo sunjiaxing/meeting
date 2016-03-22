@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -445,5 +446,15 @@ public class Utils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 转换 double科学技术法
+     * @param price
+     * @return
+     */
+    public static String parseDouble(double price) {
+        DecimalFormat sf = new DecimalFormat("#.00");
+        return sf.format(price);
     }
 }

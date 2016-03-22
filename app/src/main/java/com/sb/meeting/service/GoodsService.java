@@ -249,6 +249,7 @@ public class GoodsService extends BaseService {
             detailVO.setName(dto.getGoodsName());
             detailVO.setCoverUrl(dto.getCoverUrl());
             detailVO.setNeedCategoryStr(dto.getNeedCategory());
+            detailVO.setCategoryStr(dto.getCategory());
             detailVO.setValidTimeStr(dto.getValidTimeStr());
             detailVO.setAttentionNum(dto.getAttentionNum());
             detailVO.setScanNum(dto.getScanNum());

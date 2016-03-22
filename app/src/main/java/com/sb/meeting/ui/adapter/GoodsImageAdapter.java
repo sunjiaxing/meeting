@@ -104,7 +104,12 @@ public abstract class GoodsImageAdapter extends BaseAdapter implements View.OnCl
             // 单张
             viewHolder.layoutSingle.setVisibility(View.VISIBLE);
             viewHolder.layoutMore.setVisibility(View.GONE);
-            viewHolder.tvText.setText(vo.getDesc());
+            if (!Utils.isEmpty(vo.getDesc())) {
+                viewHolder.tvText.setVisibility(View.VISIBLE);
+                viewHolder.tvText.setText(vo.getDesc());
+            } else {
+                viewHolder.tvText.setVisibility(View.GONE);
+            }
             if (viewType == GoodsDetailAndPreviewActivity.Type.PREVIEW) {
                 ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.FILE.wrap(vo.getUrl1()), viewHolder.ivImage, ImageOption.createNomalOption(), loadingListener);
             } else {
@@ -124,6 +129,7 @@ public abstract class GoodsImageAdapter extends BaseAdapter implements View.OnCl
         ImageView ivImage1;
         ImageView ivImage2;
     }
+
     ImageLoadingListener loadingListener = new SimpleImageLoadingListener() {
         @Override
         public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {

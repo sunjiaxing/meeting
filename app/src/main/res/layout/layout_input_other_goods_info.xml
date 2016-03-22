@@ -27,11 +27,10 @@
     <TextView
         android:id="@+id/tv_preview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/ppi_px_98_dp"
         android:layout_alignParentBottom="true"
         android:background="@color/c_ff946e"
         android:gravity="center"
-        android:padding="10dp"
         android:text="预览"
         android:textColor="@color/color_white"
         android:textSize="@dimen/ppi_px_30_sp" />

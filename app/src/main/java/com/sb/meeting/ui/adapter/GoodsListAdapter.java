@@ -2,6 +2,7 @@ package com.sb.meeting.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,11 +33,12 @@ public abstract class GoodsListAdapter extends BaseAdapter implements View.OnCli
     public GoodsListAdapter(Context context) {
         layoutInflater = LayoutInflater.from(context);
         // 600 240
-        int screenWidth = Utils.getScreenWidth(context);
+        int screenWidth = Utils.getScreenWidth(context) - 40;
         int h = screenWidth * 240 / 600;
         layoutParams = new LinearLayout.LayoutParams(screenWidth, h);
         int dp_10 = Utils.dip2px(context, 10);
         layoutParams.setMargins(dp_10, dp_10 / 2, dp_10, 0);
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
     }
 
     public void setData(List<GoodsVO> data) {
@@ -68,6 +70,7 @@ public abstract class GoodsListAdapter extends BaseAdapter implements View.OnCli
             viewHolder.ivImage.setLayoutParams(layoutParams);
             viewHolder.tvGoodsName = (TextView) convertView.findViewById(R.id.tv_goods_name);
             viewHolder.tvAttention = (TextView) convertView.findViewById(R.id.tv_attention);
+            viewHolder.ivAttentionTip = (ImageView) convertView.findViewById(R.id.iv_attention_tip);
 
             viewHolder.tvExchangePrice = (TextView) convertView.findViewById(R.id.tv_exchange_price);
             viewHolder.tvMarketPrice = (TextView) convertView.findViewById(R.id.tv_market_price);
@@ -85,15 +88,19 @@ public abstract class GoodsListAdapter extends BaseAdapter implements View.OnCli
         GoodsVO vo = list.get(position);
         viewHolder.tvGoodsName.setText(vo.getName());
         if (vo.isAttention()) {
-            viewHolder.tvAttention.setText("取消关注");
+            viewHolder.ivAttentionTip.setImageResource(R.mipmap.icon_attention_ok);
+            viewHolder.tvAttention.setText("已关注");
         } else {
+            viewHolder.ivAttentionTip.setImageResource(R.mipmap.icon_attention_plus);
             viewHolder.tvAttention.setText("关注");
         }
         viewHolder.tvAttention.setTag(position);
+        viewHolder.ivAttentionTip.setTag(position);
         viewHolder.tvAttention.setOnClickListener(this);
+        viewHolder.ivAttentionTip.setOnClickListener(this);
 
-        viewHolder.tvExchangePrice.setText("¥" + String.valueOf(vo.getExchangePrice()));
-        viewHolder.tvMarketPrice.setText("¥" + String.valueOf(vo.getMarketPrice()));
+        viewHolder.tvExchangePrice.setText(Utils.parseDouble(vo.getExchangePrice()));
+        viewHolder.tvMarketPrice.setText("¥" + Utils.parseDouble(vo.getMarketPrice()));
         viewHolder.tvPublishTime.setText(vo.getPublishTime());
 
         ImageLoader.getInstance().displayImage(vo.getCoverUrl(), viewHolder.ivImage, ImageOption.createNomalOption());
@@ -108,6 +115,7 @@ public abstract class GoodsListAdapter extends BaseAdapter implements View.OnCli
 
     class ViewHolder {
         ImageView ivImage;
+        ImageView ivAttentionTip;
         TextView tvGoodsName;
         TextView tvScanNum;
         TextView tvAttentionNum;

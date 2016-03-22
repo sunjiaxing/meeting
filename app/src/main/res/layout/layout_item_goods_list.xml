@@ -11,10 +11,10 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/ppi_px_50_dp"
+        android:layout_marginTop="@dimen/ppi_px_20_dp"
         android:paddingLeft="@dimen/ppi_px_20_dp"
-        android:paddingRight="@dimen/ppi_px_20_dp"
-        android:paddingTop="@dimen/ppi_px_20_dp">
+        android:paddingRight="@dimen/ppi_px_20_dp">
 
         <TextView
             android:id="@+id/tv_goods_name"
@@ -27,65 +27,90 @@
             android:textColor="@color/c_454545"
             android:textSize="@dimen/ppi_px_32_sp" />
 
+        <ImageView
+            android:id="@+id/iv_attention_tip"
+            android:layout_width="@dimen/ppi_px_24_dp"
+            android:layout_height="@dimen/ppi_px_24_dp"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="@dimen/ppi_px_13_dp"
+            android:layout_marginTop="@dimen/ppi_px_13_dp"
+            android:layout_toLeftOf="@+id/tv_attention"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_attention_plus" />
+
         <TextView
             android:id="@+id/tv_attention"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:paddingBottom="@dimen/ppi_px_13_dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="@dimen/ppi_px_13_dp"
+            android:layout_marginLeft="@dimen/ppi_px_10_dp"
             android:singleLine="true"
             android:text="关注"
-            android:textColor="@color/c_c9ccd0"
+            android:textColor="@color/c_7d8e9d"
             android:textSize="@dimen/ppi_px_24_sp" />
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:paddingBottom="@dimen/ppi_px_10_dp"
         android:paddingLeft="@dimen/ppi_px_20_dp"
         android:paddingRight="@dimen/ppi_px_20_dp"
         android:paddingTop="@dimen/ppi_px_10_dp">
 
-        <TextView
-            android:id="@+id/tv_exchange_price"
+        <LinearLayout
+            android:id="@+id/layout_exchange_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:text="@string/loading"
-            android:textColor="@color/c_ff946e"
-            android:textSize="@dimen/ppi_px_32_sp" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_market_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tv_exchange_price"
-            android:layout_marginLeft="@dimen/ppi_px_20_dp"
-            android:layout_toRightOf="@+id/tv_exchange_price"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:text="@string/loading"
-            android:textColor="@color/c_c9ccd0"
-            android:textSize="@dimen/ppi_px_24_sp" />
+            <ImageView
+                android:id="@+id/iv_money_tip"
+                android:layout_width="@dimen/ppi_px_30_dp"
+                android:layout_height="@dimen/ppi_px_36_dp"
+                android:layout_marginRight="@dimen/ppi_px_10_dp"
+                android:src="@mipmap/icon_money" />
 
-        <TextView
-            android:id="@+id/tv_publish_time"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tv_exchange_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/loading"
+                android:textColor="@color/c_ff6600"
+                android:textSize="@dimen/ppi_px_32_sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tv_exchange_price"
-            android:layout_alignParentRight="true"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:text="@string/loading"
-            android:textColor="@color/c_c9ccd0"
-            android:textSize="@dimen/ppi_px_24_sp" />
-    </RelativeLayout>
+            android:layout_gravity="bottom">
+
+            <TextView
+                android:id="@+id/tv_market_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/ppi_px_20_dp"
+                android:layout_weight="1"
+                android:text="@string/loading"
+                android:textColor="@color/c_c9ccd0"
+                android:textSize="@dimen/ppi_px_24_sp" />
+
+            <TextView
+                android:id="@+id/tv_publish_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="@string/loading"
+                android:textColor="@color/c_c9ccd0"
+                android:textSize="@dimen/ppi_px_24_sp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/iv_image"
@@ -99,7 +124,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/ppi_px_70_dp"
         android:paddingBottom="@dimen/ppi_px_17_dp"
         android:paddingLeft="@dimen/ppi_px_20_dp"
         android:paddingRight="@dimen/ppi_px_20_dp"
@@ -121,24 +146,39 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="@dimen/ppi_px_20_dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
+
+            <ImageView
+                android:layout_width="@dimen/ppi_px_36_dp"
+                android:layout_height="@dimen/ppi_px_36_dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_scan" />
 
             <TextView
                 android:id="@+id/tv_scan_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/ppi_px_10_dp"
                 android:layout_marginRight="@dimen/ppi_px_46_dp"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="@string/loading"
                 android:textColor="@color/c_7d8e9d"
                 android:textSize="@dimen/ppi_px_24_sp" />
+
+            <ImageView
+                android:layout_width="@dimen/ppi_px_36_dp"
+                android:layout_height="@dimen/ppi_px_36_dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_count" />
 
             <TextView
                 android:id="@+id/tv_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/ppi_px_10_dp"
                 android:layout_marginRight="@dimen/ppi_px_46_dp"
                 android:ellipsize="end"
                 android:singleLine="true"
@@ -146,10 +186,17 @@
                 android:textColor="@color/c_7d8e9d"
                 android:textSize="@dimen/ppi_px_24_sp" />
 
+            <ImageView
+                android:layout_width="@dimen/ppi_px_36_dp"
+                android:layout_height="@dimen/ppi_px_36_dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_attention" />
+
             <TextView
                 android:id="@+id/tv_attention_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/ppi_px_10_dp"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="@string/loading"

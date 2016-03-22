@@ -3,17 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingLeft="10dp"
-    android:paddingTop="10dp">
+    android:paddingLeft="@dimen/ppi_px_20_dp"
+    android:paddingTop="@dimen/ppi_px_20_dp">
 
     <ImageView
         android:id="@+id/iv_image"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_width="@dimen/ppi_px_160_dp"
+        android:layout_height="@dimen/ppi_px_160_dp"
         android:layout_centerVertical="true"
         android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@mipmap/icon_win" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,8 +20,7 @@
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/iv_image"
         android:orientation="vertical"
-        android:paddingLeft="10dp"
-        android:paddingTop="5dp">
+        android:paddingLeft="@dimen/ppi_px_20_dp">
 
         <LinearLayout
             android:id="@+id/layout_main"
@@ -34,26 +32,28 @@
             <TextView
                 android:id="@+id/tv_input_desc"
                 android:layout_width="match_parent"
-                android:layout_height="85dp"
+                android:layout_height="@dimen/ppi_px_160_dp"
                 android:layout_weight="1"
-                android:lineSpacingExtra="3dp"
-                android:minHeight="85dp"
+                android:paddingTop="@dimen/ppi_px_5_dp"
+                android:paddingBottom="@dimen/ppi_px_5_dp"
+                android:lineSpacingExtra="@dimen/ppi_px_5_dp"
                 android:text="@string/input_image_desc_tip"
                 android:textColor="@color/c_454545"
                 android:textSize="@dimen/ppi_px_24_sp" />
 
             <ImageView
                 android:id="@+id/iv_remove"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/ppi_px_48_dp"
+                android:layout_height="@dimen/ppi_px_48_dp"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="4"
-                android:src="@android:drawable/ic_notification_clear_all" />
+                android:layout_marginLeft="@dimen/ppi_px_20_dp"
+                android:layout_marginRight="@dimen/ppi_px_20_dp"
+                android:src="@drawable/delete_image_selector" />
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/c_d8d8d8" />
+            android:background="@color/c_dddddd" />
     </LinearLayout>
 </RelativeLayout>
