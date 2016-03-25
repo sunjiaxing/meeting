@@ -11,13 +11,19 @@ import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.WindowManager;
+import android.widget.ImageView;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.download.ImageDownloader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.sb.meeting.remote.IParam;
 
 import org.json.JSONArray;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -450,11 +456,54 @@ public class Utils {
 
     /**
      * 转换 double科学技术法
+     *
      * @param price
      * @return
      */
     public static String parseDouble(double price) {
-        DecimalFormat sf = new DecimalFormat("#.00");
+        return parseDouble(price, "#.00");
+    }
+
+    public static String parseDouble(double price, String pattern) {
+        DecimalFormat sf = new DecimalFormat(pattern);
         return sf.format(price);
+    }
+
+    /**
+     * 加载图片
+     *
+     * @param path      图片路径
+     * @param imageView ImageView
+     * @param options   option
+     */
+    public static void displayImage(String path, ImageView imageView, DisplayImageOptions options) {
+        ImageLoader.getInstance().displayImage(
+                path.startsWith(IParam.HTTP) ? path : ImageDownloader.Scheme.FILE.wrap(path),
+                imageView,
+                options);
+    }
+
+    /**
+     * 加载图片
+     *
+     * @param path      路径
+     * @param imageView ImageView
+     * @param options   option
+     * @param listener  监听
+     */
+    public static void displayImage(String path, ImageView imageView, DisplayImageOptions options, ImageLoadingListener listener) {
+        ImageLoader.getInstance().displayImage(
+                path.startsWith(IParam.HTTP) ? path : ImageDownloader.Scheme.FILE.wrap(path),
+                imageView,
+                options, listener);
+    }
+
+    /**
+     * 删除图片链接 域名部分
+     * @param url
+     * @return
+     */
+    public static String deleteHeadOfUrl(String url) {
+        return url.replace(BonConstants.SERVER_URL, "");
     }
 }

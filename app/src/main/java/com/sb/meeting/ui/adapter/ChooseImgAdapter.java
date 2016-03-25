@@ -123,8 +123,7 @@ public class ChooseImgAdapter extends QuickFlingAdapter {
             String path = list.get(position - 1);
             viewHolder.ivImage.setTag(path);
             viewHolder.ivImage.setLayoutParams(params);
-            ImageLoader.getInstance().displayImage(path, viewHolder.ivImage,
-                    ImageOption.createNomalOption());
+            Utils.displayImage(path, viewHolder.ivImage, ImageOption.createNomalOption());
             if (selectedImg.contains(path)) {
                 viewHolder.ivSelectTip
                         .setImageResource(R.mipmap.picture_icon_selected);

@@ -8,8 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.sb.meeting.R;
 import com.sb.meeting.common.ImageOption;
 import com.sb.meeting.common.Utils;
@@ -63,14 +61,12 @@ public abstract class SortListAdapter extends BaseAdapter implements View.OnClic
             viewHolder = (ViewHolder) convertView.getTag();
         }
         ImageVO vo = goodsVOList.get(position);
-        ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.FILE.wrap(vo.getFilePath()), viewHolder.ivImage, ImageOption.createNomalOption());
+        Utils.displayImage(vo.getUrl(),viewHolder.ivImage,ImageOption.createNomalOption());
         if (!Utils.isEmpty(vo.getDesc())) {
             viewHolder.tvInputDesc.setText(vo.getDesc());
         } else {
             viewHolder.tvInputDesc.setText(R.string.input_image_desc_tip);
         }
-//        viewHolder.tvInputDesc.setTag(position);
-//        viewHolder.tvInputDesc.setOnClickListener(this);
         viewHolder.ivDelete.setTag(position);
         viewHolder.ivDelete.setOnClickListener(this);
         return convertView;

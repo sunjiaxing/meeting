@@ -189,8 +189,7 @@ public class HttpUtilsApache {
         CloseableHttpResponse response = null;
         try {
             response = client.execute(request);
-            if (response != null
-                    && response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            if (response != null) {
                 result = EntityUtils.toString(response.getEntity());
                 if (Utils.isEmpty(result)) {
                     throw new AppException("网络连接异常, 请稍后再试！");

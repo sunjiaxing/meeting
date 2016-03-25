@@ -6,12 +6,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sb.meeting.R;
 import com.sb.meeting.common.ImageOption;
+import com.sb.meeting.common.Utils;
 import com.sb.meeting.service.UserService;
+import com.sb.meeting.ui.activity.AttentionGoodsActivity_;
 import com.sb.meeting.ui.activity.FavoriteActivity_;
 import com.sb.meeting.ui.activity.LoginActivity_;
+import com.sb.meeting.ui.activity.PublishedGoodsActivity_;
 import com.sb.meeting.ui.vo.UserVO;
 
 import org.androidannotations.annotations.AfterViews;
@@ -60,7 +62,7 @@ public class TabUserFragment extends BaseFragment {
             }
             layoutNotLogin.setVisibility(View.GONE);
             layoutUserCenter.setVisibility(View.VISIBLE);
-            ImageLoader.getInstance().displayImage(userInfo.getUserAvatar(), ivUserAvatar, ImageOption.createNomalOption());
+            Utils.displayImage(userInfo.getUserAvatar(),ivUserAvatar,ImageOption.createNomalOption());
             tvUserName.setText(userInfo.getNickName());
         } else {
             layoutUserCenter.setVisibility(View.GONE);
@@ -102,7 +104,7 @@ public class TabUserFragment extends BaseFragment {
      */
     @Click(R.id.tv_published_goods)
     void toPublished() {
-
+        PublishedGoodsActivity_.intent(this).start();
     }
 
     /**
@@ -110,7 +112,7 @@ public class TabUserFragment extends BaseFragment {
      */
     @Click(R.id.tv_attention_goods)
     void toAttention() {
-
+        AttentionGoodsActivity_.intent(this).start();
     }
 
 

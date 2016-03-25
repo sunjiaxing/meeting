@@ -197,8 +197,8 @@ public class MainActivity extends BaseActivity {
                 ivGoods.setImageResource(R.mipmap.icon_goods_selected);
                 break;
             case USER:
-                tvGoods.setTextColor(getResources().getColor(R.color.c_ff946e));
-                ivGoods.setImageResource(R.mipmap.icon_user_selected);
+                tvUser.setTextColor(getResources().getColor(R.color.c_ff946e));
+                ivUser.setImageResource(R.mipmap.icon_user_selected);
                 break;
         }
     }

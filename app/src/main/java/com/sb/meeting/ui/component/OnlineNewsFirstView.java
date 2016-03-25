@@ -1,10 +1,5 @@
 package com.sb.meeting.ui.component;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import android.content.Context;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
@@ -18,12 +13,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sb.meeting.R;
 import com.sb.meeting.common.BonConstants;
 import com.sb.meeting.common.ImageOption;
 import com.sb.meeting.common.Utils;
 import com.sb.meeting.ui.vo.NewsVO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 新闻顶部viewpager
@@ -155,9 +152,7 @@ public class OnlineNewsFirstView extends FrameLayout implements
 			// 设置显示文字
 			tvNewsTitle.setText(topList.get(j).getTitle());
 			// 设置显示图片
-			ImageLoader.getInstance().displayImage(
-					topList.get(j).getIconPath(), ivNewsImage,
-					ImageOption.createNomalOption());
+			Utils.displayImage(topList.get(j).getIconPath(),ivNewsImage,ImageOption.createNomalOption());
 			// 设置专题图标是否显示
 			if (topList.get(j).isSubject()) {
 				// 是专题

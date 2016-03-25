@@ -5,14 +5,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.taskmanager.Task;
-import com.taskmanager.TaskManager;
 import com.sb.meeting.R;
 import com.sb.meeting.common.ImageOption;
 import com.sb.meeting.common.TaskAction;
+import com.sb.meeting.common.Utils;
 import com.sb.meeting.service.UserService;
 import com.sb.meeting.ui.vo.UserVO;
+import com.taskmanager.Task;
+import com.taskmanager.TaskManager;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -94,10 +94,7 @@ public class UserCenterActivity extends BaseActivity {
     private void refreshUI() {
         if (userVO != null) {
             tvLogout.setVisibility(View.VISIBLE);
-            ImageLoader.getInstance().displayImage(
-                    userVO.getUserAvatar(),
-                    ivUserAvatar,
-                    ImageOption.createNomalOption());
+            Utils.displayImage(userVO.getUserAvatar(),ivUserAvatar,ImageOption.createNomalOption());
             tvUserName.setText(userVO.getNickName());
         }
     }

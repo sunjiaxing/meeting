@@ -7,6 +7,7 @@ import com.sb.meeting.common.BonConstants;
 import com.sb.meeting.common.FileUtil;
 import com.sb.meeting.common.Utils;
 import com.sb.meeting.dao.GoodsDao;
+import com.sb.meeting.dao.entity.CheckingGoods;
 import com.sb.meeting.dao.entity.Goods;
 import com.sb.meeting.remote.GoodsRO;
 import com.sb.meeting.remote.IParam;
@@ -59,15 +60,6 @@ public class GoodsService extends BaseService {
                 showData.add(vo);
             }
         }
-//        // 构建临时数据
-//        GoodsCategoryVO vo = new GoodsCategoryVO();
-//        vo.setName("酒水");
-//        vo.setId(1);
-//        showData.add(vo);
-//        vo = new GoodsCategoryVO();
-//        vo.setName("办公用品");
-//        vo.setId(2);
-//        showData.add(vo);
         return showData;
     }
 
@@ -89,19 +81,6 @@ public class GoodsService extends BaseService {
                 showData.add(vo);
             }
         }
-//        // 构建临时数据
-//        ValidTimeVO vo = new ValidTimeVO();
-//        vo.setName("一周内有效");
-//        vo.setId(1);
-//        showData.add(vo);
-//        vo = new ValidTimeVO();
-//        vo.setName("两周内有效");
-//        vo.setId(2);
-//        showData.add(vo);
-//        vo = new ValidTimeVO();
-//        vo.setName("一月内有效");
-//        vo.setId(3);
-//        showData.add(vo);
         return showData;
     }
 
@@ -112,23 +91,26 @@ public class GoodsService extends BaseService {
      * @param mobile  手机号
      * @throws JSONException
      */
-    public void publishGoods(GoodsVO goodsVO, String mobile) throws JSONException {
+    public void publishGoods(GoodsVO goodsVO, String mobile, String uuid) throws JSONException {
         JSONArray imageJson = new JSONArray();
         // 上传图片
         if (!Utils.isEmpty(goodsVO.getImageList())) {
             String fileName;
             File file;
             for (ImageVO imgVO : goodsVO.getImageList()) {
-                file = new File(imgVO.getFilePath());
+                if (imgVO.getUrl().startsWith(IParam.HTTP)) {
+                    continue;
+                }
+                file = new File(imgVO.getUrl());
                 if (file.exists()) {
                     fileName = file.getName();
                     file = new File(BonConstants.PATH_COMPRESSED, fileName);
                     if (!file.exists()) {
                         // 执行原图压缩
                         // 压缩图片
-                        Bitmap bm = Utils.comp(imgVO.getFilePath());
+                        Bitmap bm = Utils.comp(imgVO.getUrl());
                         // 判断图片是否进过系统旋转
-                        int degree = FileUtil.getBitmapDegree(imgVO.getFilePath());
+                        int degree = FileUtil.getBitmapDegree(imgVO.getUrl());
                         if (degree != 0) {
                             bm = FileUtil.rotateBitmapByDegree(bm, degree);
                         }
@@ -139,18 +121,18 @@ public class GoodsService extends BaseService {
                         }
                     }
                     String url = goodsRO.uploadFile(file);
-                    imgVO.setUrl(url);
                     JSONObject json = new JSONObject();
                     json.put(IParam.URL, url);
                     json.put(IParam.DESC, imgVO.getDesc());
                     imageJson.put(json);
-                    if (imgVO.getFilePath().equals(goodsVO.getCoverUrl())) {
+                    if (imgVO.getUrl().equals(goodsVO.getCoverUrl())) {
                         goodsVO.setCoverUrl(url);
                     }
                 }
             }
         }
-        goodsRO.publishGoods(goodsVO, configDao.getUserId(), mobile, imageJson.toString());
+        int id = goodsRO.publishGoods(goodsVO, configDao.getUserId(), mobile, imageJson.toString());
+        goodsDao.addCheckingDataId(id, uuid);
     }
 
     /**
@@ -256,6 +238,7 @@ public class GoodsService extends BaseService {
             detailVO.setMarketPrice(dto.getMarketPrice());
             detailVO.setExchangePrice(dto.getExchangePrice());
             detailVO.setPublishTime(Utils.formateTime(dto.getPublishTime(), "yyyy-MM-dd"));
+            detailVO.setCount(dto.getCount());
             detailVO.setIsAttention(dto.getIsAttention() == 1);
             JSONArray array = new JSONArray(dto.getImgJson());
             List<ImageVO> imageList = new ArrayList<>();
@@ -290,5 +273,158 @@ public class GoodsService extends BaseService {
      */
     public boolean cancelAttention(int goodsId) throws JSONException {
         return goodsRO.attention(goodsId, configDao.getUserId(), 1);
+    }
+
+    /**
+     * 获取 发布 的物品
+     *
+     * @param pageIndex 页码
+     * @return
+     * @throws JSONException
+     */
+    public List<GoodsVO> getPublishedGoods(int pageIndex) throws JSONException {
+        List<GoodsDto> webData = goodsRO.getPublishedGoods(configDao.getUserId(), pageIndex, BonConstants.LIMIT_GET_PUBLISHED_GOODS);
+        List<GoodsVO> showData = null;
+        if (!Utils.isEmpty(webData)) {
+            showData = new ArrayList<>();
+            GoodsVO vo;
+            for (GoodsDto dto : webData) {
+                vo = new GoodsVO();
+                vo.setId(dto.getId());
+                vo.setName(dto.getGoodsName());
+                vo.setCoverUrl(dto.getCoverUrl());
+                vo.setExchangePrice(dto.getExchangePrice());
+                vo.setMarketPrice(dto.getMarketPrice());
+                vo.setScanNum(dto.getScanNum());
+                vo.setCount(dto.getCount());
+                vo.setAttentionNum(dto.getAttentionNum());
+                vo.setPublishTime(Utils.formateTime(dto.getPublishTime(), "yyyy/MM/dd"));
+                vo.setValidTimeStr(dto.getValidTimeStr());
+                if (dto.getCheckingState() == -1) {
+                    vo.setCheckingState(GoodsVO.CheckingState.FAIL);
+                } else if (dto.getCheckingState() == 0) {
+                    vo.setCheckingState(GoodsVO.CheckingState.CHECKING);
+                } else if (dto.getCheckingState() == 1) {
+                    vo.setCheckingState(GoodsVO.CheckingState.PASS);
+                }
+                showData.add(vo);
+            }
+        }
+        return showData;
+    }
+
+    /**
+     * 获取 我 关注的物品
+     *
+     * @param pageIndex 页码
+     * @return
+     * @throws JSONException
+     */
+    public List<GoodsVO> getAttentionGoods(int pageIndex) throws JSONException {
+        List<GoodsDto> webData = goodsRO.getAttentionGoods(configDao.getUserId(), pageIndex, BonConstants.LIMIT_GET_ATTENTION_GOODS);
+        List<GoodsVO> showData = null;
+        if (!Utils.isEmpty(webData)) {
+            showData = new ArrayList<>();
+            GoodsVO vo;
+            for (GoodsDto dto : webData) {
+                vo = new GoodsVO();
+                vo.setId(dto.getId());
+                vo.setName(dto.getGoodsName());
+                vo.setCoverUrl(dto.getCoverUrl());
+                vo.setExchangePrice(dto.getExchangePrice());
+                vo.setMarketPrice(dto.getMarketPrice());
+                vo.setScanNum(dto.getScanNum());
+                vo.setCount(dto.getCount());
+                vo.setAttentionNum(dto.getAttentionNum());
+                vo.setPublishTime(Utils.formateTime(dto.getPublishTime(), "yyyy/MM/dd"));
+                vo.setValidTimeStr(dto.getValidTimeStr());
+                vo.setIsAttention(true);
+                showData.add(vo);
+            }
+        }
+        return showData;
+    }
+
+    /**
+     * 保存 审核中的数据
+     *
+     * @param checkingGoods
+     */
+    public void saveCheckingData(CheckingGoods checkingGoods) {
+        checkingGoods.setSendSuccess(-1);
+        goodsDao.saveCheckingData(checkingGoods);
+    }
+
+    /**
+     * 获取审核中的数据
+     *
+     * @return
+     */
+    public CheckingGoods getCheckingData() {
+        return goodsDao.getCheckingData();
+    }
+
+    /**
+     * 删除 审核中的物品
+     *
+     * @param goodsId 物品id
+     */
+    public void deleteCheckingData(String goodsId) {
+        goodsDao.deleteCheckingData(goodsId);
+    }
+
+    /**
+     * 更新 物品信息
+     *
+     * @param goodsVO 物品
+     * @param mobile  联系方式
+     * @throws JSONException
+     */
+    public void updateGoodsInfo(GoodsVO goodsVO, String mobile) throws JSONException {
+        goodsVO.setCoverUrl(Utils.deleteHeadOfUrl(goodsVO.getCoverUrl()));
+        JSONArray imageJson = new JSONArray();
+        // 上传图片
+        if (!Utils.isEmpty(goodsVO.getImageList())) {
+            String fileName;
+            File file;
+            for (ImageVO imgVO : goodsVO.getImageList()) {
+                if (imgVO.getUrl().startsWith(IParam.HTTP)) {
+                    JSONObject json = new JSONObject();
+                    json.put(IParam.URL, Utils.deleteHeadOfUrl(imgVO.getUrl()));
+                    json.put(IParam.DESC, imgVO.getDesc());
+                    imageJson.put(json);
+                    continue;
+                }
+                file = new File(imgVO.getUrl());
+                if (file.exists()) {
+                    fileName = file.getName();
+                    file = new File(BonConstants.PATH_COMPRESSED, fileName);
+                    if (!file.exists()) {
+                        // 执行原图压缩
+                        // 压缩图片
+                        Bitmap bm = Utils.comp(imgVO.getUrl());
+                        // 判断图片是否进过系统旋转
+                        int degree = FileUtil.getBitmapDegree(imgVO.getUrl());
+                        if (degree != 0) {
+                            bm = FileUtil.rotateBitmapByDegree(bm, degree);
+                        }
+                        file = Utils.savePic(bm, BonConstants.PATH_COMPRESSED
+                                + fileName);
+                        if (bm != null && !bm.isRecycled()) {
+                            bm.recycle();
+                        }
+                    }
+                    String url = goodsRO.uploadFile(file);
+                    JSONObject json = new JSONObject();
+                    json.put(IParam.URL, url);
+                    json.put(IParam.DESC, imgVO.getDesc());
+                    imageJson.put(json);
+                    if (imgVO.getUrl().equals(goodsVO.getCoverUrl())) {
+                        goodsVO.setCoverUrl(url);
+                    }
+                }
+            }
+        }
+        goodsRO.updateGoods(goodsVO, configDao.getUserId(), mobile, imageJson.toString());
     }
 }

@@ -122,7 +122,7 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
         if (goodsVO != null) {
             switch (viewType) {
                 case DETAIL:
-                    ImageLoader.getInstance().displayImage(goodsVO.getCoverUrl(), ivCover, ImageOption.createNomalOption());
+                    Utils.displayImage(goodsVO.getCoverUrl(),ivCover,ImageOption.createNomalOption());
                     tvValidTime.setText(goodsVO.getValidTimeStr());
                     tvAttentionTip.setVisibility(View.VISIBLE);
                     if (goodsVO.isAttention()) {
@@ -134,7 +134,7 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
                     tvPublishTime.setText(goodsVO.getPublishTime());
                     break;
                 case PREVIEW:
-                    ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.FILE.wrap(goodsVO.getCoverUrl()), ivCover, ImageOption.createNomalOption());
+                    Utils.displayImage(goodsVO.getCoverUrl(), ivCover, ImageOption.createNomalOption());
                     tvValidTime.setText(goodsVO.getValidTime().getName());
                     tvGoodsCategory.setText(goodsVO.getCategory().getName());
                     tvPublishTime.setText(Utils.formateTime(System.currentTimeMillis(), "yyyy/MM/dd"));
@@ -167,10 +167,10 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
                                     .start();
                         }
                     };
-                    adapter.setData(goodsImageVOList, viewType);
+                    adapter.setData(goodsImageVOList);
                     listView.setAdapter(adapter);
                 } else {
-                    adapter.setData(goodsImageVOList, viewType);
+                    adapter.setData(goodsImageVOList);
                     adapter.notifyDataSetChanged();
                 }
             } else {
@@ -190,7 +190,7 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
         if (!Utils.isEmpty(data)) {
             GoodsImageVO goodsImgVO = new GoodsImageVO();
             ImageVO vo = data.get(0);
-            goodsImgVO.setUrl1(viewType == Type.PREVIEW ? vo.getFilePath() : vo.getUrl());
+            goodsImgVO.setUrl1(vo.getUrl());
             goodsImgVO.setDesc(vo.getDesc());
             list.add(goodsImgVO);
             for (int i = 1; i < data.size(); i++) {
@@ -200,11 +200,11 @@ public class GoodsDetailAndPreviewActivity extends BaseActivity {
                         && Utils.isEmpty(list.get(list.size() - 1).getUrl2())) {
                     // 上一组数据 无 描述信息  && 当前本身 无 描述信息 && 上一组数据 只有一个url
                     // 添加到上一项
-                    list.get(list.size() - 1).setUrl2(viewType == Type.PREVIEW ? vo.getFilePath() : vo.getUrl());
+                    list.get(list.size() - 1).setUrl2(vo.getUrl());
                 } else {
                     // 直接添加 新一项
                     goodsImgVO = new GoodsImageVO();
-                    goodsImgVO.setUrl1(viewType == Type.PREVIEW ? vo.getFilePath() : vo.getUrl());
+                    goodsImgVO.setUrl1(vo.getUrl());
                     goodsImgVO.setDesc(vo.getDesc());
                     list.add(goodsImgVO);
                 }

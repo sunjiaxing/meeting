@@ -63,6 +63,10 @@ public class BonConstants {
     public static final int LIMIT_GET_NEWS = 20;
 
     public static final int LIMIT_GET_GOODS = 20;
+
+    public static final int LIMIT_GET_PUBLISHED_GOODS = 10;
+
+    public static final int LIMIT_GET_ATTENTION_GOODS = 10;
     /**
      * 默认显示的新闻栏目的数量
      */

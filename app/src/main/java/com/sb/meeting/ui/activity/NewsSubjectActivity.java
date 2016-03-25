@@ -8,9 +8,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.taskmanager.Task;
-import com.taskmanager.TaskManager;
 import com.sb.meeting.R;
 import com.sb.meeting.common.ImageOption;
 import com.sb.meeting.common.TaskAction;
@@ -21,6 +18,8 @@ import com.sb.meeting.ui.adapter.OnlineNewsAdapter;
 import com.sb.meeting.ui.component.RefreshListView;
 import com.sb.meeting.ui.vo.NewsSubjectVO;
 import com.sb.meeting.ui.vo.NewsVO;
+import com.taskmanager.Task;
+import com.taskmanager.TaskManager;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -156,7 +155,7 @@ public class NewsSubjectActivity extends BaseActivity implements RefreshListView
      * 刷新界面
      */
     private void refreshUI() {
-        ImageLoader.getInstance().displayImage(subjectVO.getBanner(), ivBanner, ImageOption.createNomalOption());
+        Utils.displayImage(subjectVO.getBanner(), ivBanner, ImageOption.createNomalOption());
         tvDesc.setText(subjectVO.getDescription());
         if (adapter == null) {
             adapter = new OnlineNewsAdapter(this);

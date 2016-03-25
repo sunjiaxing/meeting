@@ -11,10 +11,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sb.meeting.R;
 import com.sb.meeting.common.ImageOption;
 import com.sb.meeting.common.Utils;
+import com.sb.meeting.dao.entity.CheckingGoods;
 import com.sb.meeting.ui.vo.GoodsVO;
 
 import java.util.ArrayList;
@@ -27,10 +27,13 @@ import java.util.List;
 public abstract class GoodsListAdapter extends BaseAdapter implements View.OnClickListener {
 
     private final LayoutInflater layoutInflater;
+    private final Context context;
     private List<GoodsVO> list;
     private final LinearLayout.LayoutParams layoutParams;
+    private CheckingGoods checkingData;
 
     public GoodsListAdapter(Context context) {
+        this.context = context;
         layoutInflater = LayoutInflater.from(context);
         // 600 240
         int screenWidth = Utils.getScreenWidth(context) - 40;
@@ -41,13 +44,25 @@ public abstract class GoodsListAdapter extends BaseAdapter implements View.OnCli
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
     }
 
+    public void setTempData(CheckingGoods checkingGoods) {
+        this.checkingData = checkingGoods;
+    }
+
+    public boolean hasCheckingData() {
+        return checkingData != null;
+    }
+
+    public CheckingGoods getCheckingData() {
+        return checkingData;
+    }
+
     public void setData(List<GoodsVO> data) {
         this.list = new ArrayList<>(data);
     }
 
     @Override
     public int getCount() {
-        return !Utils.isEmpty(list) ? list.size() : 0;
+        return !Utils.isEmpty(list) ? (hasCheckingData() ? list.size() + 1 : list.size()) : 0;
     }
 
     @Override
@@ -85,31 +100,61 @@ public abstract class GoodsListAdapter extends BaseAdapter implements View.OnCli
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        GoodsVO vo = list.get(position);
-        viewHolder.tvGoodsName.setText(vo.getName());
-        if (vo.isAttention()) {
-            viewHolder.ivAttentionTip.setImageResource(R.mipmap.icon_attention_ok);
-            viewHolder.tvAttention.setText("已关注");
+        if (hasCheckingData() && position == 0) {
+            viewHolder.tvGoodsName.setText(checkingData.getGoodsName());
+            viewHolder.ivAttentionTip.setVisibility(View.GONE);
+            viewHolder.tvAttention.setTextColor(context.getResources().getColor(R.color.c_ff6600));
+            switch (checkingData.getSendSuccess()) {
+                case -1:
+                    viewHolder.tvAttention.setText("重新发布");
+                    break;
+                case 0:
+                    viewHolder.tvAttention.setText("发布中");
+                    break;
+                case 1:
+                    viewHolder.tvAttention.setText("审核中");
+                    break;
+            }
+            viewHolder.tvAttention.setTag(position);
+            viewHolder.tvAttention.setOnClickListener(this);
+
+            viewHolder.tvExchangePrice.setText(Utils.parseDouble(checkingData.getExchangePrice()));
+            viewHolder.tvMarketPrice.setText("¥" + Utils.parseDouble(checkingData.getMarketPrice()));
+            viewHolder.tvPublishTime.setText(Utils.formateTime(checkingData.getPublishTime(), "yyyy/MM/dd"));
+
+            Utils.displayImage(checkingData.getCoverUrl(), viewHolder.ivImage, ImageOption.createNomalOption());
+
+            viewHolder.tvValidTime.setText(checkingData.getValidTime().split("-")[1] + "内有效");
+            viewHolder.tvScanNum.setText("浏览 0");
+            viewHolder.tvCount.setText("库存 " + checkingData.getCount());
+            viewHolder.tvAttentionNum.setText("关注 0");
         } else {
-            viewHolder.ivAttentionTip.setImageResource(R.mipmap.icon_attention_plus);
-            viewHolder.tvAttention.setText("关注");
+            viewHolder.ivAttentionTip.setVisibility(View.VISIBLE);
+            GoodsVO vo = list.get(hasCheckingData() ? position - 1 : position);
+            viewHolder.tvGoodsName.setText(vo.getName());
+            if (vo.isAttention()) {
+                viewHolder.ivAttentionTip.setImageResource(R.mipmap.icon_attention_ok);
+                viewHolder.tvAttention.setText("已关注");
+            } else {
+                viewHolder.ivAttentionTip.setImageResource(R.mipmap.icon_attention_plus);
+                viewHolder.tvAttention.setText("关注");
+            }
+            viewHolder.tvAttention.setTag(position);
+            viewHolder.ivAttentionTip.setTag(position);
+            viewHolder.tvAttention.setOnClickListener(this);
+            viewHolder.ivAttentionTip.setOnClickListener(this);
+
+            viewHolder.tvExchangePrice.setText(Utils.parseDouble(vo.getExchangePrice()));
+            viewHolder.tvMarketPrice.setText("¥" + Utils.parseDouble(vo.getMarketPrice()));
+            viewHolder.tvPublishTime.setText(vo.getPublishTime());
+
+            Utils.displayImage(vo.getCoverUrl(), viewHolder.ivImage, ImageOption.createNomalOption());
+
+            viewHolder.tvValidTime.setText(vo.getValidTimeStr() + "内有效");
+            viewHolder.tvScanNum.setText("浏览 " + vo.getScanNum());
+            viewHolder.tvCount.setText("库存 " + vo.getCount());
+            viewHolder.tvAttentionNum.setText("关注 " + vo.getAttentionNum());
         }
-        viewHolder.tvAttention.setTag(position);
-        viewHolder.ivAttentionTip.setTag(position);
-        viewHolder.tvAttention.setOnClickListener(this);
-        viewHolder.ivAttentionTip.setOnClickListener(this);
-
-        viewHolder.tvExchangePrice.setText(Utils.parseDouble(vo.getExchangePrice()));
-        viewHolder.tvMarketPrice.setText("¥" + Utils.parseDouble(vo.getMarketPrice()));
-        viewHolder.tvPublishTime.setText(vo.getPublishTime());
-
-        ImageLoader.getInstance().displayImage(vo.getCoverUrl(), viewHolder.ivImage, ImageOption.createNomalOption());
-
-        viewHolder.tvValidTime.setText(vo.getValidTimeStr() + "内有效");
-        viewHolder.tvScanNum.setText("浏览 " + vo.getScanNum());
-        viewHolder.tvCount.setText("库存 " + vo.getCount());
-        viewHolder.tvAttentionNum.setText("关注 " + vo.getAttentionNum());
-
         return convertView;
     }
 

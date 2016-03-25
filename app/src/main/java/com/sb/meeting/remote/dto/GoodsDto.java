@@ -21,6 +21,7 @@ public class GoodsDto {
     private int isAttention;
     private int count;
     private String validTimeStr;
+    private int checkingState;
 
     public int getId() {
         return id;
@@ -66,6 +67,10 @@ public class GoodsDto {
         return validTimeStr;
     }
 
+    public int getCheckingState() {
+        return checkingState;
+    }
+
     /**
      * 解析 json
      *
@@ -108,6 +113,9 @@ public class GoodsDto {
         }
         if (json.has(IParam.VALID_TIME)) {
             this.validTimeStr = json.getString(IParam.VALID_TIME);
+        }
+        if (json.has(IParam.APPROVER_STATUS)) {
+            this.checkingState = json.getInt(IParam.APPROVER_STATUS);
         }
     }
 }

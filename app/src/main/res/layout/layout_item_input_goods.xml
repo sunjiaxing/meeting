@@ -37,7 +37,7 @@
                 android:paddingTop="@dimen/ppi_px_5_dp"
                 android:paddingBottom="@dimen/ppi_px_5_dp"
                 android:lineSpacingExtra="@dimen/ppi_px_5_dp"
-                android:text="@string/input_image_desc_tip"
+                android:hint="@string/input_image_desc_tip"
                 android:textColor="@color/c_454545"
                 android:textSize="@dimen/ppi_px_24_sp" />
 

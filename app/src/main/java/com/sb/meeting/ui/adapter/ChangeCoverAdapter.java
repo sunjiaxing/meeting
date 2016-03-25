@@ -2,19 +2,16 @@ package com.sb.meeting.ui.adapter;
 
 import android.content.Context;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout.LayoutParams;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.sb.meeting.R;
 import com.sb.meeting.common.ImageOption;
 import com.sb.meeting.common.Utils;
-import com.sb.meeting.ui.activity.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +77,7 @@ public class ChangeCoverAdapter extends QuickFlingAdapter {
         viewHolder.ivSelectTip.setVisibility(View.GONE);
         String path = list.get(position);
         viewHolder.ivImage.setLayoutParams(params);
-        ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.FILE.wrap(path), viewHolder.ivImage,
-                ImageOption.createNomalOption());
+        Utils.displayImage(path,viewHolder.ivImage,ImageOption.createNomalOption());
         return convertView;
     }
 

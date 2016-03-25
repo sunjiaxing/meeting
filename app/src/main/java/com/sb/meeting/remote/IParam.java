@@ -19,6 +19,7 @@ public interface IParam {
     String ATTENTION = "attention";
     String ATTENTION_NUM = "attentionNum";
     String ATTENTION_STATUS = "attentionStatus";
+    String APPROVER_STATUS = "approverStatus";
 
     // B
     // C
@@ -65,12 +66,14 @@ public interface IParam {
 
     // H
     String HINT = "hint";
+    String HTTP = "http";
 
     // I
     String ID = "id";
     String ICON_URL = "iconUrl";
     String IMG_URL = "imgUrl";
     String IS_AD = "isAd";
+    String IS_URL = "isUrl";
     String IS_SELECT_USER_HEAD = "isSelectUserHead";
     String IS_SPECIAL = "isSpecial";
     String ICON_AD_URL = "iconAdUrl";
@@ -96,6 +99,9 @@ public interface IParam {
     String MODEL_NAME = "modelName";
     String MARKET_PRICE = "marketPrice";
     String MOBILE = "mobile";
+    String MY_LIST = "myList";
+    String MY_ATTENTION = "myAttention";
+    String MESSAGE = "message";
 
     // N
     String NEED_PARAM = "needParam";
@@ -113,6 +119,7 @@ public interface IParam {
     String POSITION = "position";
     String PARENT_ID = "parentId";
     String PASSWORD = "password";
+    String PASS = "pass";
     String PUBLISH_GOODS = "publishGoods";
     String PUBLISH_TIME = "publishTime";
     String PAGE_INDEX = "pageIndex";
@@ -141,7 +148,6 @@ public interface IParam {
     String TITLE = "title";
     String TOKEN = "token";
     String TIME = "time";
-    String TYPES = "types";
     String TYPE = "type";
     String TYPE_ID = "typeId";
     String TOP = "top";
@@ -149,6 +155,7 @@ public interface IParam {
     // U
     String URL = "url";
     String UPDATE_TIME = "updateTime";
+    String UPDATE_GOODS = "updateGoods";
     String USER_ID = "userId";
     String USER = "user";
     String USER_NAME = "userName";

@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -188,6 +187,10 @@ public class RefreshListView extends PtrClassicFrameLayout implements AbsListVie
         if (adapter instanceof QuickFlingAdapter) {
             this.adapter = (QuickFlingAdapter) adapter;
         }
+    }
+
+    public ListAdapter getAdapter() {
+        return listView.getAdapter();
     }
 
     @Override

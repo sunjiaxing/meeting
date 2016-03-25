@@ -10,13 +10,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.taskmanager.LogUtils;
-import com.taskmanager.Task;
-import com.taskmanager.TaskManager;
 import com.sb.meeting.R;
 import com.sb.meeting.common.BonConstants;
 import com.sb.meeting.common.TaskAction;
 import com.sb.meeting.common.Utils;
+import com.sb.meeting.dao.entity.CheckingGoods;
 import com.sb.meeting.remote.IParam;
 import com.sb.meeting.service.GoodsService;
 import com.sb.meeting.service.UserService;
@@ -25,18 +23,27 @@ import com.sb.meeting.ui.activity.GoodsDetailAndPreviewActivity_;
 import com.sb.meeting.ui.activity.InputGoodsNameActivity_;
 import com.sb.meeting.ui.activity.InputOtherGoodsInfoActivity_;
 import com.sb.meeting.ui.activity.LoginActivity_;
+import com.sb.meeting.ui.activity.PublishedGoodsActivity_;
 import com.sb.meeting.ui.adapter.GoodsListAdapter;
 import com.sb.meeting.ui.component.RefreshListView;
 import com.sb.meeting.ui.vo.GoodsVO;
+import com.sb.meeting.ui.vo.ImageVO;
+import com.taskmanager.LogUtils;
+import com.taskmanager.Task;
+import com.taskmanager.TaskManager;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 易物 列表
@@ -71,10 +78,13 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
     private int pageIndex;
     private GoodsListAdapter adapter;
 
-    private static final int REQUEST_CODE_INPUT_GOODS_NAME = 0;
-    private static final int REQUEST_CODE_LOGIN = 1;
-    private static final int REQUEST_CODE_PUBLISH = 2;
-    private static final int REQUEST_CODE_ATTENTION = 3;
+    private static final int REQUEST_CODE_INPUT_GOODS_NAME = 0x3231;
+    private static final int REQUEST_CODE_LOGIN = 0x3232;
+    private static final int REQUEST_CODE_PUBLISH = 0x3233;
+    private static final int REQUEST_CODE_ATTENTION = 0x3234;
+    private CheckingGoods checkingGoods;
+    private GoodsVO vo;
+    private String contact;
 
     @AfterViews
     void init() {
@@ -100,6 +110,7 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
         if (Utils.isEmpty(goodsList)) {
             startLoadingSelf();
             getGoodsFromDB();
+            getCheckingDataFromDB();
         }
     }
 
@@ -112,7 +123,19 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
             protected void doBackground() throws Exception {
                 setReturnData(goodsService.getGoodsListFromDB());
             }
-        }, getActivity());
+        }, this);
+    }
+
+    /**
+     * 获取审核数据
+     */
+    private void getCheckingDataFromDB() {
+        TaskManager.pushTask(new Task(TaskAction.ACTION_GET_CHECKING_DATA) {
+            @Override
+            protected void doBackground() throws Exception {
+                setReturnData(goodsService.getCheckingData());
+            }
+        }, this);
     }
 
     /**
@@ -125,7 +148,7 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
                 pageIndex = 0;
                 setReturnData(goodsService.getGoodsList(pageIndex));
             }
-        }, getActivity());
+        }, this);
     }
 
     /**
@@ -186,9 +209,66 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
         } else if (requestCode == REQUEST_CODE_LOGIN && resultCode == Activity.RESULT_OK) {
             clickToInputGoodsName();
         } else if (requestCode == REQUEST_CODE_PUBLISH && resultCode == Activity.RESULT_OK) {
-            listView.autoRefresh();
+            vo = (GoodsVO) data.getSerializableExtra(IParam.GOODS);
+            contact = data.getStringExtra(IParam.USER_CONTACT);
+            publishGoods();
         } else if (requestCode == REQUEST_CODE_ATTENTION && resultCode == Activity.RESULT_OK) {
             listView.autoRefresh();
+        }
+    }
+
+    /**
+     * 发布物品
+     */
+    private void publishGoods() {
+        // 构建临时 存储
+        checkingGoods = new CheckingGoods();
+        checkingGoods.setUUID(UUID.randomUUID().toString());
+        checkingGoods.setGoodsName(vo.getName());
+        checkingGoods.setCoverUrl(vo.getCoverUrl());
+        checkingGoods.setExchangePrice(vo.getExchangePrice());
+        checkingGoods.setMarketPrice(vo.getMarketPrice());
+        checkingGoods.setValidTime(vo.getValidTime().getId() + "-" + vo.getValidTime().getName());
+        checkingGoods.setCount(vo.getCount());
+        checkingGoods.setCategory(vo.getCategory().getId() + "-" + vo.getCategory().getName());
+        checkingGoods.setNeedCategory(vo.getNeedCategory().getId() + "-" + vo.getNeedCategory().getName());
+        checkingGoods.setContact(contact);
+        try {
+            JSONArray array = new JSONArray();
+            for (ImageVO imageVO : vo.getImageList()) {
+                JSONObject json = new JSONObject();
+                json.put(IParam.URL, imageVO.getUrl());
+                json.put(IParam.DESC, imageVO.getDesc());
+                array.put(json);
+            }
+            checkingGoods.setImages(array.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        checkingGoods.setPublishTime(System.currentTimeMillis());
+        refreshUI();
+        TaskManager.pushTask(new Task(TaskAction.ACTION_PUBLISH_GOODS) {
+            @Override
+            protected void doBackground() throws Exception {
+                goodsService.saveCheckingData(checkingGoods);
+                goodsService.publishGoods(vo, contact, checkingGoods.getUUID());
+            }
+        }, this);
+    }
+
+    /**
+     * 重新发布
+     */
+    private void rePublish() {
+        if (checkingGoods != null) {
+            checkingGoods.setSendSuccess(0);
+            refreshUI();
+            TaskManager.pushTask(new Task(TaskAction.ACTION_PUBLISH_GOODS) {
+                @Override
+                protected void doBackground() throws Exception {
+                    goodsService.publishGoods(vo, contact, checkingGoods.getUUID());
+                }
+            }, this);
         }
     }
 
@@ -242,6 +322,16 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
                 stopLoading();
                 adapter.notifyDataSetChanged();
                 break;
+            case TaskAction.ACTION_PUBLISH_GOODS:
+                checkingGoods.setSendSuccess(1);
+                refreshUI();
+                break;
+            case TaskAction.ACTION_GET_CHECKING_DATA:
+                if (data != null) {
+                    checkingGoods = (CheckingGoods) data;
+                    refreshUI();
+                }
+                break;
         }
     }
 
@@ -257,16 +347,25 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
                         case R.id.tv_attention:
                         case R.id.iv_attention_tip:
                             int pos = (int) v.getTag();
-                            startLoading();
-                            attention(pos);
+                            if (checkingGoods != null && pos == 0) {
+                                // 判断 状态，发送失败 才能重发
+                                if (checkingGoods.getSendSuccess() == -1) {
+                                    rePublish();
+                                }
+                            } else {
+                                startLoading();
+                                attention(checkingGoods != null ? pos - 1 : pos);
+                            }
                             break;
                     }
                 }
             };
             adapter.setData(goodsList);
+            adapter.setTempData(checkingGoods);
             listView.setAdapter(adapter);
         } else {
             adapter.setData(goodsList);
+            adapter.setTempData(checkingGoods);
             adapter.notifyDataSetChanged();
         }
     }
@@ -299,6 +398,12 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
             case TaskAction.ACTION_GOODS_ATTENTION:
                 stopLoading();
                 showToast(errorMessage);
+                break;
+            case TaskAction.ACTION_PUBLISH_GOODS:
+                showToast("发送失败");
+                checkingGoods.setSendSuccess(-1);
+                adapter.setTempData(checkingGoods);
+                adapter.notifyDataSetChanged();
                 break;
             default:
                 stopLoadingSelf();
@@ -334,10 +439,16 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
 
     @ItemClick(R.id.lv_drag)
     void onItemClick(int position) {
-        GoodsVO vo = goodsList.get(position);
-        GoodsDetailAndPreviewActivity_.intent(this)
-                .extra(IParam.GOODS_ID, vo.getId())
-                .extra(IParam.TYPE, GoodsDetailAndPreviewActivity.Type.DETAIL)
-                .start();
+        if (checkingGoods != null && position == 0) {
+            if (checkingGoods.getSendSuccess() == 1) {
+                PublishedGoodsActivity_.intent(this).start();
+            }
+        } else {
+            GoodsVO vo = goodsList.get(checkingGoods != null ? position - 1 : position);
+            GoodsDetailAndPreviewActivity_.intent(this)
+                    .extra(IParam.GOODS_ID, vo.getId())
+                    .extra(IParam.TYPE, GoodsDetailAndPreviewActivity.Type.DETAIL)
+                    .start();
+        }
     }
 }

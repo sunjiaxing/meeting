@@ -47,11 +47,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 输入其他商品信息页面
- * Created by sun on 2016/2/20.
+ * 更新商品信息页面
+ * Created by sun on 2016/3/24.
  */
 @EActivity(R.layout.layout_input_other_goods_info)
-public class InputOtherGoodsInfoActivity extends BaseActivity implements View.OnClickListener {
+public class UpdateGoodsInfoActivity extends BaseActivity implements View.OnClickListener {
 
     @ViewById(R.id.iv_back)
     ImageView ivBack;
@@ -59,12 +59,12 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
     TextView tvTitle;
     @ViewById(R.id.btn_right)
     Button btnRight;
-    @ViewById(R.id.btn_right_two)
-    Button btnRightTwo;
     @ViewById(R.id.lv_sort)
     DragSortListView sortListView;
     @Extra(IParam.GOODS_NAME)
     String goodsName;
+    @Extra(IParam.GOODS_ID)
+    int goodsId;
 
     private TextView tvGoodsName;
     private ImageView ivCover;
@@ -94,10 +94,6 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         btnRight.setBackgroundColor(Color.TRANSPARENT);
         btnRight.setText("下一步");
 
-//        btnRightTwo.setVisibility(View.VISIBLE);
-//        btnRightTwo.setBackgroundColor(Color.TRANSPARENT);
-//        btnRightTwo.setText("下一步");
-
         initHeader();
         tvGoodsName.setText(goodsName);
         initFooter();
@@ -124,6 +120,52 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         }
         if (Utils.isEmpty(validTime)) {
             getValidTime();
+        }
+        getDetail();
+    }
+
+    /**
+     * 获取详情
+     */
+    private void getDetail() {
+        startLoading();
+        TaskManager.pushTask(new Task(TaskAction.ACTION_GET_GOODS_DETAIL) {
+            @Override
+            protected void doBackground() throws Exception {
+                setReturnData(goodsService.getGoodsDetail(goodsId));
+            }
+        }, this);
+    }
+
+    /**
+     * 显示等待编辑的信息
+     */
+    private void showWaitEditInfo() {
+        setCover(goodsVO.getCoverUrl());
+        tvGoodsName.setText(goodsVO.getName());
+        tvSelectCategory.setText(goodsVO.getCategoryStr());
+        tvInputPrice.setText(Utils.parseDouble(goodsVO.getMarketPrice(), "#") + "/" + Utils.parseDouble(goodsVO.getExchangePrice(), "#"));
+        tvInputCount.setText(String.valueOf(goodsVO.getCount()));
+        tvSelectValidTime.setText(goodsVO.getValidTimeStr());
+        if (adapter == null) {
+            adapter = new SortListAdapter(this) {
+                @Override
+                public void onClick(View v) {
+                    switch (v.getId()) {
+                        case R.id.iv_remove:
+                            removeSelectImage((int) v.getTag());
+                            break;
+                    }
+                }
+            };
+            adapter.setData(goodsVO.getImageList());
+            sortListView.setAdapter(adapter);
+        } else {
+            adapter.setData(goodsVO.getImageList());
+            adapter.notifyDataSetChanged();
+        }
+        for (ImageVO img : goodsVO.getImageList()) {
+            imagePathList.add(img.getUrl());
         }
     }
 
@@ -163,7 +205,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         layoutAddImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChooseImageActivity_.intent(InputOtherGoodsInfoActivity.this).extra(IParam.LAST_NUM, 20 - imagePathList.size()).startForResult(REQUEST_CODE_SELECT_IMAGE);
+                ChooseImageActivity_.intent(UpdateGoodsInfoActivity.this).extra(IParam.LAST_NUM, 20 - imagePathList.size()).startForResult(REQUEST_CODE_SELECT_IMAGE);
             }
         });
         sortListView.addFooterView(footer);
@@ -299,6 +341,23 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         // 设置封面
         Utils.displayImage(path, ivCover, ImageOption.createNomalOption());
         goodsVO.setCoverUrl(path);
+        if (adapter == null) {
+            adapter = new SortListAdapter(this) {
+                @Override
+                public void onClick(View v) {
+                    switch (v.getId()) {
+                        case R.id.iv_remove:
+                            removeSelectImage((int) v.getTag());
+                            break;
+                    }
+                }
+            };
+            adapter.setData(goodsVO.getImageList());
+            sortListView.setAdapter(adapter);
+        } else {
+            adapter.setData(goodsVO.getImageList());
+            adapter.notifyDataSetChanged();
+        }
     }
 
     /**
@@ -334,11 +393,19 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
                     this.validTime = (List<ValidTimeVO>) data;
                 }
                 break;
+            case TaskAction.ACTION_GET_GOODS_DETAIL:// 获取物品详情
+                stopLoading();
+                if (data != null) {
+                    goodsVO = (GoodsVO) data;
+                    showWaitEditInfo();
+                }
+                break;
         }
     }
 
     @Override
     protected void onTaskFail(int action, String errorMessage) {
+        stopLoading();
         super.onTaskFail(action, errorMessage);
     }
 
@@ -351,7 +418,10 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
             case R.id.iv_cover:// 设置封面
                 if (goodsVO != null && !Utils.isEmpty(goodsVO.getCoverUrl())) {
                     // 切换封面
-                    ChangeCoverActivity_.intent(this).extra(IParam.CONTENT, (Serializable) imagePathList).startForResult(REQUEST_CODE_CHANGE_COVER);
+                    ChangeCoverActivity_.intent(this)
+                            .extra(IParam.CONTENT, (Serializable) imagePathList)
+                            .extra(IParam.IS_URL, true)
+                            .startForResult(REQUEST_CODE_CHANGE_COVER);
                 } else {
                     showToast("请先选择图片");
                 }

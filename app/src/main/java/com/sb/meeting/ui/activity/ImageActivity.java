@@ -138,7 +138,7 @@ public class ImageActivity extends BaseActivity implements ViewPager.OnPageChang
                 }
             });
             final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-            ImageLoader.getInstance().displayImage(vo.getUrl(), ivImage, options, new ImageLoadingListener() {
+            Utils.displayImage(vo.getUrl(), ivImage, options, new ImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
                     progressBar.setVisibility(View.VISIBLE);

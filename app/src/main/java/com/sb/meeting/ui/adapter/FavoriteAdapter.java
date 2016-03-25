@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sb.meeting.R;
 import com.sb.meeting.common.ImageOption;
 import com.sb.meeting.common.Utils;
@@ -78,8 +77,7 @@ public class FavoriteAdapter extends QuickFlingAdapter {
         if (!Utils.isEmpty(vo.getIconUrl())) {
             viewHolder.ivIcon.setVisibility(View.VISIBLE);
             viewHolder.ivIcon.setLayoutParams(params);
-            ImageLoader.getInstance().displayImage(vo.getIconUrl(),
-                    viewHolder.ivIcon, ImageOption.createNomalOption());
+            Utils.displayImage(vo.getIconUrl(),viewHolder.ivIcon,ImageOption.createNomalOption());
         } else {
             // url无效
             viewHolder.ivIcon.setVisibility(View.GONE);

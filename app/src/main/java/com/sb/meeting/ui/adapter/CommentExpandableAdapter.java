@@ -1,16 +1,5 @@
 package com.sb.meeting.ui.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.sb.meeting.R;
-import com.sb.meeting.common.BonConstants;
-import com.sb.meeting.common.ImageOption;
-import com.sb.meeting.dao.ConfigDao;
-import com.sb.meeting.ui.vo.CommentVO;
-import com.sb.meeting.ui.vo.ReplyVO;
-
 import android.content.Context;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -21,6 +10,17 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.sb.meeting.R;
+import com.sb.meeting.common.BonConstants;
+import com.sb.meeting.common.ImageOption;
+import com.sb.meeting.common.Utils;
+import com.sb.meeting.dao.ConfigDao;
+import com.sb.meeting.ui.vo.CommentVO;
+import com.sb.meeting.ui.vo.ReplyVO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 评论列表适配器
@@ -157,8 +157,7 @@ public class CommentExpandableAdapter extends BaseExpandableListAdapter {
                 return true;
             }
         });
-        ImageLoader.getInstance().displayImage(commentVO.getUserAvatar(), iv,
-                ImageOption.createNomalOption());
+        Utils.displayImage(commentVO.getUserAvatar(), iv, ImageOption.createNomalOption());
         tvUserName.setText(commentVO.getUserName());
         String content = commentVO.getContent();
         // 判断评论 长度

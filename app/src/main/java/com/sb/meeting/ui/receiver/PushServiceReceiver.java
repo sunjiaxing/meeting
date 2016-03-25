@@ -8,15 +8,12 @@ import android.util.Log;
 
 import com.sb.meeting.common.MessageType;
 import com.sb.meeting.remote.IParam;
-import com.sb.meeting.ui.MeetingApp;
+import com.sb.meeting.service.GoodsService;
 import com.sb.meeting.ui.activity.NewsDetailActivity_;
-import com.sb.meeting.ui.activity.TestActivity_;
-import com.sb.meeting.ui.activity.WelcomeActivity_;
+import com.sb.meeting.ui.activity.PublishedGoodsActivity_;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Iterator;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -34,16 +31,23 @@ public class PushServiceReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
         if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
-            String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
-            Log.d(TAG, "[PushServiceReceiver] 接收Registration Id : " + regId);
-            //send the Registration Id to your server..
+
         } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
             Log.d(TAG, "[PushServiceReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
 
         } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
-            Log.d(TAG, "[PushServiceReceiver] 接收到推送下来的通知");
-            int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
-            Log.d(TAG, "[PushServiceReceiver] 接收到推送下来的通知的ID: " + notifactionId);
+            try {
+                JSONObject json = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
+                String type = json.getString(IParam.TYPE);
+                if (MessageType.TYPE_GOODS_CHECK_RESULT.equals(type)) {
+                    String goodsId = json.getString(IParam.GOODS_ID);
+//                    int pass = json.getInt(IParam.PASS);
+//                    String message = json.getString(IParam.MESSAGE);
+                    new GoodsService(context).deleteCheckingData(goodsId);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             Log.d(TAG, "[PushServiceReceiver] 用户点击打开了通知");
@@ -80,7 +84,9 @@ public class PushServiceReceiver extends BroadcastReceiver {
                             .start();
                 } else if (MessageType.TYPE_GOODS_CHECK_RESULT.equals(type)) {
                     // 物品审核结果 消息通知
-
+                    PublishedGoodsActivity_.intent(context)
+                            .flags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            .start();
                 }
             }
         } catch (Exception e) {

@@ -10,14 +10,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.sb.meeting.R;
 import com.sb.meeting.common.ImageOption;
 import com.sb.meeting.common.Utils;
-import com.sb.meeting.ui.activity.GoodsDetailAndPreviewActivity;
 import com.sb.meeting.ui.vo.GoodsImageVO;
 
 import java.util.List;
@@ -32,7 +29,6 @@ public abstract class GoodsImageAdapter extends BaseAdapter implements View.OnCl
     private List<GoodsImageVO> list;
     private final LinearLayout.LayoutParams layoutParamsLeft;
     private final LinearLayout.LayoutParams layoutParamsRight;
-    private GoodsDetailAndPreviewActivity.Type viewType;
     private final int screenW;
 
     public GoodsImageAdapter(Context context) {
@@ -46,9 +42,8 @@ public abstract class GoodsImageAdapter extends BaseAdapter implements View.OnCl
         layoutParamsRight.leftMargin = dp_5;
     }
 
-    public void setData(List<GoodsImageVO> data, GoodsDetailAndPreviewActivity.Type type) {
+    public void setData(List<GoodsImageVO> data) {
         this.list = data;
-        this.viewType = type;
     }
 
     @Override
@@ -89,17 +84,12 @@ public abstract class GoodsImageAdapter extends BaseAdapter implements View.OnCl
             viewHolder.layoutMore.setVisibility(View.VISIBLE);
             viewHolder.ivImage1.setLayoutParams(layoutParamsLeft);
             viewHolder.ivImage2.setLayoutParams(layoutParamsRight);
-            if (viewType == GoodsDetailAndPreviewActivity.Type.PREVIEW) {
-                ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.FILE.wrap(vo.getUrl1()), viewHolder.ivImage1, ImageOption.createNomalOption());
-                ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.FILE.wrap(vo.getUrl2()), viewHolder.ivImage2, ImageOption.createNomalOption());
-            } else {
-                ImageLoader.getInstance().displayImage(vo.getUrl1(), viewHolder.ivImage1, ImageOption.createNomalOption());
-                ImageLoader.getInstance().displayImage(vo.getUrl2(), viewHolder.ivImage2, ImageOption.createNomalOption());
-                viewHolder.ivImage1.setTag(vo.getUrl1());
-                viewHolder.ivImage2.setTag(vo.getUrl2());
-                viewHolder.ivImage1.setOnClickListener(this);
-                viewHolder.ivImage2.setOnClickListener(this);
-            }
+            Utils.displayImage(vo.getUrl1(), viewHolder.ivImage1, ImageOption.createNomalOption());
+            Utils.displayImage(vo.getUrl2(), viewHolder.ivImage2, ImageOption.createNomalOption());
+            viewHolder.ivImage1.setTag(vo.getUrl1());
+            viewHolder.ivImage2.setTag(vo.getUrl2());
+            viewHolder.ivImage1.setOnClickListener(this);
+            viewHolder.ivImage2.setOnClickListener(this);
         } else {
             // 单张
             viewHolder.layoutSingle.setVisibility(View.VISIBLE);
@@ -110,13 +100,9 @@ public abstract class GoodsImageAdapter extends BaseAdapter implements View.OnCl
             } else {
                 viewHolder.tvText.setVisibility(View.GONE);
             }
-            if (viewType == GoodsDetailAndPreviewActivity.Type.PREVIEW) {
-                ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.FILE.wrap(vo.getUrl1()), viewHolder.ivImage, ImageOption.createNomalOption(), loadingListener);
-            } else {
-                ImageLoader.getInstance().displayImage(vo.getUrl1(), viewHolder.ivImage, ImageOption.createNomalOption(), loadingListener);
-                viewHolder.ivImage.setTag(vo.getUrl1());
-                viewHolder.ivImage.setOnClickListener(this);
-            }
+            Utils.displayImage(vo.getUrl1(), viewHolder.ivImage, ImageOption.createNomalOption(), loadingListener);
+            viewHolder.ivImage.setTag(vo.getUrl1());
+            viewHolder.ivImage.setOnClickListener(this);
         }
         return convertView;
     }

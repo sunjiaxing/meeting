@@ -16,9 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.download.ImageDownloader;
-import com.taskmanager.Task;
-import com.taskmanager.TaskManager;
 import com.sb.meeting.R;
 import com.sb.meeting.common.BonConstants;
 import com.sb.meeting.common.TaskAction;
@@ -26,6 +23,8 @@ import com.sb.meeting.common.Utils;
 import com.sb.meeting.remote.IParam;
 import com.sb.meeting.ui.adapter.ChooseImgAdapter;
 import com.sb.meeting.ui.component.TlcyDialog;
+import com.taskmanager.Task;
+import com.taskmanager.TaskManager;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -111,15 +110,14 @@ public class ChooseImageActivity extends BaseActivity implements ChooseImgAdapte
                         if (file.exists() && file.length() > 0) {
                             File pa_file = file.getParentFile();
                             String parentName = pa_file.getAbsolutePath();
-                            allImgs.add(ImageDownloader.Scheme.FILE.wrap(path));
+                            allImgs.add(path);
                             // 根据父路径名将图片放入到mGruopMap中
                             if (!dirAndFile.containsKey(parentName)) {
                                 ArrayList<String> chileList = new ArrayList<>();
-                                chileList.add(ImageDownloader.Scheme.FILE.wrap(path));
+                                chileList.add(path);
                                 dirAndFile.put(parentName, chileList);
                             } else {
-                                dirAndFile.get(parentName).add(
-                                        ImageDownloader.Scheme.FILE.wrap(path));
+                                dirAndFile.get(parentName).add(path);
                             }
                         }
                     }
@@ -199,7 +197,7 @@ public class ChooseImageActivity extends BaseActivity implements ChooseImgAdapte
         } else {
             if (isSelectUserHead || lastNum == 1) {
                 // 判断图片大小
-                final String path = ImageDownloader.Scheme.FILE.crop(allImgs.get(position - 1));
+                final String path = allImgs.get(position - 1);
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
                 BitmapFactory.decodeFile(path, options);
@@ -212,13 +210,13 @@ public class ChooseImageActivity extends BaseActivity implements ChooseImgAdapte
                                 @Override
                                 public void onClick() {
                                     selectedData = new ArrayList<>();
-                                    selectedData.add(ImageDownloader.Scheme.FILE.wrap(path));
+                                    selectedData.add(path);
                                     onSelectComplete();
                                 }
                             }, null);
                 } else {
                     selectedData = new ArrayList<>();
-                    selectedData.add(ImageDownloader.Scheme.FILE.wrap(path));
+                    selectedData.add(path);
                     onSelectComplete();
                 }
             }
@@ -235,7 +233,7 @@ public class ChooseImageActivity extends BaseActivity implements ChooseImgAdapte
                 if (Utils.isEmpty(selectedData)) {
                     selectedData = new ArrayList<>();
                 }
-                selectedData.add(ImageDownloader.Scheme.FILE.wrap(imageUri.getPath()));
+                selectedData.add(imageUri.getPath());
                 onSelectComplete();
             }
         }
@@ -243,13 +241,12 @@ public class ChooseImageActivity extends BaseActivity implements ChooseImgAdapte
 
     /**
      * 选择结束
-     *
      */
     @Click(R.id.btn_right)
     void onSelectComplete() {
         startLoading();
         for (int i = 0; i < selectedData.size(); i++) {
-            selectedData.set(i, ImageDownloader.Scheme.FILE.crop(selectedData.get(i)));
+            selectedData.set(i, selectedData.get(i));
         }
         Intent data = new Intent();
         data.putExtra(IParam.CONTENT, (Serializable) selectedData);

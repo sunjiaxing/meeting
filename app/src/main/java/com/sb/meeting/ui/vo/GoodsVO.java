@@ -8,7 +8,7 @@ import java.util.List;
  * 商品 vo
  * Created by sun on 2016/2/19.
  */
-public class GoodsVO implements Serializable{
+public class GoodsVO implements Serializable {
     private int id;
     private String name;
     private GoodsCategoryVO category;
@@ -27,6 +27,11 @@ public class GoodsVO implements Serializable{
     private String categoryStr;
     private String needCategoryStr;
     private int count;
+    private CheckingState checkingState;
+
+    public enum CheckingState {
+        CHECKING, FAIL,PASS
+    }
 
     public int getId() {
         return id;
@@ -169,5 +174,13 @@ public class GoodsVO implements Serializable{
 
     public void setCategoryStr(String categoryStr) {
         this.categoryStr = categoryStr;
+    }
+
+    public CheckingState getCheckingState() {
+        return checkingState;
+    }
+
+    public void setCheckingState(CheckingState checkingState) {
+        this.checkingState = checkingState;
     }
 }

@@ -12,17 +12,8 @@ import java.io.Serializable;
  * Created by sun on 2016/2/22.
  */
 public class ImageVO implements Serializable {
-    private String filePath;
     private String url;
     private String desc;
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
 
     public String getUrl() {
         return url;

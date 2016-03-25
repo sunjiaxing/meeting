@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.sb.meeting.dao.entity.CheckingGoods;
 import com.sb.meeting.dao.entity.Goods;
 import com.sb.meeting.dao.entity.News;
 import com.sb.meeting.dao.entity.NewsChannel;
@@ -17,12 +18,10 @@ import com.sb.meeting.dao.entity.User;
  */
 public class DBHelper extends SQLiteOpenHelper {
     public static DBHelper instance;
-    private Context context;
 
     private DBHelper(Context context, String name, CursorFactory factory,
                      int version) {
         super(context, name, factory, version);
-        this.context = context;
     }
 
     /**
@@ -51,6 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(NewsChannel.CREAT_TABLE);
         db.execSQL(User.CREAT_TABLE);
         db.execSQL(Goods.CREAT_TABLE);
+        db.execSQL(CheckingGoods.CREAT_TABLE);
     }
 
     @Override
