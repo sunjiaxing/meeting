@@ -1,7 +1,6 @@
 package com.sb.meeting.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
@@ -9,10 +8,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sb.meeting.service.UserService;
-import com.sb.meeting.ui.fragment.TabUserFragment;
-import com.sb.meeting.ui.fragment.TabUserFragment_;
-import com.taskmanager.LogUtils;
 import com.sb.meeting.R;
 import com.sb.meeting.common.BonConstants;
 import com.sb.meeting.remote.IParam;
@@ -20,6 +15,11 @@ import com.sb.meeting.ui.fragment.TabGoodsListFragment;
 import com.sb.meeting.ui.fragment.TabGoodsListFragment_;
 import com.sb.meeting.ui.fragment.TabNewsFragment;
 import com.sb.meeting.ui.fragment.TabNewsFragment_;
+import com.sb.meeting.ui.fragment.TabUserFragment;
+import com.sb.meeting.ui.fragment.TabUserFragment_;
+import com.sb.meeting.ui.fragment.TabYellowPageFragment;
+import com.sb.meeting.ui.fragment.TabYellowPageFragment_;
+import com.taskmanager.LogUtils;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -49,13 +49,17 @@ public class MainActivity extends BaseActivity {
     ImageView ivUser;
     @ViewById(R.id.tv_user)
     TextView tvUser;
+    @ViewById(R.id.iv_yp)
+    ImageView ivYP;
+    @ViewById(R.id.tv_yp)
+    TextView tvYP;
 
     private TabNewsFragment tabNewsFragment;
     private TabGoodsListFragment tabGoodsListFragment;
     private TabUserFragment tabUserFragment;
+    private TabYellowPageFragment tabYellowPageFragment;
     private BonConstants.BottomMenuSelected menuSelected = BonConstants.BottomMenuSelected.NEWS;
     private Handler handler;
-    private UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +68,6 @@ public class MainActivity extends BaseActivity {
             menuSelected = BonConstants.BottomMenuSelected.values()[savedInstanceState.getInt(IParam.TYPE)];
         }
         handler = new Handler();
-        userService = new UserService(this);
     }
 
     @AfterViews
@@ -75,6 +78,8 @@ public class MainActivity extends BaseActivity {
             toGoodsPage();
         } else if (menuSelected == BonConstants.BottomMenuSelected.USER) {
             toUserPage();
+        } else if (menuSelected == BonConstants.BottomMenuSelected.YP) {
+            toYellowPage();
         }
     }
 
@@ -85,6 +90,7 @@ public class MainActivity extends BaseActivity {
         tabNewsFragment = (TabNewsFragment) getSupportFragmentManager().findFragmentByTag(IParam.NEWS);
         tabGoodsListFragment = (TabGoodsListFragment) getSupportFragmentManager().findFragmentByTag(IParam.GOODS);
         tabUserFragment = (TabUserFragment) getSupportFragmentManager().findFragmentByTag(IParam.USER);
+        tabYellowPageFragment = (TabYellowPageFragment) getSupportFragmentManager().findFragmentByTag(IParam.YP);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (tabNewsFragment != null) {
@@ -97,6 +103,9 @@ public class MainActivity extends BaseActivity {
 
         if (tabUserFragment != null) {
             ft.hide(tabUserFragment);
+        }
+        if (tabYellowPageFragment != null) {
+            ft.hide(tabYellowPageFragment);
         }
         ft.commit();
     }
@@ -174,6 +183,27 @@ public class MainActivity extends BaseActivity {
         }, 50);
     }
 
+    @Click(R.id.layout_menu_yp)
+    void toYellowPage() {
+        hideOtherFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        if (tabYellowPageFragment == null) {
+            tabYellowPageFragment = new TabYellowPageFragment_();
+            ft.add(R.id.layout_contain, tabYellowPageFragment, IParam.YP);
+        } else {
+            ft.show(tabYellowPageFragment);
+        }
+        ft.commit();
+        menuSelected = BonConstants.BottomMenuSelected.YP;
+        resetMenuStyle();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tabYellowPageFragment.refreshView();
+            }
+        }, 50);
+    }
+
     /**
      * 重置底部菜单样式
      */
@@ -182,9 +212,11 @@ public class MainActivity extends BaseActivity {
         tvNews.setTextColor(getResources().getColor(R.color.c_7d8e9d));
         tvGoods.setTextColor(getResources().getColor(R.color.c_7d8e9d));
         tvUser.setTextColor(getResources().getColor(R.color.c_7d8e9d));
+        tvYP.setTextColor(getResources().getColor(R.color.c_7d8e9d));
         ivNews.setImageResource(R.mipmap.icon_news_nomal);
         ivGoods.setImageResource(R.mipmap.icon_goods_nomal);
         ivUser.setImageResource(R.mipmap.icon_user_nomal);
+        ivYP.setImageResource(R.mipmap.icon_goods_nomal);
 
 
         switch (menuSelected) {
@@ -200,6 +232,10 @@ public class MainActivity extends BaseActivity {
                 tvUser.setTextColor(getResources().getColor(R.color.c_ff946e));
                 ivUser.setImageResource(R.mipmap.icon_user_selected);
                 break;
+            case YP:
+                tvYP.setTextColor(getResources().getColor(R.color.c_ff946e));
+                ivYP.setImageResource(R.mipmap.icon_goods_selected);
+                break;
         }
     }
 
@@ -212,6 +248,9 @@ public class MainActivity extends BaseActivity {
             case GOODS:
                 tabGoodsListFragment.onTaskSuccess(action, data);
                 break;
+            case YP:
+                tabYellowPageFragment.onTaskSuccess(action, data);
+                break;
         }
     }
 
@@ -223,6 +262,9 @@ public class MainActivity extends BaseActivity {
                 break;
             case GOODS:
                 tabGoodsListFragment.onTaskFail(action, errorMessage);
+                break;
+            case YP:
+                tabYellowPageFragment.onTaskFail(action, errorMessage);
                 break;
         }
     }

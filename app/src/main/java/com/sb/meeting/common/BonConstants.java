@@ -113,6 +113,6 @@ public class BonConstants {
     }
 
     public enum BottomMenuSelected {
-        NEWS, GOODS, USER
+        NEWS, GOODS, YP, USER
     }
 }

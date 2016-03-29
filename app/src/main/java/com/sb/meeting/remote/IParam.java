@@ -12,6 +12,9 @@ public interface IParam {
     String AD_URL = "adUrl";
     String AND = "&";
     String AD_ID = "adId";
+    String AREA = "area";
+    String AREA_ID = "areaId";
+    String AVATAR_URL = "avatarUrl";
     String ADD_COMMENT = "addComment";
     String ADD_REPLY = "addReply";
     String ADD_FAVORITE = "addFavorite";
@@ -27,6 +30,7 @@ public interface IParam {
     String CREATE_TIME = "createTime";
     String COUNT_COMMENT = "countComment";
     String CAT_ID = "catId";
+    String CAT_IDS = "catIds";
     String CONTENT = "content";
     String CONTAINS = "contains";
     String COMMENT = "comment";
@@ -37,6 +41,12 @@ public interface IParam {
     String COVER_URL = "coverUrl";
     String CODE = "code";
     String COUNT = "count";
+    String COMPANY_ID = "companyId";
+    String COMPANY_NAME = "companyName";
+    String COMPANY_TYPE = "companyType";
+    String COMPANY_LIST = "companyList";
+    String CLASS_NAME = "className";
+    String CLASS_POSITION = "classPosition";
 
     // D
     String DETAIL = "detail";
@@ -74,6 +84,8 @@ public interface IParam {
     String IMG_URL = "imgUrl";
     String IS_AD = "isAd";
     String IS_URL = "isUrl";
+    String IS_PUBLIC = "isPublic";
+    String IS_VIP = "isVip";
     String IS_SELECT_USER_HEAD = "isSelectUserHead";
     String IS_SPECIAL = "isSpecial";
     String ICON_AD_URL = "iconAdUrl";
@@ -92,6 +104,7 @@ public interface IParam {
     String LAST_NUM = "lastNum";
     String LIMIT = "limit";
     String LOGO_URL = "logoUrl";
+    String LOGO = "logo";
     String LIST_FOR_ORIENTATION = "listForOrientation";
 
     // M
@@ -123,6 +136,9 @@ public interface IParam {
     String PUBLISH_GOODS = "publishGoods";
     String PUBLISH_TIME = "publishTime";
     String PAGE_INDEX = "pageIndex";
+    String PHONE = "phone";
+    String PATTERN = "pattern";
+    String PRODUCT_DESC = "productDesc";
 
     // Q
     // R
@@ -143,6 +159,8 @@ public interface IParam {
     String SPECIAL_ID = "specialId";
     String SPECIAL = "special";
     String SCAN_NUM = "scanNum";
+    String STUDENT_ID = "studentId";
+    String STUDENT_NAME = "studentName";
 
     // T
     String TITLE = "title";
@@ -172,6 +190,8 @@ public interface IParam {
 
     // X
     // Y
+    String YP = "yp";
+
     // Z
 
 }

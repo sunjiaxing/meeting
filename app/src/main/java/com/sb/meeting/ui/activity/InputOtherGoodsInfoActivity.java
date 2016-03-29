@@ -151,7 +151,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         header.findViewById(R.id.layout_input_count).setOnClickListener(this);
         tvSelectValidTime = (TextView) header.findViewById(R.id.tv_select_valid_time);
         header.findViewById(R.id.layout_select_valid_time).setOnClickListener(this);
-        sortListView.addHeaderView(header);
+        sortListView.addHeaderView(header, null, false);
     }
 
     /**
