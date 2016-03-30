@@ -52,7 +52,7 @@ public class YellowPageRO extends BaseRO {
      * @throws JSONException
      */
     public List<CompanyDto> getCompanyList(int areaId, String name, int pageIndex, int limit) throws JSONException {
-        String url = RemoteCompanyURL.COMPANY_LIST.getURL();
+        String url = getServerUrl() + RemoteCompanyURL.COMPANY_LIST.getURL();
         Map<String, Object> params = new HashMap<>();
         if (areaId != 0) {
             params.put(IParam.AREA_ID, areaId);

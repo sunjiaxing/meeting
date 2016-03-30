@@ -5,6 +5,10 @@ import android.os.Message;
 import android.widget.ImageView;
 
 import com.sb.meeting.R;
+import com.sb.meeting.common.TaskAction;
+import com.sb.meeting.service.YellowPageService;
+import com.taskmanager.Task;
+import com.taskmanager.TaskManager;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -34,6 +38,13 @@ public class WelcomeActivity extends BaseActivity {
             }
         };
         handler.sendEmptyMessageDelayed(1, 3000);
+        TaskManager.pushTask(new Task(TaskAction.ACTION_INIT_AREA) {
+            @Override
+            protected void doBackground() throws Exception {
+                new YellowPageService(WelcomeActivity.this).initArea();
+                setNeedCallBack(false);
+            }
+        }, this);
     }
 
 

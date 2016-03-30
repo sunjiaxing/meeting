@@ -477,6 +477,9 @@ public class Utils {
      * @param options   option
      */
     public static void displayImage(String path, ImageView imageView, DisplayImageOptions options) {
+        if (Utils.isEmpty(path)) {
+            return;
+        }
         ImageLoader.getInstance().displayImage(
                 path.startsWith(IParam.HTTP) ? path : ImageDownloader.Scheme.FILE.wrap(path),
                 imageView,
@@ -492,6 +495,9 @@ public class Utils {
      * @param listener  监听
      */
     public static void displayImage(String path, ImageView imageView, DisplayImageOptions options, ImageLoadingListener listener) {
+        if (Utils.isEmpty(path)) {
+            return;
+        }
         ImageLoader.getInstance().displayImage(
                 path.startsWith(IParam.HTTP) ? path : ImageDownloader.Scheme.FILE.wrap(path),
                 imageView,
@@ -500,6 +506,7 @@ public class Utils {
 
     /**
      * 删除图片链接 域名部分
+     *
      * @param url
      * @return
      */
