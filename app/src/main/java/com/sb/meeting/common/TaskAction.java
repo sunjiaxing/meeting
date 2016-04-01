@@ -49,4 +49,5 @@ public interface TaskAction extends TaskKey {
     int ACTION_INIT_STUDENT = 39;
     int ACTION_REFRESH_STUDENT = 40;
     int ACTION_LOAD_MORE_STUDENT = 41;
+    int ACTION_GET_COMPANY_DETAIL = 42;
 }

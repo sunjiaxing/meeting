@@ -166,7 +166,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
                 ChooseImageActivity_.intent(InputOtherGoodsInfoActivity.this).extra(IParam.LAST_NUM, 20 - imagePathList.size()).startForResult(REQUEST_CODE_SELECT_IMAGE);
             }
         });
-        sortListView.addFooterView(footer);
+        sortListView.addFooterView(footer, null, false);
     }
 
     @Override

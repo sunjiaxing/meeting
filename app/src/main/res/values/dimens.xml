@@ -36,7 +36,9 @@
     <dimen name="ppi_px_50_dp">25dp</dimen>
     <dimen name="ppi_px_56_dp">28dp</dimen>
     <dimen name="ppi_px_60_dp">30dp</dimen>
+    <dimen name="ppi_px_68_dp">34dp</dimen>
     <dimen name="ppi_px_70_dp">35dp</dimen>
+    <dimen name="ppi_px_80_dp">40dp</dimen>
     <dimen name="ppi_px_88_dp">44dp</dimen>
     <dimen name="ppi_px_98_dp">49dp</dimen>
     <dimen name="ppi_px_100_dp">50dp</dimen>

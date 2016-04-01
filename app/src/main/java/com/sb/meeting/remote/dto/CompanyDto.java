@@ -23,14 +23,14 @@ public class CompanyDto {
      * area : 呼和浩特市
      */
 
-    private int companyId;
-    private String companyName;
-    private String logo;
-    private String productDesc;
+    protected int companyId;
+    protected String companyName;
+    protected String logo;
+    protected String productDesc;
     private String catIds;
     private String pattern;
     private String companyType;
-    private int isVIP;
+    protected int isVIP;
     private String area;
 
     public int getCompanyId() {

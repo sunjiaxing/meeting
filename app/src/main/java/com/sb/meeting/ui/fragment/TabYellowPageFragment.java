@@ -11,8 +11,11 @@ import com.sb.meeting.R;
 import com.sb.meeting.common.BonConstants;
 import com.sb.meeting.common.TaskAction;
 import com.sb.meeting.common.Utils;
+import com.sb.meeting.remote.IParam;
 import com.sb.meeting.service.YellowPageService;
+import com.sb.meeting.ui.activity.CompanyVIPDetailActivity_;
 import com.sb.meeting.ui.adapter.CompanyListAdapter;
+import com.sb.meeting.ui.adapter.StudentListAdapter;
 import com.sb.meeting.ui.component.RefreshListView;
 import com.sb.meeting.ui.vo.CompanyVO;
 import com.sb.meeting.ui.vo.StudentVO;
@@ -22,6 +25,7 @@ import com.taskmanager.TaskManager;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
@@ -66,6 +70,7 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
     private String studentName;
     private int classId;
     private int studentAreaId;
+    private StudentListAdapter studentListAdapter;
 
     public enum YPType {
         STUDENT, COMPANY
@@ -147,9 +152,9 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
      */
     public void onTaskSuccess(int action, Object data) {
         switch (action) {
-            case TaskAction.ACTION_INIT_COMPANY:
-                stopLoadingSelf();
+            case TaskAction.ACTION_INIT_COMPANY:// 初始化企业列表
                 if (data != null) {
+                    stopLoadingSelf();
                     companyList = (List<CompanyVO>) data;
                     refreshCompanyUI();
                     if (!Utils.isEmpty(companyList) && companyList.size() != BonConstants.LIMIT_GET_COMPANY) {
@@ -160,19 +165,34 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
                 break;
             case TaskAction.ACTION_REFRESH_COMPANY:// 刷新企业列表
                 lvCompany.onRefreshComplete();
+                stopLoadingSelf();
                 if (data != null) {
                     companyList = (List<CompanyVO>) data;
                     refreshCompanyUI();
                     if (!Utils.isEmpty(companyList) && companyList.size() != BonConstants.LIMIT_GET_COMPANY) {
                         lvCompany.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_REMOVE);
+                    } else {
+                        lvCompany.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NORMAL);
                     }
                 } else {
                     showErrorMsg("暂无数据");
                 }
                 break;
-            case TaskAction.ACTION_INIT_STUDENT:// 初始化学员名片
-                stopLoadingSelf();
+            case TaskAction.ACTION_LOAD_MORE_COMPANY:// 加载更多企业
                 if (data != null) {
+                    List<CompanyVO> moreData = (List<CompanyVO>) data;
+                    if (Utils.isEmpty(moreData) || (!Utils.isEmpty(moreData) && moreData.size() != BonConstants.LIMIT_GET_COMPANY)) {
+                        lvCompany.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_OVER);
+                    } else {
+                        lvCompany.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NORMAL);
+                    }
+                    companyList.addAll(moreData);
+                    refreshCompanyUI();
+                }
+                break;
+            case TaskAction.ACTION_INIT_STUDENT:// 初始化学员名片
+                if (data != null) {
+                    stopLoadingSelf();
                     studentList = (List<StudentVO>) data;
                     refreshStudentUI();
                     if (!Utils.isEmpty(studentList) && studentList.size() != BonConstants.LIMIT_GET_STUDENT) {
@@ -183,14 +203,29 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
                 break;
             case TaskAction.ACTION_REFRESH_STUDENT:// 刷新学员列表
                 lvStudent.onRefreshComplete();
+                stopLoadingSelf();
                 if (data != null) {
                     studentList = (List<StudentVO>) data;
                     refreshStudentUI();
                     if (!Utils.isEmpty(studentList) && studentList.size() != BonConstants.LIMIT_GET_STUDENT) {
                         lvStudent.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_REMOVE);
+                    } else {
+                        lvStudent.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NORMAL);
                     }
                 } else {
                     showErrorMsg("暂无数据");
+                }
+                break;
+            case TaskAction.ACTION_LOAD_MORE_STUDENT:// 加载更多学员列表
+                if (data != null) {
+                    List<StudentVO> moreData = (List<StudentVO>) data;
+                    if (Utils.isEmpty(moreData) || (!Utils.isEmpty(moreData) && moreData.size() != BonConstants.LIMIT_GET_STUDENT)) {
+                        lvStudent.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_OVER);
+                    } else {
+                        lvStudent.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NORMAL);
+                    }
+                    studentList.addAll(moreData);
+                    refreshStudentUI();
                 }
                 break;
         }
@@ -209,8 +244,22 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
         }, this);
     }
 
+    /**
+     * 刷新 学员列表 UI界面
+     */
     private void refreshStudentUI() {
-
+        if (!Utils.isEmpty(studentList)) {
+            lvCompany.setVisibility(View.GONE);
+            lvStudent.setVisibility(View.VISIBLE);
+            if (studentListAdapter == null) {
+                studentListAdapter = new StudentListAdapter(getActivity());
+                studentListAdapter.setData(studentList);
+                lvStudent.setAdapter(studentListAdapter);
+            } else {
+                studentListAdapter.setData(studentList);
+                studentListAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     /**
@@ -252,6 +301,22 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
      */
     public void onTaskFail(int action, String errorMessage) {
         switch (action) {
+            case TaskAction.ACTION_REFRESH_COMPANY:
+                lvCompany.onRefreshComplete();
+                showToast(errorMessage);
+                break;
+            case TaskAction.ACTION_LOAD_MORE_COMPANY:
+                lvCompany.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NETWORK_DISABLE);
+                showToast(errorMessage);
+                break;
+            case TaskAction.ACTION_REFRESH_STUDENT:
+                lvStudent.onRefreshComplete();
+                showToast(errorMessage);
+                break;
+            case TaskAction.ACTION_LOAD_MORE_STUDENT:
+                lvStudent.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NETWORK_DISABLE);
+                showToast(errorMessage);
+                break;
             default:
                 stopLoadingSelf();
                 showErrorMsg(errorMessage);
@@ -311,12 +376,39 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
 
     @Override
     public void onLoadMore() {
-
+        if (ypType == YPType.COMPANY) {
+            companyPageIndex++;
+            TaskManager.pushTask(new Task(TaskAction.ACTION_LOAD_MORE_COMPANY) {
+                @Override
+                protected void doBackground() throws Exception {
+                    setReturnData(yellowPageService.getCompanyList(companyName, companyAreaId, companyPageIndex));
+                }
+            }, this);
+        } else if (ypType == YPType.STUDENT) {
+            studentPageIndex++;
+            TaskManager.pushTask(new Task(TaskAction.ACTION_LOAD_MORE_STUDENT) {
+                @Override
+                protected void doBackground() throws Exception {
+                    setReturnData(yellowPageService.getStudentList(studentName, classId, studentAreaId, studentPageIndex));
+                }
+            }, this);
+        }
     }
 
     @Click(R.id.btn_refresh)
     void clickRefresh() {
         startLoadingSelf();
         onRefresh();
+    }
+
+    @ItemClick({R.id.lv_company, R.id.lv_student})
+    void onItemClick(int position) {
+        if (ypType == YPType.COMPANY) {
+            CompanyVO vo = companyList.get(position);
+            // TODO 判断 vip  跳转不同页面
+            CompanyVIPDetailActivity_.intent(this).extra(IParam.COMPANY_ID, vo.getCompanyId()).start();
+        } else if (ypType == YPType.STUDENT) {
+
+        }
     }
 }

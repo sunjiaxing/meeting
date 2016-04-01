@@ -15,6 +15,24 @@ public class StudentVO implements Serializable {
     private String companyName;
     private String className;
     private String classPosition;
+    private String avatarUrl;
+    private String area;
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
 
     public int getStudentId() {
         return studentId;

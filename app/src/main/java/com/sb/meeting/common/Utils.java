@@ -513,4 +513,52 @@ public class Utils {
     public static String deleteHeadOfUrl(String url) {
         return url.replace(BonConstants.SERVER_URL, "");
     }
+    /***
+     * 隐藏电话号码后几位数字
+     *
+     * @param phoneNum
+     *            电话号码
+     * @param len
+     *            需要隐藏的位数
+     * @return
+     */
+    public static String hideLastNumber(String phoneNum, int len) {
+        if (!isEmpty(phoneNum)) {
+            String tmp = phoneNum.substring(0, phoneNum.length() - len);
+            for (int i = 0; i < len; i++) {
+                tmp += "*";
+            }
+            return tmp;
+        }
+        return "无";
+    }
+
+    /***
+     * 隐藏电话号码中间几位数字
+     *
+     * @param phoneNum
+     *            电话号码
+     * @param len
+     *            需要隐藏的位数
+     * @return
+     */
+    public static String hideMiddleNumber(String phoneNum, int len) {
+        try {
+            if (!isEmpty(phoneNum)) {
+                phoneNum = phoneNum.trim();
+                // 获取电话号码后4位数字
+                String last = phoneNum.substring(phoneNum.length() - 4,
+                        phoneNum.length());
+                String tmp = phoneNum.substring(0, phoneNum.length() - len - 4);
+                for (int i = 0; i < len; i++) {
+                    tmp += "*";
+                }
+                tmp += last;
+                return tmp;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 }

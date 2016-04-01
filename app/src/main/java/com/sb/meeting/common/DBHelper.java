@@ -11,6 +11,7 @@ import com.sb.meeting.dao.entity.Company;
 import com.sb.meeting.dao.entity.Goods;
 import com.sb.meeting.dao.entity.News;
 import com.sb.meeting.dao.entity.NewsChannel;
+import com.sb.meeting.dao.entity.Student;
 import com.sb.meeting.dao.entity.User;
 
 /**
@@ -55,6 +56,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CheckingGoods.CREAT_TABLE);
         db.execSQL(Area.CREAT_TABLE);
         db.execSQL(Company.CREAT_TABLE);
+        db.execSQL(Student.CREAT_TABLE);
     }
 
     @Override

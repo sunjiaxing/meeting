@@ -193,7 +193,7 @@ public class UpdateGoodsInfoActivity extends BaseActivity implements View.OnClic
         header.findViewById(R.id.layout_input_count).setOnClickListener(this);
         tvSelectValidTime = (TextView) header.findViewById(R.id.tv_select_valid_time);
         header.findViewById(R.id.layout_select_valid_time).setOnClickListener(this);
-        sortListView.addHeaderView(header);
+        sortListView.addHeaderView(header, null, false);
     }
 
     /**
@@ -208,7 +208,7 @@ public class UpdateGoodsInfoActivity extends BaseActivity implements View.OnClic
                 ChooseImageActivity_.intent(UpdateGoodsInfoActivity.this).extra(IParam.LAST_NUM, 20 - imagePathList.size()).startForResult(REQUEST_CODE_SELECT_IMAGE);
             }
         });
-        sortListView.addFooterView(footer);
+        sortListView.addFooterView(footer, null, false);
     }
 
     @Override
@@ -598,18 +598,18 @@ public class UpdateGoodsInfoActivity extends BaseActivity implements View.OnClic
      */
     private boolean checkDataValid() {
         // 数据验证
-        if (goodsVO.getCategory() == null) {
-            showToast("请选择分类");
-            return false;
-        }
+//        if (goodsVO.getCategory() == null) {
+//            showToast("请选择分类");
+//            return false;
+//        }
         if (!(goodsVO.getMarketPrice() > 0 && goodsVO.getExchangePrice() > 0)) {
             showToast("请输入市场价和兑换价");
             return false;
         }
-        if (goodsVO.getValidTime() == null) {
-            showToast("请选择有效时间");
-            return false;
-        }
+//        if (goodsVO.getValidTime() == null) {
+//            showToast("请选择有效时间");
+//            return false;
+//        }
         if (goodsVO.getCount() == 0) {
             showToast("请输入库存数量");
             return false;

@@ -33,7 +33,9 @@ public interface IParam {
     String CAT_IDS = "catIds";
     String CONTENT = "content";
     String CONTAINS = "contains";
+    String CONTACT = "contact";
     String COMMENT = "comment";
+    String CERTIFICATE = "certificate";
     String CONTENT_URL = "contentUrl";
     String CATEGORIES = "categories";
     String CATEGORY = "category";
@@ -41,10 +43,15 @@ public interface IParam {
     String COVER_URL = "coverUrl";
     String CODE = "code";
     String COUNT = "count";
+    String COMPANY_ADDRESS = "companyAddress";
+    String COMPANY_DETAIL = "companyDetail";
     String COMPANY_ID = "companyId";
     String COMPANY_NAME = "companyName";
+    String COMPANY_MAP = "companyMap";
     String COMPANY_TYPE = "companyType";
     String COMPANY_LIST = "companyList";
+    String COMPANY_INTRODUCE = "companyIntroduce";
+    String CLASS_ID = "classId";
     String CLASS_NAME = "className";
     String CLASS_POSITION = "classPosition";
 
@@ -127,6 +134,7 @@ public interface IParam {
 
     // O
     String OPTION = "option";
+    String ORGANIZATION = "organization";
 
     // P
     String POSITION = "position";
@@ -138,9 +146,14 @@ public interface IParam {
     String PAGE_INDEX = "pageIndex";
     String PHONE = "phone";
     String PATTERN = "pattern";
+    String PRODUCT_ID = "productId";
+    String PRODUCT_NAME = "productName";
     String PRODUCT_DESC = "productDesc";
+    String PRODUCT_LIST = "productList";
 
     // Q
+    String QQ = "qq";
+
     // R
     String REPLY_TO_USER_ID = "replyToUserId";
     String REPLY_TO_USER_NAME = "replyToUserName";
@@ -159,6 +172,7 @@ public interface IParam {
     String SPECIAL_ID = "specialId";
     String SPECIAL = "special";
     String SCAN_NUM = "scanNum";
+    String STUDENT = "student";
     String STUDENT_ID = "studentId";
     String STUDENT_NAME = "studentName";
 
@@ -169,6 +183,7 @@ public interface IParam {
     String TYPE = "type";
     String TYPE_ID = "typeId";
     String TOP = "top";
+    String THUMB = "thumb";
 
     // U
     String URL = "url";
@@ -187,6 +202,7 @@ public interface IParam {
     // W
     String WENHAO = "?";
     String WAP_URL = "wapUrl";
+    String WEB_URL = "webUrl";
 
     // X
     // Y
