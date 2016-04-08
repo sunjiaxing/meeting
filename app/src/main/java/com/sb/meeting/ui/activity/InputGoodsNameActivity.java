@@ -50,6 +50,7 @@ public class InputGoodsNameActivity extends BaseActivity {
         if (!Utils.isEmpty(goodsName)) {
             editGoodsName.setText(goodsName);
             editGoodsName.setSelection(goodsName.length());
+            btnRight.setEnabled(true);
         }
         editGoodsName.addTextChangedListener(new TextWatcher() {
             @Override

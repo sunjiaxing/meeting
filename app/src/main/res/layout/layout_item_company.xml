@@ -2,55 +2,83 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:padding="@dimen/ppi_px_30_dp">
+    android:background="@color/color_white"
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/iv_logo"
-        android:layout_width="@dimen/ppi_px_200_dp"
-        android:layout_height="@dimen/ppi_px_200_dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/default_item_pic" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ppi_px_20_dp"
+        android:background="@color/c_e8e8e8" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/ppi_px_10_dp"
-        android:orientation="vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/ppi_px_30_dp"
+        android:paddingLeft="@dimen/ppi_px_40_dp"
+        android:paddingRight="@dimen/ppi_px_40_dp"
+        android:paddingTop="@dimen/ppi_px_40_dp">
 
-        <TextView
-            android:id="@+id/tv_company_name"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/iv_company_logo"
+            android:layout_width="@dimen/ppi_px_160_dp"
+            android:layout_height="@dimen/ppi_px_160_dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/default_item_pic" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/loading"
-            android:textColor="@color/c_454545"
-            android:textSize="@dimen/ppi_px_30_sp" />
+            android:layout_marginLeft="@dimen/ppi_px_30_dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_company_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/loading"
+                android:textColor="@color/c_454545"
+                android:textSize="@dimen/ppi_px_32_sp" />
+
+            <TextView
+                android:id="@+id/tv_product_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ppi_px_15_dp"
+                android:ellipsize="end"
+                android:lineSpacingExtra="4dp"
+                android:lines="2"
+                android:maxLines="2"
+                android:text="@string/loading"
+                android:textColor="@color/c_454545"
+                android:textSize="@dimen/ppi_px_28_sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="@dimen/ppi_px_240_dp"
+        android:background="@color/line_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/ppi_px_20_dp"
+        android:paddingLeft="@dimen/ppi_px_40_dp"
+        android:paddingRight="@dimen/ppi_px_40_dp"
+        android:paddingTop="@dimen/ppi_px_20_dp">
 
         <TextView
-            android:id="@+id/tv_product_desc"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_area"
+            android:layout_width="@dimen/ppi_px_160_dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ppi_px_5_dp"
-            android:singleLine="true"
-            android:text="@string/loading"
-            android:textColor="@color/c_454545"
-            android:textSize="@dimen/ppi_px_26_sp" />
-
-        <TextView
-            android:id="@+id/tv_cat_ids"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/ppi_px_5_dp"
-            android:singleLine="true"
-            android:text="@string/loading"
-            android:textColor="@color/c_454545"
-            android:textSize="@dimen/ppi_px_26_sp" />
-
-        <TextView
-            android:id="@+id/tv_pattern"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/ppi_px_5_dp"
+            android:gravity="center"
             android:singleLine="true"
             android:text="@string/loading"
             android:textColor="@color/c_454545"
@@ -60,20 +88,28 @@
             android:id="@+id/tv_company_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/ppi_px_5_dp"
+            android:layout_marginLeft="@dimen/ppi_px_30_dp"
+            android:background="@drawable/yp_switch_shape"
+            android:maxLength="20"
+            android:paddingBottom="@dimen/ppi_px_10_dp"
+            android:paddingLeft="@dimen/ppi_px_20_dp"
+            android:paddingRight="@dimen/ppi_px_20_dp"
+            android:paddingTop="@dimen/ppi_px_10_dp"
             android:singleLine="true"
             android:text="@string/loading"
             android:textColor="@color/c_454545"
             android:textSize="@dimen/ppi_px_26_sp" />
 
         <TextView
-            android:id="@+id/tv_area"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_pattern"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/ppi_px_5_dp"
+            android:ellipsize="end"
+            android:gravity="right"
             android:singleLine="true"
             android:text="@string/loading"
             android:textColor="@color/c_454545"
             android:textSize="@dimen/ppi_px_26_sp" />
     </LinearLayout>
+
 </LinearLayout>

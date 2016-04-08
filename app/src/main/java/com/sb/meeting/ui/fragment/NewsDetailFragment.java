@@ -7,7 +7,7 @@ import com.sb.meeting.R;
 import com.sb.meeting.remote.IParam;
 import com.sb.meeting.ui.activity.ImageActivity_;
 import com.sb.meeting.ui.activity.NewsDetailActivity;
-import com.sb.meeting.ui.component.CustomerWebview;
+import com.sb.meeting.ui.component.CustomWebView;
 import com.sb.meeting.ui.vo.ImageVO;
 
 import org.androidannotations.annotations.AfterViews;
@@ -26,7 +26,7 @@ import java.util.List;
 public class NewsDetailFragment extends BaseFragment {
 
     @ViewById(R.id.webview_detail)
-    CustomerWebview webview;
+    CustomWebView webview;
 
     @AfterViews
     @SuppressLint("JavascriptInterface")

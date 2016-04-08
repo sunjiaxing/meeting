@@ -166,9 +166,29 @@ public class ConfigDao {
 
     /**
      * 获取用户id
+     *
      * @return
      */
     public String getUserId() {
         return getShare().getString(IParam.USER_ID, "-1");
+    }
+
+    /**
+     * 保存 七牛 云存储 token
+     *
+     * @param qiniuToken token
+     * @return
+     */
+    public boolean setQiniuToken(String qiniuToken) {
+        return getEdit().putString(IParam.QINIU_TOKEN, qiniuToken).commit();
+    }
+
+    /**
+     * 获取 七牛云存储 token
+     *
+     * @return
+     */
+    public String getQiniuToken() {
+        return getShare().getString(IParam.QINIU_TOKEN, null);
     }
 }

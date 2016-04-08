@@ -7,7 +7,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fadingEdge="none"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -16,127 +18,222 @@
             android:paddingBottom="20dp">
 
             <RelativeLayout
-                android:id="@+id/layout_vip_detail"
                 android:layout_width="match_parent"
-                android:layout_height="150dp">
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/ppi_px_20_dp">
 
-                <com.sb.meeting.ui.component.ChildViewPager
-                    android:id="@+id/vp_image_list"
+                <RelativeLayout
+                    android:id="@+id/layout_vip_detail"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp" />
+                    android:layout_height="160dp">
 
-                <LinearLayout
-                    android:id="@+id/layout_vip_detail_point"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    <com.sb.meeting.ui.component.ChildViewPager
+                        android:id="@+id/vp_image_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:background="@color/c_454545" />
+
+                    <LinearLayout
+                        android:id="@+id/layout_vip_detail_point"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingBottom="5dp" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/ppi_px_70_dp"
+                    android:layout_below="@+id/layout_vip_detail"
+                    android:background="@color/color_white" />
+
+                <com.sb.meeting.ui.component.CircleImageView
+                    android:id="@+id/iv_logo"
+                    android:layout_width="@dimen/ppi_px_160_dp"
+                    android:layout_height="@dimen/ppi_px_160_dp"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingBottom="5dp" />
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/default_item_pic" />
             </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/c_d8d8d8" />
 
             <TextView
                 android:id="@+id/tv_company_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/ppi_px_20_dp"
+                android:layout_marginLeft="@dimen/ppi_px_20_dp"
+                android:layout_marginRight="@dimen/ppi_px_20_dp"
+                android:gravity="center"
+                android:singleLine="true"
                 android:text="@string/loading"
                 android:textColor="@color/c_454545"
                 android:textSize="@dimen/ppi_px_36_sp" />
 
-            <View
+            <TextView
+                android:id="@+id/tv_web_url"
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/c_d8d8d8" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/ppi_px_20_dp"
+                android:layout_marginRight="@dimen/ppi_px_20_dp"
+                android:layout_marginTop="@dimen/ppi_px_10_dp"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@string/loading" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/ppi_px_20_dp"
+                android:layout_marginRight="@dimen/ppi_px_20_dp"
+                android:layout_marginTop="@dimen/ppi_px_20_dp">
+
+                <TextView
+                    android:id="@+id/tv_catIds"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/tv_vertical_line2"
+                    android:maxLength="7"
+                    android:text="@string/loading" />
+
+                <TextView
+                    android:id="@+id/tv_vertical_line2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/ppi_px_30_dp"
+                    android:layout_toLeftOf="@+id/tv_area"
+                    android:text="|"
+                    android:textColor="@color/c_d8d8d8"
+                    android:textSize="@dimen/ppi_px_32_sp" />
+
+                <TextView
+                    android:id="@+id/tv_area"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/ppi_px_30_dp"
+                    android:layout_marginRight="@dimen/ppi_px_30_dp"
+                    android:maxLength="5"
+                    android:text="@string/loading"
+                    android:textSize="@dimen/ppi_px_30_sp" />
+
+                <TextView
+                    android:id="@+id/tv_vertical_line1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/ppi_px_30_dp"
+                    android:layout_toRightOf="@+id/tv_area"
+                    android:text="|"
+                    android:textColor="@color/c_d8d8d8"
+                    android:textSize="@dimen/ppi_px_32_sp" />
+
+                <TextView
+                    android:id="@+id/tv_company_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/tv_vertical_line1"
+                    android:maxLength="6"
+                    android:text="@string/loading" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_company_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/ppi_px_30_dp"
+                android:layout_marginLeft="@dimen/ppi_px_20_dp"
+                android:layout_marginRight="@dimen/ppi_px_20_dp"
+                android:layout_marginTop="@dimen/ppi_px_30_dp"
+                android:gravity="center"
+                android:lineSpacingExtra="2dp"
+                android:maxLines="2"
+                android:text="@string/loading"
+                android:textColor="@color/c_454545"
+                android:textSize="@dimen/ppi_px_30_sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/ppi_px_20_dp"
+                android:layout_marginLeft="@dimen/ppi_px_20_dp"
+                android:layout_marginRight="@dimen/ppi_px_20_dp"
+                android:layout_marginTop="@dimen/ppi_px_10_dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/line_dash"
+                    android:layerType="software" />
+
+                <TextView
+                    android:id="@+id/tv_company_introduce_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@color/color_white"
+                    android:paddingLeft="@dimen/ppi_px_20_dp"
+                    android:paddingRight="@dimen/ppi_px_20_dp"
+                    android:text="企业简介"
+                    android:textColor="@color/c_454545"
+                    android:textSize="@dimen/ppi_px_32_sp" />
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/tv_product_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/loading" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/c_d8d8d8" />
+                android:layout_marginLeft="@dimen/ppi_px_20_dp"
+                android:layout_marginRight="@dimen/ppi_px_20_dp"
+                android:lineSpacingExtra="3dp"
+                android:text="@string/loading"
+                android:textColor="@color/c_7d8e9d"
+                android:textSize="@dimen/ppi_px_30_sp" />
 
             <TextView
                 android:id="@+id/tv_company_introduce"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ppi_px_5_dp"
-                android:drawableRight="@mipmap/right_tip"
-                android:padding="@dimen/ppi_px_20_dp"
-                android:text="企业简介"
+                android:layout_gravity="center_horizontal"
+                android:background="@mipmap/news_type_open"
                 android:textColor="@color/c_454545"
                 android:textSize="@dimen/ppi_px_30_sp" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/c_d8d8d8" />
-
-            <TextView
-                android:id="@+id/tv_contact"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ppi_px_5_dp"
-                android:text="@string/loading" />
-
-            <TextView
-                android:id="@+id/tv_phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ppi_px_5_dp"
-                android:text="@string/loading" />
-
-            <TextView
-                android:id="@+id/tv_qq"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ppi_px_5_dp"
-                android:text="@string/loading" />
-
-            <TextView
-                android:id="@+id/tv_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ppi_px_5_dp"
-                android:text="@string/loading" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
+                android:layout_height="@dimen/ppi_px_20_dp"
                 android:background="@color/c_d8d8d8" />
 
             <LinearLayout
-                android:id="@+id/layout_web"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="@dimen/ppi_px_20_dp">
-
-                <ImageView
-                    android:id="@+id/iv_logo"
-                    android:layout_width="@dimen/ppi_px_100_dp"
-                    android:layout_height="@dimen/ppi_px_100_dp"
-                    android:layout_marginRight="@dimen/ppi_px_20_dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/default_item_pic" />
+                android:paddingBottom="@dimen/ppi_px_15_dp"
+                android:paddingTop="@dimen/ppi_px_15_dp">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/ppi_px_10_dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/c_454545" />
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableRight="@mipmap/right_tip"
-                    android:lineSpacingExtra="3dp"
-                    android:text="企业微官网\n点击进入" />
+                    android:layout_marginLeft="@dimen/ppi_px_20_dp"
+                    android:paddingBottom="@dimen/ppi_px_5_dp"
+                    android:paddingTop="@dimen/ppi_px_5_dp"
+                    android:text="联系方式"
+                    android:textColor="@color/c_454545"
+                    android:textSize="@dimen/ppi_px_30_sp" />
             </LinearLayout>
 
             <View
@@ -144,35 +241,104 @@
                 android:layout_height="1px"
                 android:background="@color/c_d8d8d8" />
 
-            <TextView
-                android:id="@+id/tv_company_address"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableRight="@mipmap/right_tip"
-                android:padding="@dimen/ppi_px_20_dp"
-                android:text="@string/loading"
-                android:textColor="@color/c_454545"
-                android:textSize="@dimen/ppi_px_36_sp" />
+                android:orientation="vertical"
+                android:padding="@dimen/ppi_px_30_dp">
+
+                <TextView
+                    android:id="@+id/tv_contact"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/loading" />
+
+                <TextView
+                    android:id="@+id/tv_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ppi_px_5_dp"
+                    android:text="@string/loading" />
+
+                <TextView
+                    android:id="@+id/tv_qq"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ppi_px_5_dp"
+                    android:text="@string/loading" />
+
+                <TextView
+                    android:id="@+id/tv_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ppi_px_5_dp"
+                    android:text="@string/loading" />
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/c_d8d8d8" />
+                android:layout_height="@dimen/ppi_px_20_dp"
+                android:background="@color/line_color" />
 
-            <TextView
-                android:id="@+id/tv_certificate"
+            <LinearLayout
+                android:id="@+id/layout_certificate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableRight="@mipmap/right_tip"
-                android:padding="@dimen/ppi_px_20_dp"
-                android:text="荣誉证书"
-                android:textColor="@color/c_454545"
-                android:textSize="@dimen/ppi_px_36_sp" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/ppi_px_15_dp"
+                android:paddingTop="@dimen/ppi_px_15_dp">
+
+                <TextView
+                    android:layout_width="@dimen/ppi_px_10_dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/c_454545" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/ppi_px_20_dp"
+                    android:layout_marginRight="@dimen/ppi_px_20_dp"
+                    android:drawableRight="@mipmap/right_tip"
+                    android:paddingBottom="@dimen/ppi_px_5_dp"
+                    android:paddingTop="@dimen/ppi_px_5_dp"
+                    android:text="企业认证信息"
+                    android:textColor="@color/c_454545"
+                    android:textSize="@dimen/ppi_px_30_sp" />
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/c_d8d8d8" />
+                android:layout_height="@dimen/ppi_px_20_dp"
+                android:background="@color/line_color" />
+
+            <LinearLayout
+                android:id="@+id/layout_to_product"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/ppi_px_15_dp"
+                android:paddingTop="@dimen/ppi_px_15_dp">
+
+                <TextView
+                    android:layout_width="@dimen/ppi_px_10_dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/c_454545" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/ppi_px_20_dp"
+                    android:layout_marginRight="@dimen/ppi_px_20_dp"
+                    android:drawableRight="@mipmap/right_tip"
+                    android:paddingBottom="@dimen/ppi_px_5_dp"
+                    android:paddingTop="@dimen/ppi_px_5_dp"
+                    android:text="主要产品"
+                    android:textColor="@color/c_454545"
+                    android:textSize="@dimen/ppi_px_30_sp" />
+            </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/layout_product"
@@ -252,17 +418,6 @@
                         android:textColor="@color/c_454545" />
                 </LinearLayout>
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tv_look_more_product"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="@dimen/ppi_px_30_dp"
-                android:text="查看更多产品"
-                android:textColor="@color/c_ff946e"
-                android:textSize="@dimen/ppi_px_36_sp"
-                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
     <!-- 显示转轮 -->

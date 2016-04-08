@@ -4,18 +4,11 @@
     android:layout_height="match_parent"
     android:background="@color/color_white">
 
-    <include
-        android:id="@+id/head_layout"
-        layout="@layout/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/galleryLayout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_below="@+id/head_layout"
         android:background="#ededed"
         android:clickable="false"
         android:focusable="false"
@@ -28,9 +21,9 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
-            android:visibility="gone"
             android:layout_margin="5dp"
-            android:src="@drawable/btn_user_center" />
+            android:src="@drawable/btn_user_center"
+            android:visibility="gone" />
 
         <com.sb.meeting.ui.component.ChannelGallery
             android:id="@+id/channel_gallery"

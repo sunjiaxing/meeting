@@ -200,10 +200,10 @@ public class NewsSubjectActivity extends BaseActivity implements RefreshListView
             adapter.notifyDataSetChanged();
             // 判断iconAdUrl
             if (!Utils.isEmpty(model.getIconAdUrl())) {
-                Intent intent = new Intent(this, ShowUrlActivity.class);
-                intent.putExtra(IParam.URL, model.getIconAdUrl());
-                intent.putExtra(IParam.TITLE, model.getTitle());
-                startActivity(intent);
+                ShowWebActivity_.intent(this)
+                        .extra(IParam.URL, model.getIconAdUrl())
+                        .extra(IParam.TITLE, model.getTitle())
+                        .start();
             } else {
                 // 界面跳转
                 Intent intent = new Intent(this, NewsDetailActivity_.class);

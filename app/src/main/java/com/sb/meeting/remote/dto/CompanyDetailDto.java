@@ -24,7 +24,7 @@ public class CompanyDetailDto extends CompanyDto {
     private String companyAddress;
     private String companyMap;
 
-    private List<String> imageList;
+    private String imageList;
     private List<CertificateDto> certificateList;
     private List<ProductDto> productList;
 
@@ -80,7 +80,7 @@ public class CompanyDetailDto extends CompanyDto {
         return companyMap;
     }
 
-    public List<String> getImageList() {
+    public String getImageList() {
         return imageList;
     }
 
@@ -100,28 +100,28 @@ public class CompanyDetailDto extends CompanyDto {
         if (json.has(IParam.COMPANY_INTRODUCE)) {
             this.companyIntroduce = json.getString(IParam.COMPANY_INTRODUCE);
         }
-        if (json.has(IParam.WEB_URL)){
+        if (json.has(IParam.WEB_URL)) {
             this.webUrl = json.getString(IParam.WEB_URL);
         }
-        if (json.has(IParam.CONTACT)){
+        if (json.has(IParam.CONTACT)) {
             this.contact = json.getString(IParam.CONTACT);
         }
-        if (json.has(IParam.PHONE)){
+        if (json.has(IParam.PHONE)) {
             this.phone = json.getString(IParam.PHONE);
         }
-        if (json.has(IParam.QQ)){
+        if (json.has(IParam.QQ)) {
             this.qq = json.getString(IParam.QQ);
         }
-        if (json.has(IParam.EMAIL)){
+        if (json.has(IParam.EMAIL)) {
             this.email = json.getString(IParam.EMAIL);
         }
-        if (json.has(IParam.COMPANY_ADDRESS)){
+        if (json.has(IParam.COMPANY_ADDRESS)) {
             this.companyAddress = json.getString(IParam.COMPANY_ADDRESS);
         }
-        if (json.has(IParam.COMPANY_MAP)){
+        if (json.has(IParam.COMPANY_MAP)) {
             this.companyMap = json.getString(IParam.COMPANY_MAP);
         }
-        if (json.has(IParam.CERTIFICATE)){
+        if (json.has(IParam.CERTIFICATE)) {
             JSONArray array = json.getJSONArray(IParam.CERTIFICATE);
             this.certificateList = new ArrayList<>();
             for (int i = 0; i < array.length(); i++) {
@@ -130,7 +130,7 @@ public class CompanyDetailDto extends CompanyDto {
                 certificateList.add(dto);
             }
         }
-        if (json.has(IParam.PRODUCT_LIST)){
+        if (json.has(IParam.PRODUCT_LIST)) {
             JSONArray array = json.getJSONArray(IParam.PRODUCT_LIST);
             this.productList = new ArrayList<>();
             for (int i = 0; i < array.length(); i++) {
@@ -139,9 +139,8 @@ public class CompanyDetailDto extends CompanyDto {
                 productList.add(dto);
             }
         }
-
-
-
-
+        if (json.has(IParam.IMAGE_LIST)) {
+            this.imageList = json.getString(IParam.IMAGE_LIST);
+        }
     }
 }

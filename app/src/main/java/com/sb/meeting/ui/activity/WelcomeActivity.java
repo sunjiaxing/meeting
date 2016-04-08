@@ -41,7 +41,9 @@ public class WelcomeActivity extends BaseActivity {
         TaskManager.pushTask(new Task(TaskAction.ACTION_INIT_AREA) {
             @Override
             protected void doBackground() throws Exception {
-                new YellowPageService(WelcomeActivity.this).initArea();
+                YellowPageService yellowPageService = new YellowPageService(WelcomeActivity.this);
+                yellowPageService.initArea();
+                yellowPageService.getConfigInfoFromWeb();
                 setNeedCallBack(false);
             }
         }, this);

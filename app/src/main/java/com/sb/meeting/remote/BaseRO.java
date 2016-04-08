@@ -1,22 +1,21 @@
 package com.sb.meeting.remote;
 
-import java.io.File;
-import java.util.HashMap;
-
-import java.util.Map;
-
-
 import android.content.Context;
 import android.util.Log;
 
 import com.sb.meeting.R;
 import com.sb.meeting.common.BonConstants;
-import com.sb.meeting.http.HttpUtilsApache;
 import com.sb.meeting.common.Utils;
 import com.sb.meeting.exeception.AppException;
+import com.sb.meeting.http.HttpUtilsApache;
+import com.sb.meeting.remote.dto.ConfigDto;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -98,10 +97,12 @@ public class BaseRO {
 
     /**
      * 上传图片 直接返回图片链接
+     *
      * @param file
      * @return
      * @throws JSONException
      */
+    @Deprecated
     public String uploadFile(File file) throws JSONException {
         String url = getServerUrl() + "common/uploadFile";
         String res = HttpUtilsApache.postFile(url, null, null, file);
@@ -114,6 +115,25 @@ public class BaseRO {
         JSONObject json = new JSONObject(res);
         if (json.getInt(IParam.STATUS) == 1) {
             return json.getString(IParam.URL);
+        } else {
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
+        }
+    }
+
+    /**
+     * 获取配置信息
+     *
+     * @return
+     * @throws JSONException
+     */
+    public ConfigDto getConfig() throws JSONException {
+        String url = getServerUrl() + "common/config";
+        String result = httpGetRequest(url, null);
+        JSONObject json = new JSONObject(result);
+        if (json.getInt(IParam.STATUS) == 1) {
+            ConfigDto dto = new ConfigDto();
+            dto.parseJson(json.getJSONObject(IParam.DETAIL));
+            return dto;
         } else {
             throw new AppException(json.getInt(IParam.ERROR_CODE));
         }

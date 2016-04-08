@@ -3,12 +3,15 @@ package com.sb.meeting.service;
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCompletionHandler;
 import com.sb.meeting.common.BonConstants;
 import com.sb.meeting.common.FileUtil;
 import com.sb.meeting.common.Utils;
 import com.sb.meeting.dao.GoodsDao;
 import com.sb.meeting.dao.entity.CheckingGoods;
 import com.sb.meeting.dao.entity.Goods;
+import com.sb.meeting.exeception.AppException;
 import com.sb.meeting.remote.GoodsRO;
 import com.sb.meeting.remote.IParam;
 import com.sb.meeting.remote.dto.GoodsDetailDto;
@@ -35,6 +38,8 @@ public class GoodsService extends BaseService {
 
     private GoodsRO goodsRO;
     private GoodsDao goodsDao;
+    private String url;
+    private boolean wait = false;
 
     public GoodsService(Context context) {
         super(context);
@@ -91,7 +96,7 @@ public class GoodsService extends BaseService {
      * @param mobile  手机号
      * @throws JSONException
      */
-    public void publishGoods(GoodsVO goodsVO, String mobile, String uuid) throws JSONException {
+    public void publishGoods(GoodsVO goodsVO, String mobile, String uuid) throws JSONException, InterruptedException {
         JSONArray imageJson = new JSONArray();
         // 上传图片
         if (!Utils.isEmpty(goodsVO.getImageList())) {
@@ -120,7 +125,21 @@ public class GoodsService extends BaseService {
                             bm.recycle();
                         }
                     }
-                    String url = goodsRO.uploadFile(file);
+                    uploadFile(file, new UpCompletionHandler() {
+                        @Override
+                        public void complete(String key, ResponseInfo info, JSONObject response) {
+                            if (info.isOK()) {
+                                url = key;
+                                wait = false;
+                            } else {
+                                throw new AppException("图片上传失败");
+                            }
+                        }
+                    });
+                    wait = true;
+                    while (wait) {
+                        Thread.sleep(100);
+                    }
                     JSONObject json = new JSONObject();
                     json.put(IParam.URL, url);
                     json.put(IParam.DESC, imgVO.getDesc());
@@ -380,7 +399,7 @@ public class GoodsService extends BaseService {
      * @param mobile  联系方式
      * @throws JSONException
      */
-    public void updateGoodsInfo(GoodsVO goodsVO, String mobile) throws JSONException {
+    public void updateGoodsInfo(GoodsVO goodsVO, String mobile) throws JSONException, InterruptedException {
         goodsVO.setCoverUrl(Utils.deleteHeadOfUrl(goodsVO.getCoverUrl()));
         JSONArray imageJson = new JSONArray();
         // 上传图片
@@ -414,7 +433,21 @@ public class GoodsService extends BaseService {
                             bm.recycle();
                         }
                     }
-                    String url = goodsRO.uploadFile(file);
+                    uploadFile(file, new UpCompletionHandler() {
+                        @Override
+                        public void complete(String key, ResponseInfo info, JSONObject response) {
+                            if (info.isOK()) {
+                                url = key;
+                                wait = false;
+                            } else {
+                                throw new AppException("图片上传失败");
+                            }
+                        }
+                    });
+                    wait = true;
+                    while (wait) {
+                        Thread.sleep(100);
+                    }
                     JSONObject json = new JSONObject();
                     json.put(IParam.URL, url);
                     json.put(IParam.DESC, imgVO.getDesc());

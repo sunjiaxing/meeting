@@ -23,6 +23,7 @@ public interface IParam {
     String ATTENTION_NUM = "attentionNum";
     String ATTENTION_STATUS = "attentionStatus";
     String APPROVER_STATUS = "approverStatus";
+    String ALT = "alt";
 
     // B
     // C
@@ -80,6 +81,7 @@ public interface IParam {
     String GOODS_NAME = "goodsName";
     String GOODS_ID = "goodsId";
     String GET_VALID_TIME = "getValidTime";
+    String GET_CLASS_LIST = "getClassList";
 
     // H
     String HINT = "hint";
@@ -98,6 +100,7 @@ public interface IParam {
     String ICON_AD_URL = "iconAdUrl";
     String IMGS = "imgs";
     String IMAGES = "images";
+    String IMAGE_LIST = "imageList";
     String IS_OPEN_BLANK = "isOpenBlank";
     String INDEX = "index";
 
@@ -146,6 +149,7 @@ public interface IParam {
     String PAGE_INDEX = "pageIndex";
     String PHONE = "phone";
     String PATTERN = "pattern";
+    String PRODUCT = "product";
     String PRODUCT_ID = "productId";
     String PRODUCT_NAME = "productName";
     String PRODUCT_DESC = "productDesc";
@@ -153,6 +157,7 @@ public interface IParam {
 
     // Q
     String QQ = "qq";
+    String QINIU_TOKEN = "qiniuToken";
 
     // R
     String REPLY_TO_USER_ID = "replyToUserId";

@@ -241,8 +241,8 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.layout_input_image_desc, null);
         final EditText editContent = (EditText) view.findViewById(R.id.edit_content);
-        final int postion = pos - 1;
-        editContent.setText(goodsVO.getImageList().get(postion).getDesc());
+        final int position = pos - 1;
+        editContent.setText(goodsVO.getImageList().get(position).getDesc());
         editContent.setSelection(editContent.getText().length());
         final TextView tvLast = (TextView) view.findViewById(R.id.tv_last);
         editContent.addTextChangedListener(new TextWatcher() {
@@ -280,7 +280,7 @@ public class InputOtherGoodsInfoActivity extends BaseActivity implements View.On
                 if (inputImageDescDialog != null) {
                     inputImageDescDialog.dismiss();
                 }
-                goodsVO.getImageList().get(postion).setDesc(editContent.getText().toString());
+                goodsVO.getImageList().get(position).setDesc(editContent.getText().toString());
                 adapter.setData(goodsVO.getImageList());
                 adapter.notifyDataSetChanged();
             }

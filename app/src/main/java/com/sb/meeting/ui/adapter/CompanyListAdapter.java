@@ -54,10 +54,9 @@ public class CompanyListAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.layout_item_company, null);
             viewHolder = new ViewHolder();
-            viewHolder.ivLogo = (ImageView) convertView.findViewById(R.id.iv_logo);
+            viewHolder.ivLogo = (ImageView) convertView.findViewById(R.id.iv_company_logo);
             viewHolder.tvCompanyName = (TextView) convertView.findViewById(R.id.tv_company_name);
             viewHolder.tvProductDesc = (TextView) convertView.findViewById(R.id.tv_product_desc);
-            viewHolder.tvCatIds = (TextView) convertView.findViewById(R.id.tv_cat_ids);
             viewHolder.tvPattern = (TextView) convertView.findViewById(R.id.tv_pattern);
             viewHolder.tvCompanyType = (TextView) convertView.findViewById(R.id.tv_company_type);
             viewHolder.tvArea = (TextView) convertView.findViewById(R.id.tv_area);
@@ -67,13 +66,12 @@ public class CompanyListAdapter extends BaseAdapter {
         }
 
         CompanyVO vo = list.get(position);
-        Utils.displayImage(vo.getLogo(), viewHolder.ivLogo, ImageOption.createNomalOption());
+        Utils.displayImage(vo.getLogo(), viewHolder.ivLogo, ImageOption.createRoundOption(15));
         viewHolder.tvCompanyName.setText(vo.getCompanyName());
-        viewHolder.tvProductDesc.setText("主营产品介绍：" + vo.getProductDesc());
-        viewHolder.tvCatIds.setText("主营行业：" + vo.getCatIds());
-        viewHolder.tvPattern.setText("经营模式：" + vo.getPattern());
-        viewHolder.tvCompanyType.setText("公司类型：" + vo.getCompanyType());
-        viewHolder.tvArea.setText("地址：" + vo.getArea());
+        viewHolder.tvProductDesc.setText(vo.getProductDesc());
+        viewHolder.tvPattern.setText(vo.getPattern());
+        viewHolder.tvCompanyType.setText(vo.getCompanyType());
+        viewHolder.tvArea.setText(vo.getArea());
 
         return convertView;
     }
@@ -82,7 +80,6 @@ public class CompanyListAdapter extends BaseAdapter {
         ImageView ivLogo;
         TextView tvCompanyName;
         TextView tvProductDesc;
-        TextView tvCatIds;
         TextView tvPattern;
         TextView tvCompanyType;
         TextView tvArea;

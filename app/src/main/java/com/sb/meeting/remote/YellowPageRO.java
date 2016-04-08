@@ -5,8 +5,11 @@ import android.content.Context;
 import com.sb.meeting.common.BonConstants;
 import com.sb.meeting.common.Utils;
 import com.sb.meeting.exeception.AppException;
+import com.sb.meeting.remote.dto.ClassDto;
 import com.sb.meeting.remote.dto.CompanyDetailDto;
 import com.sb.meeting.remote.dto.CompanyDto;
+import com.sb.meeting.remote.dto.ProductDetailDto;
+import com.sb.meeting.remote.dto.ProductDto;
 import com.sb.meeting.remote.dto.StudentDto;
 
 import org.json.JSONArray;
@@ -44,11 +47,26 @@ public class YellowPageRO extends BaseRO {
     }
 
     public enum RemoteStudentURL implements IBaseURL {
-        LIST(IParam.LIST);
+        LIST(IParam.LIST), CLASS_LIST(IParam.GET_CLASS_LIST);
         private static final String NAMESPACE = IParam.STUDENT;
         private String url;
 
         RemoteStudentURL(String mapping) {
+            url = NAMESPACE + BonConstants.SLASH + mapping;
+        }
+
+        @Override
+        public String getURL() {
+            return url;
+        }
+    }
+
+    public enum RemoteProductURL implements IBaseURL {
+        LIST(IParam.LIST), DETAIL(IParam.DETAIL);
+        private static final String NAMESPACE = IParam.PRODUCT;
+        private String url;
+
+        RemoteProductURL(String mapping) {
             url = NAMESPACE + BonConstants.SLASH + mapping;
         }
 
@@ -158,4 +176,81 @@ public class YellowPageRO extends BaseRO {
             throw new AppException(json.getInt(IParam.ERROR_CODE));
         }
     }
+
+    /**
+     * 获取产品列表
+     *
+     * @param companyId 企业id
+     * @param pageIndex 页码
+     * @param limit     每页记录条数
+     * @return
+     * @throws JSONException
+     */
+    public List<ProductDto> getProductList(int companyId, int pageIndex, int limit) throws JSONException {
+        String url = getServerUrl() + RemoteProductURL.LIST.getURL() +
+                IParam.WENHAO + IParam.COMPANY_ID + IParam.EQUALS_STRING + companyId +
+                IParam.AND + IParam.PAGE_INDEX + IParam.EQUALS_STRING + pageIndex +
+                IParam.AND + IParam.LIMIT + IParam.EQUALS_STRING + limit;
+        String result = httpGetRequest(url, null);
+        JSONObject json = new JSONObject(result);
+        if (json.getInt(IParam.STATUS) == 1) {
+            List<ProductDto> data = new ArrayList<>();
+            JSONArray array = json.getJSONArray(IParam.LIST);
+            for (int i = 0; i < array.length(); i++) {
+                ProductDto dto = new ProductDto();
+                dto.parseJson(array.getJSONObject(i));
+                data.add(dto);
+            }
+            return data;
+        } else {
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
+        }
+    }
+
+    /**
+     * 获取产品详情
+     *
+     * @param productId 产品id
+     * @return
+     * @throws JSONException
+     */
+    public ProductDetailDto getProductDetail(int productId) throws JSONException {
+        String url = getServerUrl() + RemoteProductURL.DETAIL.getURL() + IParam.WENHAO
+                + IParam.PRODUCT_ID + IParam.EQUALS_STRING + productId;
+        String result = httpGetRequest(url, null);
+        JSONObject json = new JSONObject(result);
+        if (json.getInt(IParam.STATUS) == 1) {
+            JSONObject detail = json.getJSONObject(IParam.DETAIL);
+            ProductDetailDto detailDto = new ProductDetailDto();
+            detailDto.parseJson(detail);
+            return detailDto;
+        } else {
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
+        }
+    }
+
+    /**
+     * 获取班级列表
+     *
+     * @return
+     * @throws JSONException
+     */
+    public List<ClassDto> getClassList() throws JSONException {
+        String url = getServerUrl() + RemoteStudentURL.CLASS_LIST.getURL();
+        String result = httpGetRequest(url, null);
+        JSONObject json = new JSONObject(result);
+        if (json.getInt(IParam.STATUS) == 1) {
+            List<ClassDto> data = new ArrayList<>();
+            JSONArray array = json.getJSONArray(IParam.LIST);
+            for (int i = 0; i < array.length(); i++) {
+                ClassDto dto = new ClassDto();
+                dto.parseJson(array.getJSONObject(i));
+                data.add(dto);
+            }
+            return data;
+        } else {
+            throw new AppException(json.getInt(IParam.ERROR_CODE));
+        }
+    }
+
 }

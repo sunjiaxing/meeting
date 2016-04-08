@@ -5,12 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sb.meeting.R;
 import com.sb.meeting.common.ImageOption;
 import com.sb.meeting.common.Utils;
+import com.sb.meeting.ui.component.CircleImageView;
 import com.sb.meeting.ui.vo.StudentVO;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.List;
  * 学员列表适配器
  * Created by sun on 2016/3/31.
  */
-public class StudentListAdapter extends BaseAdapter {
+public abstract class StudentListAdapter extends BaseAdapter implements View.OnClickListener{
 
     private final LayoutInflater layoutInflater;
     private List<StudentVO> list;
@@ -55,7 +55,7 @@ public class StudentListAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             convertView = layoutInflater.inflate(R.layout.layout_item_student, null);
             viewHolder.tvCompanyName = (TextView) convertView.findViewById(R.id.tv_company_name);
-            viewHolder.ivAvatar = (ImageView) convertView.findViewById(R.id.iv_user_avatar);
+            viewHolder.ivAvatar = (CircleImageView) convertView.findViewById(R.id.iv_user_avatar);
             viewHolder.tvStudentName = (TextView) convertView.findViewById(R.id.tv_student_name);
             viewHolder.tvPosition = (TextView) convertView.findViewById(R.id.tv_position);
             viewHolder.tvPhone = (TextView) convertView.findViewById(R.id.tv_phone);
@@ -68,19 +68,21 @@ public class StudentListAdapter extends BaseAdapter {
         }
         StudentVO vo = list.get(position);
         viewHolder.tvCompanyName.setText(vo.getCompanyName());
+        viewHolder.tvCompanyName.setTag(position);
+        viewHolder.tvCompanyName.setOnClickListener(this);
         Utils.displayImage(vo.getAvatarUrl(), viewHolder.ivAvatar, ImageOption.createNomalOption());
-        viewHolder.tvStudentName.setText("姓名：" + vo.getStudentName());
-        viewHolder.tvPosition.setText("职位：" + vo.getPosition());
-        viewHolder.tvPhone.setText("电话：" + vo.getPhone());
-        viewHolder.tvClassName.setText("班级：" + vo.getClassName());
-        viewHolder.tvClassPosition.setText("班级职位：" + vo.getClassPosition());
-        viewHolder.tvArea.setText("企业所在地：" + vo.getArea());
+        viewHolder.tvStudentName.setText(vo.getStudentName());
+        viewHolder.tvPosition.setText(vo.getPosition());
+        viewHolder.tvPhone.setText("电话 " + vo.getPhone());
+        viewHolder.tvClassName.setText(vo.getClassName());
+        viewHolder.tvClassPosition.setText(vo.getClassPosition());
+        viewHolder.tvArea.setText("地区 " + vo.getArea());
         return convertView;
     }
 
     class ViewHolder {
         TextView tvCompanyName;
-        ImageView ivAvatar;
+        CircleImageView ivAvatar;
         TextView tvStudentName;
         TextView tvPosition;
         TextView tvPhone;

@@ -7,21 +7,30 @@ import com.sb.meeting.common.Utils;
 import com.sb.meeting.dao.AreaDao;
 import com.sb.meeting.dao.CompanyDao;
 import com.sb.meeting.dao.StudentDao;
+import com.sb.meeting.dao.entity.Area;
 import com.sb.meeting.dao.entity.Company;
 import com.sb.meeting.dao.entity.Student;
+import com.sb.meeting.remote.IParam;
 import com.sb.meeting.remote.YellowPageRO;
 import com.sb.meeting.remote.dto.CertificateDto;
+import com.sb.meeting.remote.dto.ClassDto;
 import com.sb.meeting.remote.dto.CompanyDetailDto;
 import com.sb.meeting.remote.dto.CompanyDto;
+import com.sb.meeting.remote.dto.ProductDetailDto;
 import com.sb.meeting.remote.dto.ProductDto;
 import com.sb.meeting.remote.dto.StudentDto;
 import com.sb.meeting.ui.vo.CertificateVO;
+import com.sb.meeting.ui.vo.ClassVO;
 import com.sb.meeting.ui.vo.CompanyDetailVO;
 import com.sb.meeting.ui.vo.CompanyVO;
+import com.sb.meeting.ui.vo.ImageVO;
+import com.sb.meeting.ui.vo.ProductDetailVO;
 import com.sb.meeting.ui.vo.ProductVO;
 import com.sb.meeting.ui.vo.StudentVO;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -101,7 +110,21 @@ public class YellowPageService extends BaseService {
                     vo.setLogo(dto.getLogo());
                     vo.setProductDesc(dto.getProductDesc());
                     vo.setCatIds(dto.getCatIds());
-                    vo.setPattern(dto.getPattern());
+                    // 处理企业 经营模式
+                    StringBuilder pattern = new StringBuilder();
+                    if (!Utils.isEmpty(dto.getPattern())) {
+                        String[] split = dto.getPattern().split(",");
+                        if (!Utils.isEmpty(split)) {
+                            for (String str : split) {
+                                if (!Utils.isEmpty(str)) {
+                                    pattern.append(str);
+                                    pattern.append("，");
+                                }
+                            }
+                            pattern.deleteCharAt(pattern.length() - 1);
+                            vo.setPattern(pattern.toString());
+                        }
+                    }
                     vo.setCompanyType(dto.getCompanyType());
                     vo.setArea(dto.getArea());
                     vo.setIsVIP(dto.getIsVIP() == 1);
@@ -114,7 +137,7 @@ public class YellowPageService extends BaseService {
                         company.setLogo(dto.getLogo());
                         company.setProductDesc(dto.getProductDesc());
                         company.setCatIds(dto.getCatIds());
-                        company.setPattern(dto.getPattern());
+                        company.setPattern(pattern.toString());
                         company.setCompanyType(dto.getCompanyType());
                         company.setArea(dto.getArea());
                         company.setIsVIP(dto.getIsVIP());
@@ -236,7 +259,11 @@ public class YellowPageService extends BaseService {
                     vo.setCompanyId(dto.getCompanyId());
                     vo.setCompanyName(dto.getCompanyName());
                     vo.setClassName(dto.getClassName());
-                    vo.setClassPosition(dto.getClassPosition());
+                    if (!Utils.isEmpty(dto.getClassPosition())) {
+                        vo.setClassPosition(dto.getClassPosition());
+                    } else {
+                        vo.setClassPosition("学员");
+                    }
                     vo.setAvatarUrl(dto.getAvatarUrl());
                     vo.setArea(dto.getArea());
                     showData.add(vo);
@@ -251,7 +278,11 @@ public class YellowPageService extends BaseService {
                         student.setCompanyId(dto.getCompanyId());
                         student.setCompanyName(dto.getCompanyName());
                         student.setClassName(dto.getClassName());
-                        student.setClassPosition(dto.getClassPosition());
+                        if (!Utils.isEmpty(dto.getClassPosition())) {
+                            student.setClassPosition(dto.getClassPosition());
+                        } else {
+                            student.setClassPosition("学员");
+                        }
                         student.setAvatarUrl(dto.getAvatarUrl());
                         student.setArea(dto.getArea());
                         studentDao.insert(student);
@@ -289,7 +320,19 @@ public class YellowPageService extends BaseService {
             vo.setProductDesc(dto.getProductDesc());
             vo.setArea(dto.getArea());
             vo.setIsVIP(dto.getIsVIP() == 1);
-            vo.setImageList(dto.getImageList());
+            // 解析滚动图片
+            if (!Utils.isEmpty(dto.getImageList())) {
+                JSONArray array = new JSONArray(dto.getImageList());
+                List<ImageVO> images = new ArrayList<>();
+                for (int i = 0; i < array.length(); i++) {
+                    ImageVO img = new ImageVO();
+                    JSONObject json = array.getJSONObject(i);
+                    img.setUrl(json.getString(IParam.URL));
+                    img.setDesc(json.getString(IParam.ALT));
+                    images.add(img);
+                }
+                vo.setImageList(images);
+            }
             vo.setCompanyIntroduce(dto.getCompanyIntroduce());
             vo.setWebUrl(dto.getWebUrl());
             vo.setContact(dto.getContact());
@@ -324,5 +367,81 @@ public class YellowPageService extends BaseService {
             }
         }
         return vo;
+    }
+
+    /**
+     * 获取产品列表
+     *
+     * @param companyId 企业id
+     * @param pageIndex 页码
+     * @return
+     * @throws JSONException
+     */
+    public List<ProductVO> getProductList(int companyId, int pageIndex) throws JSONException {
+        List<ProductVO> showData = null;
+        List<ProductDto> webData = yellowPageRO.getProductList(companyId, pageIndex, BonConstants.LIMIT_GET_PRODUCT);
+        if (!Utils.isEmpty(webData)) {
+            showData = new ArrayList<>();
+            ProductVO vo;
+            for (ProductDto dto : webData) {
+                vo = new ProductVO();
+                vo.setProductId(dto.getProductId());
+                vo.setProductName(dto.getProductName());
+                vo.setThumb(dto.getThumb());
+                showData.add(vo);
+            }
+        }
+        return showData;
+    }
+
+    /**
+     * 获取 产品详情
+     *
+     * @param productId 产品id
+     * @return
+     * @throws JSONException
+     */
+    public ProductDetailVO getProductDetail(int productId) throws JSONException {
+        ProductDetailVO detailVO = null;
+        ProductDetailDto dto = yellowPageRO.getProductDetail(productId);
+        if (dto != null) {
+            detailVO = new ProductDetailVO();
+            detailVO.setProductId(dto.getProductId());
+            detailVO.setProductName(dto.getProductName());
+            detailVO.setThumb(dto.getThumb());
+            detailVO.setContent(dto.getContent());
+        }
+        return detailVO;
+    }
+
+    /**
+     * 获取省份列表
+     *
+     * @return
+     */
+    public List<Area> getProvinceList() {
+        return areaDao.getAreaList(0);
+    }
+
+    /**
+     * 获取班级列表
+     *
+     * @return
+     * @throws JSONException
+     */
+    public List<ClassVO> getClassList() throws JSONException {
+        List<ClassVO> showData = null;
+        List<ClassDto> webData = yellowPageRO.getClassList();
+        if (!Utils.isEmpty(webData)) {
+            showData = new ArrayList<>();
+            ClassVO vo;
+            for (ClassDto dto : webData) {
+                vo = new ClassVO();
+                vo.setClassId(dto.getClassId());
+                vo.setClassName(dto.getClassName());
+                showData.add(vo);
+            }
+        }
+        return showData;
     }
 }

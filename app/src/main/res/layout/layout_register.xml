@@ -23,10 +23,10 @@
             android:textColor="#888"
             android:textSize="16sp" />
 
-        <TextView
+        <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#e5e6e8" />
+            android:background="@color/line_color" />
 
         <EditText
             android:id="@+id/edit_phone"
@@ -47,16 +47,17 @@
             android:textCursorDrawable="@null"
             android:textSize="14sp" />
 
-        <TextView
+        <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#e5e6e8" />
+            android:background="@color/line_color" />
 
-        <TextView
+        <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginTop="13.5dp"
-            android:background="#e5e6e8" />
+            android:background="@color/line_color" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -99,16 +100,16 @@
                 android:textSize="17.5sp" />
         </LinearLayout>
 
-        <TextView
+        <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#e5e6e8" />
+            android:background="@color/line_color" />
 
-        <TextView
+        <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginTop="13.5dp"
-            android:background="#e5e6e8" />
+            android:background="@color/line_color" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -152,10 +153,10 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <TextView
+        <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#e5e6e8" />
+            android:background="@color/line_color" />
 
         <Button
             android:id="@+id/btn_register"
@@ -163,7 +164,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="35dp"
             android:background="@drawable/button_default"
             android:gravity="center"
             android:paddingBottom="8dp"

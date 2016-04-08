@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_blue"
+        android:background="@color/color_white"
         android:orientation="horizontal">
 
         <TextView
@@ -32,7 +32,7 @@
             android:layout_weight="10"
             android:gravity="center"
             android:text="输入图片描述"
-            android:textColor="@color/color_white"
+            android:textColor="@color/c_454545"
             android:textSize="15sp" />
 
         <TextView
@@ -49,6 +49,11 @@
             android:textColor="@color/right_menu_color"
             android:textSize="15sp" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/line_color"
+        android:layout_height="1px" />
 
     <EditText
         android:id="@+id/edit_content"

@@ -2,89 +2,133 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/tv_company_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableRight="@mipmap/right_tip"
-        android:padding="@dimen/ppi_px_20_dp"
-        android:text="@string/loading"
-        android:textColor="@color/c_454545"
-        android:textSize="@dimen/ppi_px_30_sp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/c_d8d8d8" />
+    android:background="@color/c_e8e8e8"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/ppi_px_20_dp"
+    android:paddingRight="@dimen/ppi_px_20_dp"
+    android:paddingTop="@dimen/ppi_px_20_dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:background="@drawable/student_list_bg_shape"
+        android:orientation="vertical"
         android:padding="@dimen/ppi_px_20_dp">
-
-        <ImageView
-            android:id="@+id/iv_user_avatar"
-            android:layout_width="@dimen/ppi_px_200_dp"
-            android:layout_height="@dimen/ppi_px_200_dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/default_item_pic" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/ppi_px_10_dp"
-            android:orientation="vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.sb.meeting.ui.component.CircleImageView
+                android:id="@+id/iv_user_avatar"
+                android:layout_width="@dimen/ppi_px_160_dp"
+                android:layout_height="@dimen/ppi_px_160_dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/default_item_pic" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/ppi_px_20_dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_company_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/loading"
+                    android:textColor="@color/c_454545"
+                    android:textSize="@dimen/ppi_px_32_sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ppi_px_20_dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_student_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLength="5"
+                        android:text="@string/loading"
+                        android:textColor="@color/c_454545"
+                        android:textSize="@dimen/ppi_px_30_sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/ppi_px_5_dp"
+                        android:paddingRight="@dimen/ppi_px_5_dp"
+                        android:text="/"
+                        android:textColor="@color/c_454545"
+                        android:textSize="@dimen/ppi_px_32_sp" />
+
+                    <TextView
+                        android:id="@+id/tv_position"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="@string/loading"
+                        android:textSize="@dimen/ppi_px_26_sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ppi_px_15_dp"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_student_name"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_class_position"
+                android:layout_width="@dimen/ppi_px_160_dp"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="@string/loading"
-                android:textColor="@color/c_454545"
                 android:textSize="@dimen/ppi_px_30_sp" />
-
-            <TextView
-                android:id="@+id/tv_position"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ppi_px_5_dp"
-                android:text="@string/loading"
-                android:textSize="@dimen/ppi_px_26_sp" />
-
-            <TextView
-                android:id="@+id/tv_phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ppi_px_5_dp"
-                android:text="@string/loading"
-                android:textSize="@dimen/ppi_px_26_sp" />
 
             <TextView
                 android:id="@+id/tv_class_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ppi_px_5_dp"
+                android:layout_marginLeft="@dimen/ppi_px_20_dp"
                 android:text="@string/loading"
-                android:textSize="@dimen/ppi_px_26_sp" />
+                android:textSize="@dimen/ppi_px_30_sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginBottom="@dimen/ppi_px_28_dp"
+            android:layout_marginLeft="@dimen/ppi_px_180_dp"
+            android:layout_marginTop="@dimen/ppi_px_28_dp"
+            android:background="@color/line_color" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/ppi_px_180_dp"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_class_position"
+                android:id="@+id/tv_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ppi_px_5_dp"
                 android:text="@string/loading"
-                android:textSize="@dimen/ppi_px_26_sp" />
+                android:textSize="@dimen/ppi_px_30_sp" />
 
             <TextView
                 android:id="@+id/tv_area"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ppi_px_5_dp"
+                android:layout_marginTop="@dimen/ppi_px_10_dp"
                 android:text="@string/loading"
-                android:textSize="@dimen/ppi_px_26_sp" />
+                android:textSize="@dimen/ppi_px_30_sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

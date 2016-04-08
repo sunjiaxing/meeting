@@ -42,10 +42,6 @@ import java.util.List;
 public class TabNewsFragment extends BaseFragment implements
         ViewPager.OnPageChangeListener {
     // 以下注入组件
-    @ViewById(R.id.iv_back)
-    ImageView ivBack;
-    @ViewById(R.id.tv_title)
-    TextView tvTitle;
     @ViewById(R.id.vp_news_list)
     ViewPager mPager;
     @ViewById(R.id.right_handle_layout)
@@ -93,10 +89,6 @@ public class TabNewsFragment extends BaseFragment implements
 //        } else {
 //            ivRedPoint.setVisibility(View.GONE);
 //        }
-        ivBack.setVisibility(View.VISIBLE);
-        ivBack.setBackgroundResource(R.drawable.btn_user_center);
-        tvTitle.setText(getString(R.string.news));
-
         mPager.addOnPageChangeListener(this);
 
     }

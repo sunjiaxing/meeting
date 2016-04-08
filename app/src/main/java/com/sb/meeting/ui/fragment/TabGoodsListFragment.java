@@ -231,7 +231,9 @@ public class TabGoodsListFragment extends BaseFragment implements RefreshListVie
         checkingGoods.setValidTime(vo.getValidTime().getId() + "-" + vo.getValidTime().getName());
         checkingGoods.setCount(vo.getCount());
         checkingGoods.setCategory(vo.getCategory().getId() + "-" + vo.getCategory().getName());
-        checkingGoods.setNeedCategory(vo.getNeedCategory().getId() + "-" + vo.getNeedCategory().getName());
+        if (vo.getNeedCategory() != null) {
+            checkingGoods.setNeedCategory(vo.getNeedCategory().getId() + "-" + vo.getNeedCategory().getName());
+        }
         checkingGoods.setContact(contact);
         try {
             JSONArray array = new JSONArray();

@@ -17,6 +17,9 @@ buildscript {
 repositories {
     mavenCentral()
     mavenLocal()
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 android {
@@ -29,14 +32,14 @@ android {
         versionCode 1
         versionName "1.0"
     }
-    sourceSets{
+    sourceSets {
         main {
             jniLibs.srcDirs = ['libs'] // <-- Set your folder here!
         }
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -54,8 +57,10 @@ dependencies {
     compile 'cz.msebera.android:httpclient:4.4.1.1'
     compile 'in.srain.cube:ultra-ptr:1.0.11'
     compile 'asia.ivity.android:drag-sort-listview:1.0'
+    compile 'com.qiniu:qiniu-android-sdk:7.1.2'
     compile project(':taskmanager')
     compile project(':sharesdk')
+    compile name: 'SMSSDK-2.0.2', ext: 'aar'
 }
 apt {
     arguments {

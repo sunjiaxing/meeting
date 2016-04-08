@@ -3,20 +3,28 @@ package com.sb.meeting.ui.fragment;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.sb.meeting.R;
 import com.sb.meeting.common.BonConstants;
 import com.sb.meeting.common.TaskAction;
 import com.sb.meeting.common.Utils;
+import com.sb.meeting.dao.entity.Area;
 import com.sb.meeting.remote.IParam;
 import com.sb.meeting.service.YellowPageService;
 import com.sb.meeting.ui.activity.CompanyVIPDetailActivity_;
 import com.sb.meeting.ui.adapter.CompanyListAdapter;
+import com.sb.meeting.ui.adapter.SearchConditionAdapter;
 import com.sb.meeting.ui.adapter.StudentListAdapter;
+import com.sb.meeting.ui.component.GridViewWithScroll;
 import com.sb.meeting.ui.component.RefreshListView;
+import com.sb.meeting.ui.vo.ClassVO;
 import com.sb.meeting.ui.vo.CompanyVO;
 import com.sb.meeting.ui.vo.StudentVO;
 import com.taskmanager.Task;
@@ -57,9 +65,27 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
     @ViewById(R.id.iv_loading_in)
     ImageView ivLoadingIn;
 
+    @ViewById(R.id.sv_search)
+    ScrollView svSearch;
+
+    @ViewById(R.id.edit_name)
+    EditText editName;
+    @ViewById(R.id.gv_province)
+    GridViewWithScroll gvArea;
+    @ViewById(R.id.gv_class)
+    GridViewWithScroll gvClass;
+    @ViewById(R.id.tv_name_tip)
+    TextView tvNameTip;
+    @ViewById(R.id.tv_area_tip)
+    TextView tvAreaTip;
+    @ViewById(R.id.tv_class_tip)
+    TextView tvClassTip;
+
     private AnimationDrawable anim;
     private List<StudentVO> studentList;
     private List<CompanyVO> companyList;
+    private List<Area> areaList;
+    private List<ClassVO> classList;
     private YPType ypType;
     private YellowPageService yellowPageService;
     private int companyPageIndex;
@@ -71,6 +97,10 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
     private int classId;
     private int studentAreaId;
     private StudentListAdapter studentListAdapter;
+    private boolean searchMenuOpen;
+    private Animation searchAnimation;
+    private SearchConditionAdapter areaAdapter;
+    private SearchConditionAdapter classAdapter;
 
     public enum YPType {
         STUDENT, COMPANY
@@ -92,6 +122,23 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
         if (Utils.isEmpty(studentList) && Utils.isEmpty(companyList)) {
             switchToStudent();
         }
+        if (Utils.isEmpty(areaList)) {
+            TaskManager.pushTask(new Task(TaskAction.ACTION_GET_SEARCH_AREA_CONDITION) {
+                @Override
+                protected void doBackground() throws Exception {
+                    setReturnData(yellowPageService.getProvinceList());
+                }
+            }, getActivity());
+        }
+
+        if (Utils.isEmpty(classList)) {
+            TaskManager.pushTask(new Task(TaskAction.ACTION_GET_SEARCH_CLASS_CONDITION) {
+                @Override
+                protected void doBackground() throws Exception {
+                    setReturnData(yellowPageService.getClassList());
+                }
+            }, getActivity());
+        }
     }
 
     /**
@@ -99,9 +146,16 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
      */
     @Click(R.id.tv_student)
     void switchToStudent() {
+        if (ypType == YPType.STUDENT) {
+            return;
+        }
+        svSearch.setVisibility(View.GONE);
+        searchMenuOpen = false;
         ypType = YPType.STUDENT;
-        tvCompany.setBackgroundColor(Color.WHITE);
-        tvStudent.setBackgroundColor(Color.TRANSPARENT);
+        tvCompany.setBackgroundResource(R.drawable.yp_switch_shape_right_nomal);
+        tvCompany.setTextColor(Color.parseColor("#E0E0E0"));
+        tvStudent.setBackgroundResource(R.drawable.yp_switch_shape_left_selected);
+        tvStudent.setTextColor(Color.WHITE);
         if (!Utils.isEmpty(studentList)) {
             // 直接切换显示
             stopLoadingSelf();
@@ -124,9 +178,16 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
      */
     @Click(R.id.tv_company)
     void switchToCompany() {
+        if (ypType == YPType.COMPANY) {
+            return;
+        }
+        svSearch.setVisibility(View.GONE);
+        searchMenuOpen = false;
         ypType = YPType.COMPANY;
-        tvCompany.setBackgroundColor(Color.TRANSPARENT);
-        tvStudent.setBackgroundColor(Color.WHITE);
+        tvStudent.setBackgroundResource(R.drawable.yp_switch_shape_left_nomal);
+        tvStudent.setTextColor(Color.parseColor("#E0E0E0"));
+        tvCompany.setBackgroundResource(R.drawable.yp_switch_shape_right_selected);
+        tvCompany.setTextColor(Color.WHITE);
         if (!Utils.isEmpty(companyList)) {
             // 直接切换显示
             stopLoadingSelf();
@@ -153,6 +214,37 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
     public void onTaskSuccess(int action, Object data) {
         switch (action) {
             case TaskAction.ACTION_INIT_COMPANY:// 初始化企业列表
+            case TaskAction.ACTION_REFRESH_COMPANY:// 刷新企业列表
+            case TaskAction.ACTION_LOAD_MORE_COMPANY:// 加载更多企业
+                onCompanyTaskSuccess(action, data);
+                break;
+            case TaskAction.ACTION_INIT_STUDENT:// 初始化学员名片
+            case TaskAction.ACTION_REFRESH_STUDENT:// 刷新学员列表
+            case TaskAction.ACTION_LOAD_MORE_STUDENT:// 加载更多学员列表
+                onStudentTaskSuccess(action, data);
+                break;
+            case TaskAction.ACTION_GET_SEARCH_AREA_CONDITION:// 地区查询条件
+                if (data != null) {
+                    areaList = (List<Area>) data;
+                }
+                break;
+            case TaskAction.ACTION_GET_SEARCH_CLASS_CONDITION://班级查询条件
+                if (data != null) {
+                    classList = (List<ClassVO>) data;
+                }
+                break;
+        }
+    }
+
+    /**
+     * 企业 相关任务  成功回调
+     *
+     * @param action action
+     * @param data   data
+     */
+    private void onCompanyTaskSuccess(int action, Object data) {
+        switch (action) {
+            case TaskAction.ACTION_INIT_COMPANY:// 初始化企业列表
                 if (data != null) {
                     stopLoadingSelf();
                     companyList = (List<CompanyVO>) data;
@@ -175,6 +267,7 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
                         lvCompany.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NORMAL);
                     }
                 } else {
+                    companyList = null;
                     showErrorMsg("暂无数据");
                 }
                 break;
@@ -190,6 +283,17 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
                     refreshCompanyUI();
                 }
                 break;
+        }
+    }
+
+    /**
+     * 学员名片相关任务 成功回调
+     *
+     * @param action action
+     * @param data   data
+     */
+    private void onStudentTaskSuccess(int action, Object data) {
+        switch (action) {
             case TaskAction.ACTION_INIT_STUDENT:// 初始化学员名片
                 if (data != null) {
                     stopLoadingSelf();
@@ -213,6 +317,7 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
                         lvStudent.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_NORMAL);
                     }
                 } else {
+                    studentList = null;
                     showErrorMsg("暂无数据");
                 }
                 break;
@@ -252,7 +357,18 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
             lvCompany.setVisibility(View.GONE);
             lvStudent.setVisibility(View.VISIBLE);
             if (studentListAdapter == null) {
-                studentListAdapter = new StudentListAdapter(getActivity());
+                studentListAdapter = new StudentListAdapter(getActivity()){
+
+                    @Override
+                    public void onClick(View v) {
+                        int position = (int) v.getTag();
+                        CompanyVO vo = companyList.get(position);
+                        // TODO 判断 vip  跳转不同页面
+                        CompanyVIPDetailActivity_.intent(getActivity())
+                                .extra(IParam.COMPANY_ID, vo.getCompanyId())
+                                .start();
+                    }
+                };
                 studentListAdapter.setData(studentList);
                 lvStudent.setAdapter(studentListAdapter);
             } else {
@@ -395,6 +511,9 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
         }
     }
 
+    /**
+     * 点击刷新
+     */
     @Click(R.id.btn_refresh)
     void clickRefresh() {
         startLoadingSelf();
@@ -407,8 +526,158 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
             CompanyVO vo = companyList.get(position);
             // TODO 判断 vip  跳转不同页面
             CompanyVIPDetailActivity_.intent(this).extra(IParam.COMPANY_ID, vo.getCompanyId()).start();
-        } else if (ypType == YPType.STUDENT) {
-
         }
+    }
+
+    /**
+     * 操作 筛选菜单
+     */
+    @Click(R.id.tv_search)
+    void clickSearchMenu() {
+        if (searchMenuOpen) {
+            // 关闭
+            svSearch.setVisibility(View.GONE);
+            searchMenuOpen = false;
+        } else {
+            // 打开
+            if (searchAnimation == null) {
+                searchAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.search_condition);
+            }
+            svSearch.setVisibility(View.VISIBLE);
+            svSearch.startAnimation(searchAnimation);
+            searchMenuOpen = true;
+            if (ypType == YPType.STUDENT) {
+                // 加载学员相关信息
+                tvNameTip.setText("学员姓名");
+                editName.setHint("请输入学员姓名");
+                editName.setText(studentName);
+                editName.setSelection(editName.length());
+                tvAreaTip.setText("学员所在地区");
+                tvClassTip.setVisibility(View.VISIBLE);
+                gvClass.setVisibility(View.VISIBLE);
+                loadClassSearchCondition();
+            } else {
+                // 加载企业相关信息
+                tvNameTip.setText("企业名称");
+                editName.setHint("请输入企业名称");
+                editName.setText(companyName);
+                editName.setSelection(editName.length());
+                tvAreaTip.setText("企业所在地区");
+                tvClassTip.setVisibility(View.GONE);
+                gvClass.setVisibility(View.GONE);
+            }
+            loadAreaSearchCondition();
+        }
+    }
+
+    /**
+     * 加载班级查询条件
+     */
+    private void loadClassSearchCondition() {
+        // 加载班级信息
+        if (classAdapter == null) {
+            classAdapter = new SearchConditionAdapter(getActivity());
+            classAdapter.setClassData(classList);
+            classAdapter.setSelectClass(classId);
+            gvClass.setAdapter(classAdapter);
+        } else {
+            classAdapter.setClassData(classList);
+            classAdapter.setSelectClass(classId);
+            classAdapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * 加载地区查询条件
+     */
+    private void loadAreaSearchCondition() {
+        // 加载地区信息
+        if (areaAdapter == null) {
+            areaAdapter = new SearchConditionAdapter(getActivity());
+            areaAdapter.setAreaData(areaList.subList(0, 4));
+            areaAdapter.setSelectArea(ypType == YPType.STUDENT ? studentAreaId : companyAreaId);
+            gvArea.setAdapter(areaAdapter);
+        } else {
+            areaAdapter.setAreaData(areaList.subList(0, 4));
+            areaAdapter.setSelectArea(ypType == YPType.STUDENT ? studentAreaId : companyAreaId);
+            areaAdapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * 选中地区
+     *
+     * @param position 选中项索引
+     */
+    @ItemClick(R.id.gv_province)
+    void onAreaItemClick(int position) {
+        Area area = areaList.get(position);
+        if (ypType == YPType.STUDENT) {
+            if (studentAreaId == area.getAreaId()) {
+                studentAreaId = 0;
+            } else {
+                studentAreaId = area.getAreaId();
+            }
+        } else if (ypType == YPType.COMPANY) {
+            if (companyAreaId == area.getAreaId()) {
+                companyAreaId = 0;
+            } else {
+                companyAreaId = area.getAreaId();
+            }
+        }
+        loadAreaSearchCondition();
+    }
+
+    /**
+     * 选中班级
+     *
+     * @param position 选中项索引
+     */
+    @ItemClick(R.id.gv_class)
+    void onClassItemClick(int position) {
+        ClassVO vo = classList.get(position);
+        if (classId == vo.getClassId()) {
+            classId = 0;
+        } else {
+            classId = vo.getClassId();
+        }
+        loadClassSearchCondition();
+    }
+
+    /**
+     * 确认查询
+     */
+    @Click(R.id.tv_click_search)
+    void clickSearch() {
+        // 关闭菜单
+        svSearch.setVisibility(View.GONE);
+        searchMenuOpen = false;
+        // 执行刷新
+        if (ypType == YPType.STUDENT) {
+            studentName = editName.getText().toString();
+            refreshStudent();
+        } else {
+            companyName = editName.getText().toString();
+            refreshCompany();
+        }
+    }
+
+    /**
+     * 清空查询条件
+     */
+    @Click(R.id.tv_click_reset)
+    void clickReset() {
+        if (ypType == YPType.STUDENT) {
+            studentAreaId = 0;
+            studentName = null;
+            classId = 0;
+            editName.setText("");
+            loadClassSearchCondition();
+        } else {
+            companyAreaId = 0;
+            companyName = null;
+            editName.setText("");
+        }
+        loadAreaSearchCondition();
     }
 }

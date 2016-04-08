@@ -1,10 +1,12 @@
 package com.sb.meeting.dao.entity;
 
+import java.io.Serializable;
+
 /**
  * 地区
  * Created by sun on 2016/3/29.
  */
-public class Area {
+public class Area implements Serializable{
     public static final String KEY_COLUMN_ID = "area_id";
     public static final String KEY_COLUMN_NAME = "name";
     public static final String KEY_COLUMN_STYLE = "style";

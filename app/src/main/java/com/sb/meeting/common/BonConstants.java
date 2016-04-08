@@ -56,6 +56,8 @@ public class BonConstants {
      */
     public static final long TIME_TO_SAVE_LOGIN_STATE = 604800000;// 7天
 
+    public static final long TIME_TO_CLEAR_IMAGE_CACHE = 604800000;// 7天
+
 
     /**
      * 获取新闻的长度
@@ -67,6 +69,8 @@ public class BonConstants {
     public static final int LIMIT_GET_COMPANY = 4;
 
     public static final int LIMIT_GET_STUDENT = 10;
+
+    public static final int LIMIT_GET_PRODUCT = 1000;
 
     public static final int LIMIT_GET_PUBLISHED_GOODS = 10;
 
@@ -88,8 +92,18 @@ public class BonConstants {
     public static final int LENGTH_SHOW_SUMMARY = 50;
 
     public static final int AVATART_WHITH = 400;
+    /**
+     * shareSDK分享使用的appKey
+     **/
+    public static final String KEY_SHARE = "106207c3ea504";
+    /**
+     * shareSDK短信验证码使用的appKey
+     */
+    public static final String KEY_SMS = "1155c3ae971fa";
+    public static final String SECRET_SMS = "cdfa9cd205af7e35750df8ea47b6dd4c";
 
     public static final String PhonePattern = "^1[3|4|5|7|8][0-9]\\d{8}$";
+//    public static final String PhonePattern = "^0{0,1}(13[0-9]|15[3-9]|15[0-2]|18[0-9]|17[5-8]|14[0-9]|170|171)[0-9]{8}$";
 
     // public static final String SERVER_URL = "http://192.168.1.111:8080/";
 //    public static final String SERVER_URL = "http://192.168.1.111:8080/api/";
@@ -98,6 +112,8 @@ public class BonConstants {
     public static String SLASH = "/";
     public static final String WEB_RESOURCE_URL = "http://192.168.1.27/";
     public static final String ROOT_USER_AVATAR_URL = WEB_RESOURCE_URL + "phpsso_server/uploadfile/avatar/";
+
+    public static final String HEAD_IMAGE = "http://7xspim.com2.z0.glb.qiniucdn.com/";
 
     public enum UserAvatarType {
         TYPE_30X30("30X30.jpg"),

@@ -1,7 +1,5 @@
 package com.sb.meeting.ui.fragment;
 
-import java.util.List;
-
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -10,8 +8,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.taskmanager.Task;
-import com.taskmanager.TaskManager;
 import com.sb.meeting.R;
 import com.sb.meeting.common.BonConstants;
 import com.sb.meeting.common.TaskAction;
@@ -20,18 +16,22 @@ import com.sb.meeting.remote.IParam;
 import com.sb.meeting.service.NewsService;
 import com.sb.meeting.ui.activity.NewsDetailActivity_;
 import com.sb.meeting.ui.activity.NewsSubjectActivity_;
-import com.sb.meeting.ui.activity.ShowUrlActivity;
+import com.sb.meeting.ui.activity.ShowWebActivity_;
 import com.sb.meeting.ui.adapter.OnlineNewsAdapter;
 import com.sb.meeting.ui.component.OnlineNewsFirstView;
 import com.sb.meeting.ui.component.RefreshListView;
 import com.sb.meeting.ui.vo.NewsChannelVO;
 import com.sb.meeting.ui.vo.NewsVO;
+import com.taskmanager.Task;
+import com.taskmanager.TaskManager;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
+
+import java.util.List;
 
 /**
  * 新闻每个栏目的fragment
@@ -355,10 +355,10 @@ public class NewsPagerItemFragment extends BaseFragment implements
     @Override
     public void onClickView(NewsVO model) {
         if (!Utils.isEmpty(model.getIconAdUrl())) {
-            Intent intent = new Intent(getActivity(), ShowUrlActivity.class);
-            intent.putExtra(IParam.URL, model.getIconAdUrl());
-            intent.putExtra(IParam.TITLE, model.getTitle());
-            startActivity(intent);
+            ShowWebActivity_.intent(getActivity())
+                    .extra(IParam.URL,model.getIconAdUrl())
+                    .extra(IParam.TITLE,model.getTitle())
+                    .start();
         } else {
             toNewsDetail(model);
         }
@@ -387,10 +387,10 @@ public class NewsPagerItemFragment extends BaseFragment implements
             // 不是专题--按以前的逻辑
             // 判断iconAdUrl
             if (!Utils.isEmpty(model.getIconAdUrl())) {
-                Intent intent = new Intent(getActivity(), ShowUrlActivity.class);
-                intent.putExtra(IParam.URL, model.getIconAdUrl());
-                intent.putExtra(IParam.TITLE, model.getTitle());
-                startActivity(intent);
+                ShowWebActivity_.intent(getActivity())
+                        .extra(IParam.URL,model.getIconAdUrl())
+                        .extra(IParam.TITLE,model.getTitle())
+                        .start();
             } else {
                 // 界面跳转
                 toNewsDetail(model);

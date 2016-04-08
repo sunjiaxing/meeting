@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_condition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/search_condition_bg_shape"
+        android:gravity="center"
+        android:paddingBottom="@dimen/ppi_px_10_dp"
+        android:paddingTop="@dimen/ppi_px_10_dp"
+        android:text="@string/loading"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/ppi_px_30_sp" />
+</LinearLayout>

@@ -121,6 +121,18 @@
             android:name="com.sb.meeting.ui.activity.CompanyVIPDetailActivity_"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.sb.meeting.ui.activity.ProductListActivity_"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.sb.meeting.ui.activity.ProductDetailActivity_"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.sb.meeting.ui.activity.ShowWebActivity_"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.sb.meeting.ui.activity.CompanyCertificateActivity_"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.sb.meeting.ui.activity.TestActivity_"
             android:screenOrientation="portrait" />
         <!--shareSDK 注册的Activity-->
@@ -131,7 +143,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
-                <data android:scheme="tencent1104646053" />
+                <data android:scheme="tencent1105225559" />
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -152,7 +164,7 @@
         <activity
             android:name="cn.jpush.android.ui.PopWinActivity"
             android:exported="false"
-            android:theme="@style/MyDialogStyle"></activity>
+            android:theme="@style/MyDialogStyle"/>
 
         <!-- Required SDK核心功能-->
         <activity
@@ -171,7 +183,7 @@
         <service
             android:name="cn.jpush.android.service.DownloadService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false"/>
 
 
         <!-- Required SDK 核心功能-->

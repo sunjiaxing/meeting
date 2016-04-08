@@ -1,56 +1,61 @@
 package com.sb.meeting.ui.component;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebSettings.TextSize;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.taskmanager.LogUtils;
 import com.sb.meeting.common.Utils;
-import com.sb.meeting.ui.activity.ShowUrlActivity;
+import com.sb.meeting.remote.IParam;
+import com.sb.meeting.ui.activity.ShowWebActivity_;
 
 /**
  * 自定义webview 功能包括图片点击和电话点击
  */
-public class CustomerWebview extends WebView {
+public class CustomWebView extends WebView {
 
-    public CustomerWebview(Context context) {
+    public CustomWebView(Context context) {
         super(context);
         init();
     }
 
-    public CustomerWebview(Context context, AttributeSet attrs) {
+    public CustomWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public CustomerWebview(Context context, AttributeSet attrs, int defStyle) {
+    public CustomWebView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
 
+    @SuppressLint({"JavascriptInterface", "AddJavascriptInterface", "SetJavaScriptEnabled"})
     private void init() {
         getSettings().setJavaScriptEnabled(true);// js可用
         getSettings().setLoadsImagesAutomatically(true);// 设置自动加载图片
         getSettings().setDomStorageEnabled(true);
         getSettings().setDefaultTextEncodingName("UTF-8");
         getSettings().setTextSize(TextSize.NORMAL);
-        // getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+        getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.indexOf(".apk") != -1) {
+                if (url.contains(".apk")) {
                     getContext().startActivity(
                             new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-                } else if (url.indexOf(".3gp") != -1
-                        || url.indexOf(".mp4") != -1
-                        || url.indexOf(".flv") != -1
-                        || url.indexOf(".wmv") != -1
-                        || url.indexOf(".mov") != -1) {
+                } else if (url.contains(".3gp")
+                        || url.contains(".mp4")
+                        || url.contains(".flv")
+                        || url.contains(".wmv")
+                        || url.contains(".mov")) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     String strend = "";
                     if (url.toLowerCase().endsWith(".mp4")) {
@@ -67,7 +72,7 @@ public class CustomerWebview extends WebView {
 
                     intent.setDataAndType(Uri.parse(url), "video/" + strend);
                     getContext().startActivity(intent);
-                } else if (url.indexOf(".apk") != -1) {
+                } else if (url.contains(".apk")) {
                     getContext().startActivity(
                             new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                 } else if (url.startsWith("mailto:") || url.startsWith("tel:")) {
@@ -88,21 +93,27 @@ public class CustomerWebview extends WebView {
                     addImageClickFunction();
                 }
             }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+
+            }
         });
 
         addJavascriptInterface(new Object() {
             @JavascriptInterface
             public void onClick(String adUrl, String adTitle) {
                 if (!Utils.isEmpty(adUrl)) {
-                    Intent intent = new Intent(getContext(),
-                            ShowUrlActivity.class);
-                    intent.putExtra("url", adUrl);
-                    intent.putExtra("title", adTitle);
-                    getContext().startActivity(intent);
+                    ShowWebActivity_.intent(getContext())
+                            .extra(IParam.URL, adUrl)
+                            .extra(IParam.TITLE, adTitle)
+                            .start();
                 }
             }
         }, "ad");
     }
+
 
     /**
      * 添加 图片点击 js

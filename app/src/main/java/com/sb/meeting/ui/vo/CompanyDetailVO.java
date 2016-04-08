@@ -18,7 +18,7 @@ public class CompanyDetailVO extends CompanyVO implements Serializable {
     private double longitude;
     private double latitude;
 
-    private List<String> imageList;
+    private List<ImageVO> imageList;
     private List<CertificateVO> certificateList;
     private List<ProductVO> productList;
 
@@ -94,11 +94,11 @@ public class CompanyDetailVO extends CompanyVO implements Serializable {
         this.latitude = latitude;
     }
 
-    public List<String> getImageList() {
+    public List<ImageVO> getImageList() {
         return imageList;
     }
 
-    public void setImageList(List<String> imageList) {
+    public void setImageList(List<ImageVO> imageList) {
         this.imageList = imageList;
     }
 

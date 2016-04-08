@@ -2,42 +2,64 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/c_d8d8d8"
+    android:background="@color/c_e8e8e8"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/head"
-        layout="@layout/title"
-        android:visibility="gone" />
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/ppi_px_88_dp"
+        android:background="@color/color_white"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tv_student"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:id="@+id/tv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:padding="@dimen/ppi_px_30_dp"
-            android:text="学员名片"
-            android:textColor="@color/c_454545"
-            android:textSize="@dimen/ppi_px_30_sp" />
+            android:padding="@dimen/ppi_px_10_dp"
+            android:text="筛选"
+            android:textColor="@color/right_menu_color" />
 
-        <TextView
-            android:id="@+id/tv_company"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="@dimen/ppi_px_280_dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/color_white"
-            android:gravity="center"
-            android:padding="@dimen/ppi_px_30_dp"
-            android:text="企业信息"
-            android:textColor="@color/c_454545"
-            android:textSize="@dimen/ppi_px_30_sp" />
-    </LinearLayout>
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_student"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/yp_switch_shape_left_selected"
+                android:gravity="center"
+                android:paddingBottom="@dimen/ppi_px_10_dp"
+                android:paddingTop="@dimen/ppi_px_10_dp"
+                android:text="名片"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/ppi_px_30_sp" />
+
+            <TextView
+                android:id="@+id/tv_company"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/yp_switch_shape_right_nomal"
+                android:gravity="center"
+                android:padding="@dimen/ppi_px_10_dp"
+                android:paddingBottom="@dimen/ppi_px_10_dp"
+                android:paddingTop="@dimen/ppi_px_10_dp"
+                android:text="企业"
+                android:textColor="@color/c_454545"
+                android:textSize="@dimen/ppi_px_30_sp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -66,5 +88,130 @@
             android:id="@+id/layout_error_yp"
             layout="@layout/common_result_message"
             android:visibility="gone" />
+
+        <ScrollView
+            android:id="@+id/sv_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#90000000"
+            android:fadingEdge="none"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_white"
+                android:orientation="vertical"
+                android:padding="@dimen/ppi_px_20_dp">
+
+                <TextView
+                    android:id="@+id/tv_name_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/ppi_px_10_dp"
+                    android:layout_marginTop="@dimen/ppi_px_20_dp"
+                    android:text="学员姓名"
+                    android:textColor="@color/c_454545"
+                    android:textSize="@dimen/ppi_px_30_sp" />
+
+                <EditText
+                    android:id="@+id/edit_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/default_input_bg_shape"
+                    android:hint="请输入学员姓名"
+                    android:maxLength="20"
+                    android:padding="@dimen/ppi_px_20_dp"
+                    android:singleLine="true"
+                    android:textColor="@color/c_454545"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/ppi_px_32_sp" />
+
+                <TextView
+                    android:id="@+id/tv_area_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/ppi_px_10_dp"
+                    android:layout_marginTop="@dimen/ppi_px_30_dp"
+                    android:text="学员所在地区"
+                    android:textColor="@color/c_454545"
+                    android:textSize="@dimen/ppi_px_30_sp" />
+
+                <com.sb.meeting.ui.component.GridViewWithScroll
+                    android:id="@+id/gv_province"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:cacheColorHint="@android:color/transparent"
+                    android:fadingEdge="none"
+                    android:horizontalSpacing="@dimen/ppi_px_10_dp"
+                    android:listSelector="@android:color/transparent"
+                    android:numColumns="4"
+                    android:scrollbars="none" />
+
+                <TextView
+                    android:id="@+id/tv_class_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/ppi_px_10_dp"
+                    android:layout_marginTop="@dimen/ppi_px_30_dp"
+                    android:text="学员所在班级"
+                    android:textColor="@color/c_454545"
+                    android:textSize="@dimen/ppi_px_30_sp" />
+
+                <com.sb.meeting.ui.component.GridViewWithScroll
+                    android:id="@+id/gv_class"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:cacheColorHint="@android:color/transparent"
+                    android:fadingEdge="none"
+                    android:horizontalSpacing="@dimen/ppi_px_10_dp"
+                    android:listSelector="@android:color/transparent"
+                    android:numColumns="3"
+                    android:scrollbars="none" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/ppi_px_60_dp"
+                    android:layout_marginTop="@dimen/ppi_px_80_dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_click_search"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/ppi_px_40_dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_default"
+                        android:gravity="center"
+                        android:paddingBottom="@dimen/ppi_px_20_dp"
+                        android:paddingLeft="@dimen/ppi_px_50_dp"
+                        android:paddingRight="@dimen/ppi_px_50_dp"
+                        android:paddingTop="@dimen/ppi_px_20_dp"
+                        android:text="查询"
+                        android:textColor="@color/color_white"
+                        android:textSize="@dimen/ppi_px_32_sp" />
+
+                    <TextView
+                        android:id="@+id/tv_click_reset"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/ppi_px_40_dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_default"
+                        android:gravity="center"
+                        android:paddingBottom="@dimen/ppi_px_20_dp"
+                        android:paddingLeft="@dimen/ppi_px_50_dp"
+                        android:paddingRight="@dimen/ppi_px_50_dp"
+                        android:paddingTop="@dimen/ppi_px_20_dp"
+                        android:text="清空查询条件"
+                        android:textColor="@color/color_white"
+                        android:textSize="@dimen/ppi_px_32_sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
     </RelativeLayout>
 </LinearLayout>

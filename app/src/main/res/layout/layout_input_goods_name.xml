@@ -23,7 +23,7 @@
         android:gravity="center_vertical"
         android:hint="请输入物品名称"
         android:inputType="text"
-        android:maxLength="20"
+        android:maxLength="14"
         android:paddingBottom="13dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"

@@ -513,6 +513,8 @@ public class NewsDetailActivity extends BaseActivity implements ViewPager.OnPage
         shareParams.setImageUrl(detailVO.getIconUrl());
         shareParams.setUrl(detailVO.getShortUrl());
         shareParams.setTitleUrl(detailVO.getShortUrl());
+        shareParams.setSite(getString(R.string.app_name));
+        shareParams.setSiteUrl(detailVO.getShortUrl());
         shareDialog.setShareParams(shareParams);
     }
 

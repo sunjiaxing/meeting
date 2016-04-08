@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sb.meeting.R;
-import com.sb.meeting.ui.activity.MainActivity;
+import com.sb.meeting.common.BonConstants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +39,7 @@ public class ShareDialog implements AdapterView.OnItemClickListener, View.OnClic
     private Platform.ShareParams shareParam;
 
     public ShareDialog(Context context) {
-        ShareSDK.initSDK(context);
+        ShareSDK.initSDK(context, BonConstants.KEY_SHARE);
         this.context = context;
         dialog = new android.app.AlertDialog.Builder(context).create();
         dialog.show();

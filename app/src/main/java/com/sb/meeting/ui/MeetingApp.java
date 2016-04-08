@@ -6,14 +6,16 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
-import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
+import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.FileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LRULimitedMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.taskmanager.LogUtils;
+import com.qiniu.android.storage.UploadManager;
 import com.sb.meeting.common.BonConstants;
 import com.sb.meeting.common.MD5;
+import com.taskmanager.LogUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +38,7 @@ public class MeetingApp extends Application implements Thread.UncaughtExceptionH
     private static MeetingApp instance;
     // 用来存储设备信息和异常信息
     private Map<String, String> infos = new HashMap<>();
+    private UploadManager uploadManager;
 
     @Override
     public void onCreate() {
@@ -43,10 +46,21 @@ public class MeetingApp extends Application implements Thread.UncaughtExceptionH
         instance = this;
         Thread.setDefaultUncaughtExceptionHandler(this);
         initImageLoader();
-        ShareSDK.initSDK(this);
-        JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
-        JPushInterface.init(this);     		// 初始化 JPush
-        LogUtils.e(JPushInterface.getRegistrationID(this));
+        ShareSDK.initSDK(this,BonConstants.KEY_SHARE);
+        JPushInterface.setDebugMode(true);    // 设置开启日志,发布时请关闭日志
+        JPushInterface.init(this);            // 初始化 JPush
+    }
+
+    /**
+     * 获取七牛 云存储 上传manager
+     *
+     * @return
+     */
+    public synchronized UploadManager getUploadManager() {
+        if (uploadManager == null) {
+            uploadManager = new UploadManager();
+        }
+        return uploadManager;
     }
 
     /**
@@ -61,15 +75,13 @@ public class MeetingApp extends Application implements Thread.UncaughtExceptionH
                 .denyCacheImageMultipleSizesInMemory()
                         // 解码图像的大尺寸将在内存中缓存先前解码图像的小尺寸。
                 .tasksProcessingOrder(QueueProcessingType.LIFO)
-                .diskCache(new UnlimitedDiskCache(new File(BonConstants.PATH_IMAGE_CACHE))) // default
-                .diskCacheSize(50 * 1024 * 1024)// 缓存目录大小 50M
-                .diskCacheFileCount(200)// 缓存文件数量 200
-                .diskCacheFileNameGenerator(new FileNameGenerator() {
+                .memoryCache(new LRULimitedMemoryCache(2 * 1024 * 1024))
+                .diskCache(new LimitedAgeDiskCache(new File(BonConstants.PATH_IMAGE_CACHE), null, new FileNameGenerator() {
                     @Override
                     public String generate(String imageUri) {
                         return MD5.md5Lower(imageUri);
                     }
-                })// 文件名称 自定义md5
+                }, BonConstants.TIME_TO_CLEAR_IMAGE_CACHE))
                 .build();
 
         // Initialize ImageLoader with configuration.

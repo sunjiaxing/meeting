@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.sb.meeting.R;
 import com.sb.meeting.remote.IParam;
 
 import org.json.JSONArray;
@@ -369,21 +370,22 @@ public class Utils {
             image = BitmapFactory.decodeFile(path, options);
             options.inJustDecodeBounds = false;
             File file = new File(path);
-            if (file.length() / 1024 > 1024) {
-                options.inSampleSize = 4;
-            } else if (file.length() / 1024 > 500) {
-                options.inSampleSize = 2;
+            float fileKB = file.length() / 1024;
+            int sampleSize;
+            if (fileKB <= 100) {// 小于100K 不压缩
+                sampleSize = 1;
+            } else if (fileKB >= 1024 && fileKB <= 1024 * 2) {// 1M-2M之间的图片 --取 1/4
+                sampleSize = 2;
+            } else if (fileKB > 1024 * 2 && fileKB <= 1024 * 4) {// 2M-4M之间   取1/9
+                sampleSize = 3;
+            } else if (fileKB > 1024 * 4 && fileKB <= 1024 * 8) {// 4M-8M之间  取 1/16
+                sampleSize = 4;
+            } else {// 大于8M 取 1/25
+                sampleSize = 5;
             }
-            int w = options.outWidth;
-            // 现在主流手机比较多是 16:9 分辨率，所以高和宽我们设置为
-            int hh = 16;
-            int ww = 9;
-
-            int newH = w * hh / ww;
-            options.outWidth = ww;
-            options.outHeight = newH;
+            options.inSampleSize = sampleSize;//设置采样率
             image = BitmapFactory.decodeFile(path, options);
-            return compressImage(image);
+            image = compressImage(image);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -398,9 +400,9 @@ public class Utils {
      */
     public static Bitmap compressImage(Bitmap image) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         int options = 100;
-        while (baos.toByteArray().length / 1024 > 500) { // 循环判断如果压缩后图片是否大于500kb,大于继续压缩
+        while (baos.toByteArray().length / 1024 >= 300) { // 循环判断如果压缩后图片是否大于300kb,大于继续压缩
             baos.reset();// 重置baos即清空baos
             image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
             options -= 5;// 每次都减少5%
@@ -417,14 +419,9 @@ public class Utils {
      * @return
      */
     public static File savePic(Bitmap b, String strFileName) {
-        FileOutputStream fos;
         try {
-            File dir = new File(BonConstants.PATH_TEMP);
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-            fos = new FileOutputStream(strFileName);
-            b.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            FileOutputStream fos = new FileOutputStream(strFileName);
+            b.compress(Bitmap.CompressFormat.JPEG, 80, fos);
             fos.flush();
             fos.close();
             return new File(strFileName);
@@ -478,6 +475,7 @@ public class Utils {
      */
     public static void displayImage(String path, ImageView imageView, DisplayImageOptions options) {
         if (Utils.isEmpty(path)) {
+            imageView.setImageResource(R.mipmap.default_item_pic);
             return;
         }
         ImageLoader.getInstance().displayImage(
@@ -496,6 +494,7 @@ public class Utils {
      */
     public static void displayImage(String path, ImageView imageView, DisplayImageOptions options, ImageLoadingListener listener) {
         if (Utils.isEmpty(path)) {
+            imageView.setImageResource(R.mipmap.default_item_pic);
             return;
         }
         ImageLoader.getInstance().displayImage(
@@ -511,15 +510,14 @@ public class Utils {
      * @return
      */
     public static String deleteHeadOfUrl(String url) {
-        return url.replace(BonConstants.SERVER_URL, "");
+        return url.replace(BonConstants.HEAD_IMAGE, "");
     }
+
     /***
      * 隐藏电话号码后几位数字
      *
-     * @param phoneNum
-     *            电话号码
-     * @param len
-     *            需要隐藏的位数
+     * @param phoneNum 电话号码
+     * @param len      需要隐藏的位数
      * @return
      */
     public static String hideLastNumber(String phoneNum, int len) {
@@ -536,10 +534,8 @@ public class Utils {
     /***
      * 隐藏电话号码中间几位数字
      *
-     * @param phoneNum
-     *            电话号码
-     * @param len
-     *            需要隐藏的位数
+     * @param phoneNum 电话号码
+     * @param len      需要隐藏的位数
      * @return
      */
     public static String hideMiddleNumber(String phoneNum, int len) {
