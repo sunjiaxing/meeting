@@ -335,6 +335,8 @@ public class NewsPagerItemFragment extends BaseFragment implements
                 firstView.initData(news.get(0));
                 if (!Utils.isEmpty(news.get(0).getTopNews())) {
                     hasTop = true;
+                } else {
+                    hasTop = false;
                 }
             }
             if (adapter == null) {

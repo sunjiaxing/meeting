@@ -1,15 +1,6 @@
 package com.sb.meeting.service;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
-import org.json.JSONException;
-
 import android.content.Context;
 
 import com.sb.meeting.common.BonConstants;
@@ -28,6 +19,14 @@ import com.sb.meeting.ui.vo.NewsChannelVO;
 import com.sb.meeting.ui.vo.NewsDetailVO;
 import com.sb.meeting.ui.vo.NewsSubjectVO;
 import com.sb.meeting.ui.vo.NewsVO;
+
+import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * news service
@@ -579,18 +578,6 @@ public class NewsService extends BaseService {
         // 修改状态
         newsDao.saveToMyChannel(saveData, configDao.getUserId());
     }
-
-
-    /**
-     * 版本更新
-     *
-     * @return
-     * @throws JSONException
-     */
-    public Map<String, Object> updateVersion() throws JSONException {
-        return newsRO.updateVersion();
-    }
-
     /**
      * 获取初始化图片
      *

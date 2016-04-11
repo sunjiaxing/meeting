@@ -203,7 +203,7 @@ public class ChooseImageActivity extends BaseActivity implements ChooseImgAdapte
                 BitmapFactory.decodeFile(path, options);
                 options.inJustDecodeBounds = false;
                 if (isSelectUserHead
-                        && (options.outWidth < BonConstants.AVATART_WHITH || options.outHeight < BonConstants.AVATART_WHITH)) {
+                        && (options.outWidth < BonConstants.AVATAR_WIDTH || options.outHeight < BonConstants.AVATAR_WIDTH)) {
                     showAlert("消息提示", "所选图片达不到最佳展示效果,确定要使用吗？", "使用", "重新选择",
                             new TlcyDialog.TlcyDialogListener() {
 
@@ -244,14 +244,10 @@ public class ChooseImageActivity extends BaseActivity implements ChooseImgAdapte
      */
     @Click(R.id.btn_right)
     void onSelectComplete() {
-        startLoading();
-        for (int i = 0; i < selectedData.size(); i++) {
-            selectedData.set(i, selectedData.get(i));
-        }
         Intent data = new Intent();
         data.putExtra(IParam.CONTENT, (Serializable) selectedData);
         setResult(RESULT_OK, data);
-        this.finish();
+        finish();
     }
 
     /**

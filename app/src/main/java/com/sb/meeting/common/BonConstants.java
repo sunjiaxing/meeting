@@ -91,29 +91,31 @@ public class BonConstants {
 
     public static final int LENGTH_SHOW_SUMMARY = 50;
 
-    public static final int AVATART_WHITH = 400;
+    public static final int AVATAR_WIDTH = 100;
+    public static final int MAX_AVATAR_WIDTH = 300;
+    public static final int MAX_AVATAR_HEIGHT = 300;
     /**
      * shareSDK分享使用的appKey
      **/
-    public static final String KEY_SHARE = "106207c3ea504";
+    public static final String KEY_SHARE = "114d4366e9f38";
     /**
      * shareSDK短信验证码使用的appKey
      */
-    public static final String KEY_SMS = "1155c3ae971fa";
-    public static final String SECRET_SMS = "cdfa9cd205af7e35750df8ea47b6dd4c";
+    public static final String KEY_SMS = "115985c735b51";
+    public static final String SECRET_SMS = "636d3754af6497bf9d0607c0008586ff";
 
     public static final String PhonePattern = "^1[3|4|5|7|8][0-9]\\d{8}$";
 //    public static final String PhonePattern = "^0{0,1}(13[0-9]|15[3-9]|15[0-2]|18[0-9]|17[5-8]|14[0-9]|170|171)[0-9]{8}$";
 
-    // public static final String SERVER_URL = "http://192.168.1.111:8080/";
-//    public static final String SERVER_URL = "http://192.168.1.111:8080/api/";
-    public static final String SERVER_URL = "http://192.168.1.27:8888/sample-api/";
-    //    public static final String SERVER_URL = "http://192.168.1.27:8888/api/";
+    public static final String SERVER_URL = "http://share.zssybj.com/";
+    //    public static final String SERVER_URL = "http://192.168.1.111:8080/api/";
+//    public static final String SERVER_URL = "http://192.168.1.27:8888/sample-api/";
+//    public static final String SERVER_URL = "http://192.168.1.27:8888/api/";
     public static String SLASH = "/";
     public static final String WEB_RESOURCE_URL = "http://192.168.1.27/";
     public static final String ROOT_USER_AVATAR_URL = WEB_RESOURCE_URL + "phpsso_server/uploadfile/avatar/";
 
-    public static final String HEAD_IMAGE = "http://7xspim.com2.z0.glb.qiniucdn.com/";
+    public static final String HEAD_IMAGE = "http://picture.zssybj.com/";
 
     public enum UserAvatarType {
         TYPE_30X30("30X30.jpg"),

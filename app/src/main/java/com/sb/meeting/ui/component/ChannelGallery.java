@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sb.meeting.R;
+import com.sb.meeting.common.Utils;
 import com.sb.meeting.ui.vo.NewsChannelVO;
 
 import java.util.List;
@@ -25,6 +26,8 @@ public class ChannelGallery extends HorizontalScrollView implements View.OnClick
     private int selected;
     private boolean scrollCenter = true;
     private ItemClickListener listener;
+    private int itemPadding;
+    private int itemMargin;
 
     @Override
     public void onClick(View v) {
@@ -72,6 +75,8 @@ public class ChannelGallery extends HorizontalScrollView implements View.OnClick
      * 初始化
      */
     void init() {
+        itemPadding = Utils.dip2px(getContext(), 10);
+        itemMargin = Utils.dip2px(getContext(), 5);
         setHorizontalScrollBarEnabled(false);
         setVerticalScrollBarEnabled(false);
         setScrollbarFadingEnabled(false);
@@ -84,6 +89,7 @@ public class ChannelGallery extends HorizontalScrollView implements View.OnClick
 
     /**
      * 设置数据
+     *
      * @param data
      */
     public void setData(List<NewsChannelVO> data) {
@@ -92,17 +98,17 @@ public class ChannelGallery extends HorizontalScrollView implements View.OnClick
             NewsChannelVO vo;
             TextView tv;
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            params.leftMargin = 8;
-            params.rightMargin = 8;
+            params.leftMargin = itemMargin;
+            params.rightMargin = itemMargin;
             for (int i = 0; i < data.size(); i++) {
                 vo = data.get(i);
                 tv = new TextView(getContext());
                 tv.setTag(i);
                 tv.setText(vo.getName());
-                tv.setTextSize(16);
+                tv.setTextSize(18);
                 tv.setTextColor(getResources().getColor(R.color.news_content_color));
                 tv.setBackgroundColor(Color.TRANSPARENT);
-                tv.setPadding(8, 2, 8, 2);
+                tv.setPadding(itemPadding, 3, itemPadding, 3);
                 tv.setMinWidth(70);
                 tv.setGravity(Gravity.CENTER);
                 tv.setOnClickListener(this);

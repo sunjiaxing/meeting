@@ -17,8 +17,10 @@ import com.sb.meeting.common.Utils;
 import com.sb.meeting.remote.IParam;
 import com.sb.meeting.service.YellowPageService;
 import com.sb.meeting.ui.adapter.CompanyScrollImageAdapter;
+import com.sb.meeting.ui.adapter.ProductAdapter;
 import com.sb.meeting.ui.component.ChildViewPager;
 import com.sb.meeting.ui.component.CircleImageView;
+import com.sb.meeting.ui.component.GridViewWithScroll;
 import com.sb.meeting.ui.vo.CompanyDetailVO;
 import com.sb.meeting.ui.vo.ProductVO;
 import com.taskmanager.Task;
@@ -28,6 +30,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
 
 import java.io.Serializable;
@@ -73,26 +76,10 @@ public class CompanyVIPDetailActivity extends BaseActivity implements ViewPager.
     CircleImageView ivLogo;
     @ViewById(R.id.tv_company_address)
     TextView tvCompanyAddress;
+    @ViewById(R.id.gv_product_list)
+    GridViewWithScroll gvProductList;
 
-    @ViewById(R.id.layout_product1)
-    LinearLayout layoutProduct1;
-    @ViewById(R.id.iv_product1)
-    ImageView ivProduct1;
-    @ViewById(R.id.tv_product1)
-    TextView tvProduct1;
-    @ViewById(R.id.layout_product2)
-    LinearLayout layoutProduct2;
-    @ViewById(R.id.iv_product2)
-    ImageView ivProduct2;
-    @ViewById(R.id.tv_product2)
-    TextView tvProduct2;
-    @ViewById(R.id.layout_product3)
-    LinearLayout layoutProduct3;
-    @ViewById(R.id.iv_product3)
-    ImageView ivProduct3;
-    @ViewById(R.id.tv_product3)
-    TextView tvProduct3;
-
+    private ProductAdapter productAdapter;
     private AnimationDrawable anim;
     private CompanyDetailVO detailVO;
     private YellowPageService yellowPageService;
@@ -118,11 +105,6 @@ public class CompanyVIPDetailActivity extends BaseActivity implements ViewPager.
         anim = (AnimationDrawable) ivLoadingIn.getBackground();
         ivLogo.setBorderOverlay(true);
         yellowPageService = new YellowPageService(this);
-        int w = Utils.getScreenWidth(this) / 3;
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(w, w);
-        ivProduct1.setLayoutParams(layoutParams);
-        ivProduct2.setLayoutParams(layoutParams);
-        ivProduct3.setLayoutParams(layoutParams);
         vpImageList.addOnPageChangeListener(this);
         getDetail();
     }
@@ -196,7 +178,7 @@ public class CompanyVIPDetailActivity extends BaseActivity implements ViewPager.
                 }
             }
             tvCompanyName.setText(detailVO.getCompanyName());
-            tvProductDesc.setText("主营产品描述：" + detailVO.getProductDesc());
+            tvProductDesc.setText(detailVO.getProductDesc());
             tvContact.setText("姓名 " + detailVO.getContact());
             tvPhone.setText("电话 " + detailVO.getPhone());
             tvQQ.setText("QQ " + detailVO.getQQ());
@@ -205,20 +187,13 @@ public class CompanyVIPDetailActivity extends BaseActivity implements ViewPager.
             tvCompanyAddress.setText(detailVO.getCompanyAddress());
             // 加载产品信息
             if (!Utils.isEmpty(detailVO.getProductList())) {
-                if (detailVO.getProductList().size() >= 1) {
-                    layoutProduct1.setVisibility(View.VISIBLE);
-                    Utils.displayImage(detailVO.getProductList().get(0).getThumb(), ivProduct1, ImageOption.createNomalOption());
-                    tvProduct1.setText(detailVO.getProductList().get(0).getProductName());
-                }
-                if (detailVO.getProductList().size() >= 2) {
-                    layoutProduct2.setVisibility(View.VISIBLE);
-                    Utils.displayImage(detailVO.getProductList().get(1).getThumb(), ivProduct2, ImageOption.createNomalOption());
-                    tvProduct2.setText(detailVO.getProductList().get(1).getProductName());
-                }
-                if (detailVO.getProductList().size() >= 3) {
-                    layoutProduct3.setVisibility(View.VISIBLE);
-                    Utils.displayImage(detailVO.getProductList().get(2).getThumb(), ivProduct3, ImageOption.createNomalOption());
-                    tvProduct3.setText(detailVO.getProductList().get(2).getProductName());
+                if (productAdapter == null) {
+                    productAdapter = new ProductAdapter(this);
+                    productAdapter.setData(detailVO.getProductList());
+                    gvProductList.setAdapter(productAdapter);
+                } else {
+                    productAdapter.setData(detailVO.getProductList());
+                    productAdapter.notifyDataSetChanged();
                 }
             }
         }
@@ -308,22 +283,11 @@ public class CompanyVIPDetailActivity extends BaseActivity implements ViewPager.
     /**
      * 跳转到产品详情
      *
-     * @param v
+     * @param position 索引
      */
-    @Click({R.id.layout_product1, R.id.layout_product2, R.id.layout_product3})
-    void clickProduct(View v) {
-        ProductVO productVO = null;
-        switch (v.getId()) {
-            case R.id.layout_product1:
-                productVO = detailVO.getProductList().get(0);
-                break;
-            case R.id.layout_product2:
-                productVO = detailVO.getProductList().get(1);
-                break;
-            case R.id.layout_product3:
-                productVO = detailVO.getProductList().get(2);
-                break;
-        }
+    @ItemClick(R.id.gv_product_list)
+    void clickProduct(int position) {
+        ProductVO productVO = detailVO.getProductList().get(position);
         if (productVO != null) {
             ProductDetailActivity_.intent(this)
                     .extra(IParam.PRODUCT_ID, productVO.getProductId())

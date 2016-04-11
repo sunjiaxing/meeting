@@ -339,85 +339,17 @@
                     android:textSize="@dimen/ppi_px_30_sp" />
             </LinearLayout>
 
-
-            <LinearLayout
-                android:id="@+id/layout_product"
+            <com.sb.meeting.ui.component.GridViewWithScroll
+                android:id="@+id/gv_product_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:cacheColorHint="@android:color/transparent"
+                android:fadingEdge="none"
+                android:horizontalSpacing="15dp"
+                android:numColumns="2"
+                android:padding="15dp"
+                android:verticalSpacing="15dp" />
 
-                <LinearLayout
-                    android:id="@+id/layout_product1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:visibility="invisible">
-
-                    <ImageView
-                        android:id="@+id/iv_product1"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/ppi_px_200_dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/default_item_pic" />
-
-                    <TextView
-                        android:id="@+id/tv_product1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/loading"
-                        android:textColor="@color/c_454545" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/layout_product2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:visibility="invisible">
-
-                    <ImageView
-                        android:id="@+id/iv_product2"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/ppi_px_200_dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/default_item_pic" />
-
-                    <TextView
-                        android:id="@+id/tv_product2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/loading"
-                        android:textColor="@color/c_454545" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/layout_product3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:visibility="invisible">
-
-                    <ImageView
-                        android:id="@+id/iv_product3"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/ppi_px_200_dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/default_item_pic" />
-
-                    <TextView
-                        android:id="@+id/tv_product3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/loading"
-                        android:textColor="@color/c_454545" />
-                </LinearLayout>
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
     <!-- 显示转轮 -->

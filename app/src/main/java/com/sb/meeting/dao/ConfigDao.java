@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.sb.meeting.remote.IParam;
 
 /**
+ * 配置文件
  * Created by sun on 2015/12/10.
  */
 public class ConfigDao {

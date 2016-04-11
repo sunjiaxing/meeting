@@ -7,12 +7,13 @@ package com.sb.meeting.dao.entity;
 public class User {
     public static final String KEY_COLUMN_TABLE_ID = "table_id";
     public static final String KEY_COLUMN_USER_ID = "userId";
-    public static final String KEY_COLUMN_USER_NAME = "userName";
-    public static final String KEY_COLUMN_NICK_NAME = "nickName";
+    public static final String KEY_COLUMN_USER_NAME = "user_name";
+    public static final String KEY_COLUMN_NICK_NAME = "nick_name";
     public static final String KEY_COLUMN_EMAIL = "email";
+    public static final String KEY_COLUMN_AVATAR_URL = "avatar_url";
     public static final String KEY_COLUMN_MOBILE = "mobile";
-    public static final String KEY_COLUMN_REGISTER_TIME = "registerTime";
-    public static final String KEY_COLUMN_LAST_LOGIN_TIME = "lastLoginTime";
+    public static final String KEY_COLUMN_REGISTER_TIME = "register_time";
+    public static final String KEY_COLUMN_LAST_LOGIN_TIME = "last_login_time";
     public static final String KEY_COLUMN_REMARK = "remark";
 
     public static final String KEY_TABLE_NAME = "user_info";
@@ -23,6 +24,7 @@ public class User {
             + KEY_COLUMN_USER_NAME + " TEXT,"
             + KEY_COLUMN_NICK_NAME + " TEXT,"
             + KEY_COLUMN_EMAIL + " TEXT,"
+            + KEY_COLUMN_AVATAR_URL + " TEXT,"
             + KEY_COLUMN_MOBILE + " TEXT,"
             + KEY_COLUMN_REGISTER_TIME + " LONG,"
             + KEY_COLUMN_LAST_LOGIN_TIME + " LONG ,"
@@ -37,6 +39,7 @@ public class User {
     private String userName;
     private String nickName;
     private String email;
+    private String avatarUrl;
     private String mobile;
     private long registerTime;
     private long lastLoginTime;
@@ -95,5 +98,13 @@ public class User {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 }

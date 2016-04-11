@@ -216,7 +216,7 @@ public class MainActivity extends BaseActivity {
         ivNews.setImageResource(R.mipmap.icon_news_nomal);
         ivGoods.setImageResource(R.mipmap.icon_goods_nomal);
         ivUser.setImageResource(R.mipmap.icon_user_nomal);
-        ivYP.setImageResource(R.mipmap.icon_goods_nomal);
+        ivYP.setImageResource(R.mipmap.icon_yp_nomal);
 
 
         switch (menuSelected) {
@@ -234,7 +234,7 @@ public class MainActivity extends BaseActivity {
                 break;
             case YP:
                 tvYP.setTextColor(getResources().getColor(R.color.c_ff946e));
-                ivYP.setImageResource(R.mipmap.icon_goods_selected);
+                ivYP.setImageResource(R.mipmap.icon_yp_selected);
                 break;
         }
     }

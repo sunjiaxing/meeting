@@ -2,20 +2,20 @@ package com.sb.meeting.ui.activity;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.os.Build;
-import android.os.Bundle;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Looper;
-import android.os.PersistableBundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.taskmanager.ui.TaskActivity;
 import com.sb.meeting.R;
 import com.sb.meeting.common.Utils;
 import com.sb.meeting.ui.component.TlcyDialog;
+import com.taskmanager.ui.TaskActivity;
+
+import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -168,5 +168,23 @@ public abstract class BaseActivity extends TaskActivity {
             toDialog.show();
             toDialog = null;
         }
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        if (intent.toString().contains("mailto")
+                || intent.toString().contains("market")) {
+            PackageManager pm = getPackageManager();
+            List<ResolveInfo> activities = pm.queryIntentActivities(intent, 0);
+            if (Utils.isEmpty(activities)) {
+                if (intent.toString().contains("market")) {
+                    showToastLongTime("尚未安装应用市场！");
+                } else {
+                    showToastLongTime("没有找到可以发送邮件的应用！");
+                }
+                return;
+            }
+        }
+        super.startActivity(intent);
     }
 }

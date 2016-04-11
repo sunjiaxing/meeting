@@ -5,36 +5,7 @@
     android:background="@color/c_e8e8e8"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/layout_not_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="@dimen/ppi_px_30_dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="还没有登录哦，快去登录吧！" />
-
-        <TextView
-            android:id="@+id/tv_to_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/ppi_px_20_dp"
-            android:background="@drawable/price_tip_bg_shape"
-            android:paddingBottom="@dimen/ppi_px_10_dp"
-            android:paddingLeft="@dimen/ppi_px_30_dp"
-            android:paddingRight="@dimen/ppi_px_30_dp"
-            android:paddingTop="@dimen/ppi_px_10_dp"
-            android:text="去登录"
-            android:textColor="@color/color_white"
-            android:textSize="@dimen/ppi_px_25_sp" />
-    </LinearLayout>
-
     <ScrollView
-        android:id="@+id/layout_user_center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none">
@@ -47,14 +18,15 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/ppi_px_80_dp"
                 android:background="@color/c_ff946e">
 
-                <ImageView
+                <com.sb.meeting.ui.component.CircleImageView
                     android:id="@+id/iv_user_avatar"
-                    android:layout_width="@dimen/ppi_px_180_dp"
-                    android:layout_height="@dimen/ppi_px_180_dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_margin="@dimen/ppi_px_40_dp"
+                    android:layout_width="@dimen/ppi_px_140_dp"
+                    android:layout_height="@dimen/ppi_px_140_dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/ppi_px_100_dp"
                     android:scaleType="centerCrop"
                     android:src="@mipmap/default_item_pic" />
 
@@ -62,11 +34,29 @@
                     android:id="@+id/tv_user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/iv_user_avatar"
+                    android:layout_below="@+id/iv_user_avatar"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/ppi_px_20_dp"
                     android:text="@string/loading"
                     android:textColor="@color/color_white"
-                    android:textSize="@dimen/ppi_px_36_sp" />
+                    android:textSize="@dimen/ppi_px_36_sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_to_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_user_avatar"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/ppi_px_20_dp"
+                    android:background="@drawable/input_bg_shape"
+                    android:paddingBottom="@dimen/ppi_px_15_dp"
+                    android:paddingLeft="@dimen/ppi_px_60_dp"
+                    android:paddingRight="@dimen/ppi_px_60_dp"
+                    android:paddingTop="@dimen/ppi_px_15_dp"
+                    android:text="尚未登录，点击登录吧"
+                    android:textColor="@color/c_454545"
+                    android:textSize="@dimen/ppi_px_30_sp" />
 
                 <ImageView
                     android:id="@+id/iv_setting"
@@ -77,62 +67,70 @@
 
             </RelativeLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="35dp"
-                android:background="@color/c_e4e4e4" />
-
-            <TextView
-                android:id="@+id/tv_favorite"
+            <LinearLayout
+                android:id="@+id/layout_menu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/comment_item_white_bg"
-                android:paddingBottom="10dp"
-                android:paddingLeft="15dp"
-                android:paddingTop="10dp"
-                android:text="我的收藏"
-                android:textColor="@color/c_454545"
-                android:textSize="15sp" />
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/c_e4e4e4" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="35dp"
+                    android:background="@color/c_e4e4e4" />
 
-            <TextView
-                android:id="@+id/tv_published_goods"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/comment_item_white_bg"
-                android:paddingBottom="10dp"
-                android:paddingLeft="15dp"
-                android:paddingTop="10dp"
-                android:text="我的发布"
-                android:textColor="@color/c_454545"
-                android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/tv_favorite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/comment_item_white_bg"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:text="我的收藏"
+                    android:textColor="@color/c_454545"
+                    android:textSize="15sp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/c_e4e4e4" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/c_e4e4e4" />
 
-            <TextView
-                android:id="@+id/tv_attention_goods"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/comment_item_white_bg"
-                android:paddingBottom="10dp"
-                android:paddingLeft="15dp"
-                android:paddingTop="10dp"
-                android:text="我的关注"
-                android:textColor="@color/c_454545"
-                android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/tv_published_goods"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/comment_item_white_bg"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:text="我的发布"
+                    android:textColor="@color/c_454545"
+                    android:textSize="15sp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_color" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/c_e4e4e4" />
+
+                <TextView
+                    android:id="@+id/tv_attention_goods"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/comment_item_white_bg"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:text="我的关注"
+                    android:textColor="@color/c_454545"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/line_color" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

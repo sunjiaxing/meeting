@@ -14,10 +14,11 @@
         android:layout_below="@+id/head"
         android:cacheColorHint="@android:color/transparent"
         android:fadingEdge="none"
-        android:horizontalSpacing="5dp"
+        android:horizontalSpacing="15dp"
         android:numColumns="2"
-        android:padding="5dp"
-        android:verticalSpacing="5dp" />
+        android:padding="15dp"
+        android:scrollbars="none"
+        android:verticalSpacing="15dp" />
 
     <!-- 显示转轮 -->
 

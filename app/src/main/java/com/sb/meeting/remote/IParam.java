@@ -14,6 +14,7 @@ public interface IParam {
     String AD_ID = "adId";
     String AREA = "area";
     String AREA_ID = "areaId";
+    String AVATAR = "avatar";
     String AVATAR_URL = "avatarUrl";
     String ADD_COMMENT = "addComment";
     String ADD_REPLY = "addReply";

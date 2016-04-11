@@ -16,6 +16,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -49,6 +50,7 @@ public class UserService extends BaseService {
             user.setUserName(userDto.getUserName());
             user.setNickName(userDto.getNickName());
             user.setEmail(userDto.getEmail());
+            user.setAvatarUrl(userDto.getAvatar());
             user.setMobile(userDto.getMobile());
             user.setRegisterTime(userDto.getRegisterTime());
             user.setLastLoginTime(userDto.getLastLoginTime());
@@ -71,6 +73,19 @@ public class UserService extends BaseService {
         return user != null && !(user.getLastLoginTime() != 0 && System.currentTimeMillis() - user.getLastLoginTime() > BonConstants.TIME_TO_SAVE_LOGIN_STATE);
     }
 
+    /**
+     * 版本更新
+     *
+     * @return
+     * @throws JSONException
+     */
+    public Map<String, Object> updateVersion() throws JSONException {
+        return userRO.updateVersion();
+    }
+
+    /**
+     * 退出登录
+     */
     public void logout() {
         // 清除用户id
         configDao.saveUserId("-1");
@@ -95,7 +110,8 @@ public class UserService extends BaseService {
             vo.setNickName(user.getNickName());
             vo.setEmail(user.getEmail());
             vo.setMobile(user.getMobile());
-            vo.setUserAvatar(Utils.getUserAvatar(userId, BonConstants.UserAvatarType.TYPE_180x180));
+//            vo.setUserAvatar(Utils.getUserAvatar(userId, BonConstants.UserAvatarType.TYPE_180x180));
+            vo.setUserAvatar(user.getAvatarUrl());
             return vo;
         }
     }

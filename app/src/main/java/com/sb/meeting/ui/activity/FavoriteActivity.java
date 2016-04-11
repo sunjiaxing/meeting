@@ -131,6 +131,7 @@ public class FavoriteActivity extends BaseActivity implements RefreshListView.On
                     favoriteList = (List<FavoriteVO>) data;
                     refreshUI();
                 } else {
+                    favoriteList = null;
                     showErrorMsg("暂无收藏信息");
                 }
                 break;

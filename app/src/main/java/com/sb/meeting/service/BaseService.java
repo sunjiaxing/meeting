@@ -2,10 +2,12 @@ package com.sb.meeting.service;
 
 import android.content.Context;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.sb.meeting.common.MD5;
 import com.sb.meeting.common.Utils;
+import com.sb.meeting.dao.BaseDao;
 import com.sb.meeting.dao.ConfigDao;
 import com.sb.meeting.remote.BaseRO;
 import com.sb.meeting.remote.dto.ConfigDto;
@@ -57,5 +59,13 @@ public class BaseService {
         if (dto != null) {
             configDao.setQiniuToken(dto.getQiniuToken());
         }
+    }
+
+    /**
+     * 清除缓存
+     */
+    public void clearCache() {
+        new BaseDao(mContext).clearAllTableData();
+        ImageLoader.getInstance().clearDiskCache();
     }
 }

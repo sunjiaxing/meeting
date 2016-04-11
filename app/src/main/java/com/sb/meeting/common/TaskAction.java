@@ -54,4 +54,6 @@ public interface TaskAction extends TaskKey {
     int ACTION_GET_PRODUCT_DETAIL = 44;
     int ACTION_GET_SEARCH_AREA_CONDITION = 45;
     int ACTION_GET_SEARCH_CLASS_CONDITION = 46;
+    int ACTION_CLEAR_CACHE = 47;
+    int ACTION_CHECK_UPDATE = 48;
 }

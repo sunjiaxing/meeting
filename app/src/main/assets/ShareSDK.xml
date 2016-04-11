@@ -59,9 +59,9 @@
     <SinaWeibo
         Id="1"
         SortId="1"
-        AppKey="568898243"
-        AppSecret="38a4f8204cc784f81f9f0daaf31e02e3"
-        RedirectUrl="http://www.sharesdk.cn"
+        AppKey="1013333319"
+        AppSecret="b98e9f514dea5b9f9ad93450b11a0f4c"
+        RedirectUrl="http://www.zssybj.com"
         ShareByAppClient="true"
         Enable="true" />
 
@@ -96,7 +96,7 @@
         SortId="3"
         AppId="wx53e75e1758e25262"
         AppSecret="27c8065767d893015ba2f845dc323dcf"
-        BypassApproval="true"
+        BypassApproval="false"
         ShareByAppClient="true"
         Enable="true" />
 
@@ -106,7 +106,7 @@
         AppId="wx53e75e1758e25262"
         AppSecret="27c8065767d893015ba2f845dc323dcf"
         ShareByAppClient="true"
-        BypassApproval="true"
+        BypassApproval="false"
         Enable="true" />
 
     <Email

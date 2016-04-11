@@ -133,6 +133,10 @@
             android:name="com.sb.meeting.ui.activity.CompanyCertificateActivity_"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.sb.meeting.ui.activity.SettingActivity_"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+        <activity
             android:name="com.sb.meeting.ui.activity.TestActivity_"
             android:screenOrientation="portrait" />
         <!--shareSDK 注册的Activity-->

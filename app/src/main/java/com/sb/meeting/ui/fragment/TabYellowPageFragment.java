@@ -357,16 +357,19 @@ public class TabYellowPageFragment extends BaseFragment implements RefreshListVi
             lvCompany.setVisibility(View.GONE);
             lvStudent.setVisibility(View.VISIBLE);
             if (studentListAdapter == null) {
-                studentListAdapter = new StudentListAdapter(getActivity()){
+                studentListAdapter = new StudentListAdapter(getActivity()) {
 
                     @Override
                     public void onClick(View v) {
                         int position = (int) v.getTag();
-                        CompanyVO vo = companyList.get(position);
+                        StudentVO vo = studentList.get(position);
                         // TODO 判断 vip  跳转不同页面
-                        CompanyVIPDetailActivity_.intent(getActivity())
-                                .extra(IParam.COMPANY_ID, vo.getCompanyId())
-                                .start();
+                        if (vo.getCompanyId() > 0) {
+                            CompanyVIPDetailActivity_.intent(getActivity())
+                                    .extra(IParam.COMPANY_ID, vo.getCompanyId())
+                                    .start();
+                        }
+
                     }
                 };
                 studentListAdapter.setData(studentList);

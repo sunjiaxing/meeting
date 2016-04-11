@@ -141,6 +141,9 @@ public class PublishedGoodsActivity extends BaseActivity implements RefreshListV
                 } else {
                     listView.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_OVER);
                 }
+            } else {
+                stopLoadingSelf();
+                showErrorMsg("尚未发布物品信息");
             }
         } else if (action == TaskAction.ACTION_GET_PUBLISHED_GOODS_MORE) {
             if (data != null) {

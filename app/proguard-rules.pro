@@ -30,6 +30,7 @@
 
 #保护注解
 -keepattributes *Annotation*
+-keepattributes JavascriptInterface
 
 # 保持哪些类不被混淆
 -keep public class * extends android.app.Fragment
@@ -108,7 +109,12 @@ public static final android.os.Parcelable$Creator *;
 -keepclassmembers class **.R$* {
   public static <fields>;
 }
-
+-keep public class com.sb.meeting.ui.fragment.NewsDetailFragment$OnImageClickListener {
+  *;
+}
+-keep public class com.sb.meeting.ui.fragment.NewsDetailFragment$OnNewsClickListener {
+  *;
+}
 -keepclassmembers class fqcn.of.javascript.interface.for.webview {
    public *;
 }
@@ -131,5 +137,6 @@ public static final android.os.Parcelable$Creator *;
 -dontwarn com.mob.**
 -dontwarn cn.sharesdk.**
 -dontwarn **.R$*
+
 # shareSDK短信验证码
 -keep class cn.smssdk.**{*;}

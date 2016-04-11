@@ -25,6 +25,14 @@ import java.util.List;
 @EFragment(R.layout.layout_news_webview)
 public class NewsDetailFragment extends BaseFragment {
 
+    public interface OnImageClickListener {
+        void onClick(String url);
+    }
+
+    public interface OnNewsClickListener {
+        void onClick(int position);
+    }
+
     @ViewById(R.id.webview_detail)
     CustomWebView webview;
 
@@ -32,8 +40,9 @@ public class NewsDetailFragment extends BaseFragment {
     @SuppressLint("JavascriptInterface")
     void init() {
         // 给webview 注入图片点击 事件
-        webview.addJavascriptInterface(new Object() {
+        webview.addJavascriptInterface(new OnImageClickListener() {
             @JavascriptInterface
+            @Override
             public void onClick(String url) {
                 List<ImageVO> list = new ArrayList<>();
                 ImageVO vo = new ImageVO();
@@ -43,8 +52,9 @@ public class NewsDetailFragment extends BaseFragment {
             }
         }, "image");
 
-        webview.addJavascriptInterface(new Object() {
+        webview.addJavascriptInterface(new OnNewsClickListener() {
             @JavascriptInterface
+            @Override
             public void onClick(int position) {
                 ((NewsDetailActivity) getActivity()).toDetail(position);
             }

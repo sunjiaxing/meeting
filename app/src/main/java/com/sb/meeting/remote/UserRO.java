@@ -3,6 +3,7 @@ package com.sb.meeting.remote;
 import android.content.Context;
 
 import com.sb.meeting.common.BonConstants;
+import com.sb.meeting.common.Utils;
 import com.sb.meeting.exeception.AppException;
 import com.sb.meeting.remote.dto.FavoriteDto;
 import com.sb.meeting.remote.dto.UserDto;
@@ -204,5 +205,45 @@ public class UserRO extends BaseRO {
         } else {
             throw new AppException(json.getInt(IParam.ERROR_CODE));
         }
+    }
+
+    /**
+     * 版本更新
+     *
+     * @throws JSONException
+     */
+    public Map<String, Object> updateVersion() throws JSONException {
+        String result = httpGetRequest("http://update.com", null);
+        JSONObject json = new JSONObject(result);
+        if (json.has(IParam.VERSION_CODE)) {
+            String versionNub = json.getString(IParam.VERSION_CODE);
+            if (!Utils.isEmpty(versionNub)
+                    && versionNub.compareTo(Utils.getVersionCode(mContext)) > 0) {
+                // 获取更新标题
+                String title = "更新提示";
+                if (json.has(IParam.TITLE)) {
+                    title = json.getString(IParam.TITLE);
+                }
+                // 获取更新信息的描述
+                String desc = "有新版本，是否更新？";
+                if (json.has(IParam.DESCRIPTION)) {
+                    desc = json.getString(IParam.DESCRIPTION);
+                }
+                // 获取应用的下载地址
+                String url = json.getString(IParam.URL);
+                boolean focus = false;
+                if (json.has(IParam.FOCUS)) {
+                    focus = json.getBoolean(IParam.FOCUS);
+                }
+                Map<String, Object> data = new HashMap<>();
+                data.put(IParam.TITLE, title);
+                data.put(IParam.DESC, desc);
+                data.put(IParam.URL, url);
+                data.put(IParam.FOCUS, focus);
+
+                return data;
+            }
+        }
+        return null;
     }
 }

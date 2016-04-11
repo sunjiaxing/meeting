@@ -5,10 +5,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.sb.meeting.common.DBHelper;
+import com.sb.meeting.dao.entity.CheckingGoods;
+import com.sb.meeting.dao.entity.Company;
 import com.sb.meeting.dao.entity.Goods;
 import com.sb.meeting.dao.entity.News;
 import com.sb.meeting.dao.entity.NewsChannel;
-import com.sb.meeting.dao.entity.User;
+import com.sb.meeting.dao.entity.Student;
 
 
 public class BaseDao {
@@ -44,8 +46,10 @@ public class BaseDao {
             beginTransaction();
             db.execSQL(NewsChannel.DELETE_TABLE_DATA);
             db.execSQL(News.DELETE_TABLE_DATA);
-            db.execSQL(User.DELETE_TABLE_DATA);
             db.execSQL(Goods.DELETE_TABLE_DATA);
+            db.execSQL(CheckingGoods.DELETE_TABLE_DATA);
+            db.execSQL(Company.DELETE_TABLE_DATA);
+            db.execSQL(Student.DELETE_TABLE_DATA);
             setTransactionSuccessful();
         } catch (Exception e) {
             e.printStackTrace();

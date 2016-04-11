@@ -133,6 +133,9 @@ public class AttentionGoodsActivity extends BaseActivity implements RefreshListV
                 } else {
                     listView.onLoadMoreComplete(RefreshListView.LoadMoreState.LV_OVER);
                 }
+            } else {
+                stopLoadingSelf();
+                showErrorMsg("暂无关注数据");
             }
         } else if (action == TaskAction.ACTION_GET_ATTENTION_GOODS_MORE) {
             if (data != null) {
@@ -173,7 +176,7 @@ public class AttentionGoodsActivity extends BaseActivity implements RefreshListV
         stopLoadingSelf();
         listView.onRefreshComplete();
         if (adapter == null) {
-            adapter = new GoodsListAdapter(this){
+            adapter = new GoodsListAdapter(this) {
                 @Override
                 public void onClick(View v) {
 

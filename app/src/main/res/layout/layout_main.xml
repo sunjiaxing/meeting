@@ -88,7 +88,7 @@
                 android:layout_width="@dimen/ppi_px_48_dp"
                 android:layout_height="@dimen/ppi_px_48_dp"
                 android:scaleType="fitXY"
-                android:src="@mipmap/icon_goods_nomal" />
+                android:src="@mipmap/icon_yp_nomal" />
 
             <TextView
                 android:id="@+id/tv_yp"

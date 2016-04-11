@@ -13,6 +13,7 @@ public class UserDto {
     private String userId;
     private String userName;
     private String nickName;
+    private String avatar;
     private String email;
     private String mobile;
     private long registerTime;
@@ -46,6 +47,16 @@ public class UserDto {
         return mobile;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    /**
+     * 解析 json
+     *
+     * @param json json
+     * @throws JSONException
+     */
     public void parseJson(JSONObject json) throws JSONException {
         if (json == null) {
             return;
@@ -70,6 +81,9 @@ public class UserDto {
         }
         if (json.has(IParam.LAST_LOGIN_TIME)) {
             this.lastLoginTime = json.getLong(IParam.LAST_LOGIN_TIME);
+        }
+        if (json.has(IParam.AVATAR)) {
+            this.avatar = json.getString(IParam.AVATAR);
         }
     }
 }
